@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Cup</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="guide_text1">11</string>
+    <string name="guide_text2">22</string>
+    <string name="guide_text3">333</string>
+    <string name="guide_text4">444</string>
+
+</resources>

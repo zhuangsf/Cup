@@ -1,0 +1,103 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    tools:context="com.example.googlebottomfragment.MainActivity" >
+ 
+    <android.support.v4.view.ViewPager
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:id="@+id/id_view_pager"/>
+    <!-- 
+    <FrameLayout
+        android:id="@+id/main_content"
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+  -->
+  
+    <RadioGroup
+        android:id="@+id/tab_menu"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/holo_blue_light"
+        android:orientation="horizontal" >
+         <!--   android:background="@drawable/mmfooter_bg"  -->
+ 
+        <RadioButton
+            android:id="@+id/rbHome"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_weight="1"
+            android:background="@drawable/tab_selector_checked_bg"
+            android:button="@null"
+            android:checked="true"
+            android:drawableTop="@drawable/tab_selector_home"
+            android:gravity="center_horizontal|bottom"
+            android:paddingTop="2dp"
+            android:text="主页"
+            android:textColor="@color/tab_selector_font_color" />
+ 
+        <RadioButton
+            android:id="@+id/rbData"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_weight="1"
+            android:background="@drawable/tab_selector_checked_bg"
+            android:button="@null"
+            android:drawableTop="@drawable/tab_selector_data"
+            android:gravity="center_horizontal|bottom"
+            android:paddingTop="2dp"
+            android:text="数据"
+            android:textColor="@color/tab_selector_font_color" />
+        
+          <RadioButton
+            android:id="@+id/rbTime"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_weight="1"
+            android:background="@drawable/tab_selector_checked_bg"
+            android:button="@null"
+            android:drawableTop="@drawable/tab_selector_time"
+            android:gravity="center_horizontal|bottom"
+            android:paddingTop="2dp"
+            android:text="时时"
+            android:textColor="@color/tab_selector_font_color" />
+ 
+        <RadioButton
+            android:id="@+id/rbWater"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_weight="1"
+            android:background="@drawable/tab_selector_checked_bg"
+            android:button="@null"
+            android:drawableTop="@drawable/tab_selector_water"
+            android:gravity="center_horizontal|bottom"
+            android:paddingTop="2dp"
+            android:text="水量"
+            android:textColor="@color/tab_selector_font_color" />
+ 
+        <RadioButton
+            android:id="@+id/rbMe"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_weight="1"
+            android:background="@drawable/tab_selector_checked_bg"
+            android:button="@null"
+            android:drawableTop="@drawable/tab_selector_me"
+            android:gravity="center_horizontal|bottom"
+            android:paddingTop="2dp"
+            android:text="我"
+            android:textColor="@color/tab_selector_font_color" />
+    </RadioGroup>
+     
+       
+ 
+</LinearLayout>

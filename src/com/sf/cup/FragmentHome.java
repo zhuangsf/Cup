@@ -13,7 +13,6 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONObject;
 
-import com.sf.cup.R.id;
 import com.sf.cup.utils.Utils;
 
 import android.content.Context;
@@ -32,6 +31,7 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class FragmentHome extends Fragment {
 	private final static String TAG = FragmentHome.class.getPackage().getName() + "."
@@ -74,7 +74,6 @@ public class FragmentHome extends Fragment {
     	setHeight(hlva);
     	homeListView.setAdapter(hlva);
     	
-    	
     	buttonGet.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View arg0) {
@@ -95,8 +94,27 @@ public class FragmentHome extends Fragment {
 		public HomeListViewAdapter(Context context, List<Map<String, Object>> data, int resource, String[] from,int[] to) {
 			super(context, data, resource, from, to);
 		}
+		
+		@Override
+		public View getView(int position, View convertView, ViewGroup parent) {
+			View view=super.getView(position, convertView, parent);
+			view.setOnClickListener(new MyListener(position));
+			return view;
+		}
     	
     }
+    private class MyListener implements OnClickListener{  
+        int mPosition;  
+        public MyListener(int inPosition){  
+            mPosition= inPosition;  
+        }  
+        @Override  
+        public void onClick(View v) {  
+            // TODO Auto-generated method stub  
+            Toast.makeText(FragmentHome.this.getActivity(),((TextView)v.findViewById(R.id.title_text)).getText(), Toast.LENGTH_SHORT).show();  
+        }  
+          
+    }  
     public void setHeight(BaseAdapter comAdapter){  
         int listViewHeight = 0;  
         int adaptCount = comAdapter.getCount();  

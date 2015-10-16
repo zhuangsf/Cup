@@ -16,6 +16,7 @@ import org.json.JSONObject;
 import com.sf.cup.utils.Utils;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -37,6 +38,11 @@ public class FragmentHome extends Fragment {
 	private final static String TAG = FragmentHome.class.getPackage().getName() + "."
 			+ FragmentHome.class.getSimpleName();
 	
+	Button buttonGet;
+	TextView textViewGet;
+	ListView homeListView;
+	String[] listTitle;
+	
 	Handler mHandler = new Handler()
 	  {
 	    @Override
@@ -54,12 +60,12 @@ public class FragmentHome extends Fragment {
 			}
 	    }
 	  };
-	Button buttonGet;
-	TextView textViewGet;
-	ListView homeListView;
+	  
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Resources res =getResources();
+        listTitle=res.getStringArray(R.array.home_list_title);
     }
  
     @Override
@@ -111,7 +117,8 @@ public class FragmentHome extends Fragment {
         @Override  
         public void onClick(View v) {  
             // TODO Auto-generated method stub  
-            Toast.makeText(FragmentHome.this.getActivity(),((TextView)v.findViewById(R.id.title_text)).getText(), Toast.LENGTH_SHORT).show();  
+            Toast.makeText(FragmentHome.this.getActivity(),((TextView)v.findViewById(R.id.title_text)).getText()+""+mPosition, Toast.LENGTH_SHORT).show();
+            
         }  
           
     }  
@@ -131,39 +138,18 @@ public class FragmentHome extends Fragment {
         homeListView.setLayoutParams(layoutParams);  
     }  
     
-    private List<Map<String, Object>> getData() {
-        List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
-        Map<String, Object> map = new HashMap<String, Object>();
-        map.put("title", "配对信息");
-        map.put("info", "");
-        map.put("img",">");
-        list.add(map);
+	private List<Map<String, Object>> getData() {
+		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
+		Map<String, Object> map;
+		for (int i = 0; i < listTitle.length; i++) {
+			map = new HashMap<String, Object>();
+			map.put("title", listTitle[i]);
+			map.put("info", "");
+			map.put("img", ">");
+			list.add(map);
+		}
 
-        map=new HashMap<String, Object>();
-        map.put("title", "账号绑定");
-        map.put("info", "");
-        map.put("img",">");
-        list.add(map);
-        
-        
-        map=new HashMap<String, Object>();
-        map.put("title", "恢复出厂设置");
-        map.put("info", "");
-        map.put("img",">");
-        list.add(map);
-        
-        
-        map=new HashMap<String, Object>();
-        map.put("title", "");
-        map.put("info", "");
-        map.put("img","");
-        list.add(map);
-        
-        map=new HashMap<String, Object>();
-        map.put("title", "关于我们");
-        map.put("info", "");
-        map.put("img",">");
-        list.add(map);
+       
         return list;
     }
     

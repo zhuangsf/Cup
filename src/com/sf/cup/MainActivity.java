@@ -26,8 +26,10 @@ public class MainActivity extends FragmentActivity {
 	FragmentMe fMe;
 	FragmentTime fTime;
 	
+	FragmentHomeReset fHome_reset;
+	
 	 private ViewPager viewPager; 
-	 /*每个 tab 的 item*/
+	 /*姣忎釜 tab 鐨� item*/
 	private List<Fragment> mTab = new ArrayList<Fragment>() ;
 	
 	private int [] mRadioButton={
@@ -81,8 +83,10 @@ public class MainActivity extends FragmentActivity {
 	        }  
 	        @Override  
 	        public void onPageSelected(int index) {  
+	        	if(index<5){
 	            	    myTabRadioButton = (RadioButton) findViewById(mRadioButton[index]);
 		  	            myTabRadioButton.setChecked(true);
+	        	}
 	        }  
 	    }  
 
@@ -91,7 +95,7 @@ public class MainActivity extends FragmentActivity {
 			fData = new FragmentData();
 		}
 		if(fHome == null){
-			fHome = new FragmentHome();
+			fHome = new FragmentHome(viewPager);
 		}
 		if (fTime == null) {
 			fTime = new FragmentTime();

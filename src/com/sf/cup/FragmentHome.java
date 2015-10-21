@@ -21,6 +21,10 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -42,6 +46,13 @@ public class FragmentHome extends Fragment {
 	TextView textViewGet;
 	ListView homeListView;
 	String[] listTitle;
+	private static final int PAIR_INFO_INDEX=0;
+	private static final int ACCOUNT_BIND_INDEX=1;
+	private static final int RESET_INDEX=2;
+	private static final int HARDWARE_UPDATE_INDEX=3;
+	private static final int ABOUT_INDEX=4;
+	
+	ViewPager viewPager;
 	
 	Handler mHandler = new Handler()
 	  {
@@ -60,6 +71,11 @@ public class FragmentHome extends Fragment {
 			}
 	    }
 	  };
+	  
+	  
+	  public FragmentHome(ViewPager v){
+		  viewPager=v;
+	  }
 	  
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -118,7 +134,8 @@ public class FragmentHome extends Fragment {
         public void onClick(View v) {  
             // TODO Auto-generated method stub  
             Toast.makeText(FragmentHome.this.getActivity(),((TextView)v.findViewById(R.id.title_text)).getText()+""+mPosition, Toast.LENGTH_SHORT).show();
-            
+            if(RESET_INDEX==mPosition){
+            }
         }  
           
     }  

@@ -1,23 +1,19 @@
 package com.sf.cup;
 
-
 import java.util.ArrayList;
 import java.util.List;
 
+import android.app.Activity;
+import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.ViewPager;
-import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RadioGroup.OnCheckedChangeListener;
+import android.widget.Toast;
 
-public class MainActivity extends FragmentActivity {
-	final int RIGHT = 0;
-	final int LEFT = 1;
+public class MainActivity extends Activity {
+	long lastTime = 0L;
 	RadioGroup myTabRg;
 	RadioButton myTabRadioButton;
 	FragmentHome fHome;
@@ -25,77 +21,51 @@ public class MainActivity extends FragmentActivity {
 	FragmentWater fWater;
 	FragmentMe fMe;
 	FragmentTime fTime;
-	
+
 	FragmentHomeReset fHome_reset;
-	
-	 private ViewPager viewPager; 
-	 /*姣忎釜 tab 鐨� item*/
-	private List<Fragment> mTab = new ArrayList<Fragment>() ;
-	
-	private int [] mRadioButton={
+
+	/* 姣忎釜 tab 鐨� item */
+	private List<Fragment> mTab = new ArrayList<Fragment>();
+
+	private int[] mRadioButton = {
 			R.id.rbHome,
-			R.id.rbData,
+			R.id.rbData, 
 			R.id.rbTime,
 			R.id.rbWater,
-			R.id.rbMe,
-	};
+			R.id.rbMe, 
+			};
+	private Fragment[] mFragmentArray = { 
+			fHome,
+			fData, 
+			fTime,
+			fWater,
+			fMe, 
+			};
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
-		viewPager = (ViewPager) findViewById(R.id.id_view_pager);
 		createFragment();
 		mTab.add(fHome);
 		mTab.add(fData);
 		mTab.add(fTime);
 		mTab.add(fWater);
 		mTab.add(fMe);
-		viewPager.setAdapter(new ViewPagerAdapter(getSupportFragmentManager()));
-		viewPager.setOnPageChangeListener(new ViewPageChangeListener());
-		
 		initView();
-
+		//!!!!!!! 处理屏幕旋转生成多个fragment问题。
+		if (savedInstanceState == null) {
+			getFragmentManager().beginTransaction().add(R.id.fragmentfield, fHome).commit();
+		}
 	}
-	 private class ViewPagerAdapter extends FragmentPagerAdapter{
 
-	        public ViewPagerAdapter(FragmentManager fm) {
-	            super(fm);
-	        }
-
-	        @Override
-	        public Fragment getItem(int position) {
-	            return mTab.get(position);
-	        }
-
-	        @Override
-	        public int getCount() {
-	            return mTab.size();
-	        }
-	    }
-	 private  class ViewPageChangeListener implements OnPageChangeListener {  
-	        @Override  
-	        public void onPageScrollStateChanged(int arg0) {  
-	        }  
-	        @Override  
-	        public void onPageScrolled(int arg0, float arg1, int arg2) {  
-	        }  
-	        @Override  
-	        public void onPageSelected(int index) {  
-	        	if(index<5){
-	            	    myTabRadioButton = (RadioButton) findViewById(mRadioButton[index]);
-		  	            myTabRadioButton.setChecked(true);
-	        	}
-	        }  
-	    }  
-
-	private void createFragment(){
+	private void createFragment() {
 		if (fData == null) {
 			fData = new FragmentData();
 		}
-		if(fHome == null){
-			fHome = new FragmentHome(viewPager);
+		if (fHome == null) {
+			fHome = new FragmentHome();
 		}
 		if (fTime == null) {
 			fTime = new FragmentTime();
@@ -107,19 +77,39 @@ public class MainActivity extends FragmentActivity {
 			fMe = new FragmentMe();
 		}
 	}
-	
-	public void initView() {
+
+	private void initView() {
 		myTabRg = (RadioGroup) findViewById(R.id.tab_menu);
 		myTabRg.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 			public void onCheckedChanged(RadioGroup group, int checkedId) {
-				for(int i=0;i<mRadioButton.length;i++){
-					if(mRadioButton[i]==checkedId){
-						viewPager.setCurrentItem(i, false);
+				for (int i = 0; i < mRadioButton.length; i++) {
+					if (mRadioButton[i] == checkedId) {
+						FragmentTransaction ft = getFragmentManager().beginTransaction();
+						// ft.setCustomAnimations(R.animator.slide_left_in, R.animator.slide_left_out);
+						ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+						ft.replace(R.id.fragmentfield, mTab.get(i));
+						// ft.addToBackStack(null);
+						ft.commit();
 						break;
 					}
 				}
 			}
 		});
 	}
+	
+	
+	public void onBackPressed()
+	{
+//	    long l = System.currentTimeMillis();
+//	    if (l - lastTime > 2000L)
+//	    {
+//	      lastTime = l;
+//	      Toast.makeText(this, "Press the back key again quit.", 0).show();
+//	      return;
+//	    }
+	   
+	    super.onBackPressed();
+	    
+	  }
 
 }

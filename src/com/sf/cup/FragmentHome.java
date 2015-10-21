@@ -1,5 +1,6 @@
 package com.sf.cup;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -15,15 +16,14 @@ import org.json.JSONObject;
 
 import com.sf.cup.utils.Utils;
 
+import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -72,10 +72,6 @@ public class FragmentHome extends Fragment {
 	    }
 	  };
 	  
-	  
-	  public FragmentHome(ViewPager v){
-		  viewPager=v;
-	  }
 	  
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -135,6 +131,11 @@ public class FragmentHome extends Fragment {
             // TODO Auto-generated method stub  
             Toast.makeText(FragmentHome.this.getActivity(),((TextView)v.findViewById(R.id.title_text)).getText()+""+mPosition, Toast.LENGTH_SHORT).show();
             if(RESET_INDEX==mPosition){
+            	FragmentTransaction ft=getActivity().getFragmentManager().beginTransaction();
+            	ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+            	ft.replace(R.id.fragmentfield, new FragmentHomeReset());
+            	ft.addToBackStack(null);
+				ft.commit();
             }
         }  
           
@@ -198,4 +199,32 @@ public class FragmentHome extends Fragment {
 		}
 	}
  
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    /**
+   	 * to avoid IllegalStateException: No activity
+   	 */
+   	@Override
+   	public void onDetach() {
+   	    super.onDetach();
+   	    try {
+   	        Field childFragmentManager = Fragment.class.getDeclaredField("mChildFragmentManager");
+   	        childFragmentManager.setAccessible(true);
+   	        childFragmentManager.set(this, null);
+
+   	    } catch (NoSuchFieldException e) {
+   	        throw new RuntimeException(e);
+   	    } catch (IllegalAccessException e) {
+   	        throw new RuntimeException(e);
+   	    }
+
+   	}
 }

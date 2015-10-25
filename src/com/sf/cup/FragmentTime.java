@@ -20,7 +20,11 @@ public class FragmentTime extends Fragment {
         return inflater.inflate(R.layout.tab_time, null);
     }
  
-    
+    public static FragmentTime newInstance(Bundle b){
+    	FragmentTime fd=new FragmentTime();
+			fd.setArguments(b);
+			return fd;
+		}
     
     
     

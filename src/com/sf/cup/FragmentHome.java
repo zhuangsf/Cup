@@ -23,9 +23,6 @@ import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -52,18 +49,17 @@ public class FragmentHome extends Fragment {
 	private static final int HARDWARE_UPDATE_INDEX=3;
 	private static final int ABOUT_INDEX=4;
 	
-	ViewPager viewPager;
 	
 	Handler mHandler = new Handler()
 	  {
 	    @Override
 		public void handleMessage(Message paramAnonymousMessage)
 	    {
-	    Log.i("xxxxxxxxxxxxxxxxxxx", "handle:"+paramAnonymousMessage);
+	    Utils.Log("handle:"+paramAnonymousMessage);
 	     switch (paramAnonymousMessage.what)
 	     {
 				case 1:
-					Log.i("xxxxxxxxxxxxxxxxxx", "xxxxxxxxxxxxxxxSG_WAT_START-1---:"+paramAnonymousMessage.obj);
+					Utils.Log("xxxxxxxxxxxxxxxSG_WAT_START-1---:"+paramAnonymousMessage.obj);
 					textViewGet.setText(paramAnonymousMessage.obj.toString());
 					break;
 				case 2:
@@ -71,6 +67,12 @@ public class FragmentHome extends Fragment {
 			}
 	    }
 	  };
+	  
+	  public static FragmentHome newInstance(Bundle b){
+		  FragmentHome fd=new FragmentHome();
+			fd.setArguments(b);
+			return fd;
+		}
 	  
 	  
     @Override
@@ -128,12 +130,11 @@ public class FragmentHome extends Fragment {
         }  
         @Override  
         public void onClick(View v) {  
-            // TODO Auto-generated method stub  
             Toast.makeText(FragmentHome.this.getActivity(),((TextView)v.findViewById(R.id.title_text)).getText()+""+mPosition, Toast.LENGTH_SHORT).show();
             if(RESET_INDEX==mPosition){
             	FragmentTransaction ft=getActivity().getFragmentManager().beginTransaction();
             	ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-            	ft.replace(R.id.fragmentfield, new FragmentHomeReset());
+            	ft.add(R.id.fragmentfield, new FragmentHomeReset());
             	ft.addToBackStack(null);
 				ft.commit();
             }
@@ -143,12 +144,12 @@ public class FragmentHome extends Fragment {
     public void setHeight(BaseAdapter comAdapter){  
         int listViewHeight = 0;  
         int adaptCount = comAdapter.getCount();  
-        Log.i("xxxxxxxxxxxxxxxxxx", "xxxxxxxxxxxxxxxxxx adaptCount:"+adaptCount);
+        Utils.Log("xxxxxxxxxxxxxxxxxx adaptCount:"+adaptCount);
         for(int i=0;i<adaptCount;i++){  
             View temp = comAdapter.getView(i,null,homeListView);  
             temp.measure(0,0);  
             listViewHeight += temp.getMeasuredHeight(); 
-            Log.i("xxxxxxxxxxxxxxxxxx", "xxxxxxxxxxxxxxxxxx listViewHeight:"+listViewHeight);
+            Utils.Log("xxxxxxxxxxxxxxxxxx listViewHeight:"+listViewHeight);
         }  
         LayoutParams layoutParams = this.homeListView.getLayoutParams();  
         layoutParams.width = LayoutParams.FILL_PARENT;  

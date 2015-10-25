@@ -20,6 +20,14 @@ public class FragmentData extends Fragment {
         return inflater.inflate(R.layout.tab_data, null);
     }
  
+    public static FragmentData newInstance(Bundle b){
+    	FragmentData fd=new FragmentData();
+			fd.setArguments(b);
+			return fd;
+		}
+    
+    
+    
     
     
     /**

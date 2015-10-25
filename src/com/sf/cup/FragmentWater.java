@@ -20,6 +20,13 @@ public class FragmentWater extends Fragment {
         return inflater.inflate(R.layout.tab_water, null);
     }
  
+    public static FragmentWater newInstance(Bundle b){
+    	FragmentWater fd=new FragmentWater();
+			fd.setArguments(b);
+			return fd;
+		}
+    
+    
     
     
     

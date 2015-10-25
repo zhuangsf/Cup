@@ -21,6 +21,11 @@ public class FragmentMe extends Fragment {
     }
  
     
+    public static FragmentMe newInstance(Bundle b){
+    	FragmentMe fd=new FragmentMe();
+			fd.setArguments(b);
+			return fd;
+		}
     
     
     

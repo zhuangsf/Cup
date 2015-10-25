@@ -34,7 +34,11 @@ public class FragmentHomeReset extends Fragment {
         return v; 
     }
  
-    
+    public static FragmentHomeReset newInstance(Bundle b){
+    	FragmentHomeReset fd=new FragmentHomeReset();
+			fd.setArguments(b);
+			return fd;
+		}
     
     
     

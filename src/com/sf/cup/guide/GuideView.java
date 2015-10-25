@@ -2,6 +2,9 @@ package com.sf.cup.guide;
 
 import java.util.ArrayList;
 
+import com.sf.cup.MainActivity;
+import com.sf.cup.R;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -16,10 +19,6 @@ import android.view.ViewGroup.LayoutParams;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.TextView;
-
-import com.sf.cup.MainActivity;
-import com.sf.cup.R;
 
 public class GuideView extends Activity{
 	     private ViewPager viewPager;  

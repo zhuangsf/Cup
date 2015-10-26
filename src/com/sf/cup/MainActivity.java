@@ -68,7 +68,11 @@ public class MainActivity extends Activity {
 		initView();
 		
 		//!!!!!!! 处理屏幕旋转生成多个fragment问题。
-		if (savedInstanceState == null) {
+		//!!!!!!! 如果用replace是要加这个，判断是否是activity重建。这里是由于在RadioGroup 的状态改变，默认为第一个页签时没进onCheckedChanged，不为第一个页签 都会进onCheckedChanged切换下页签
+//		if (savedInstanceState == null)
+		{
+
+			Utils.Log("xxxxxxxxxxxxxxxxxx onCreate home:"+fHome);
 			getFragmentManager().beginTransaction().show(fHome).commit();
 		}
 	}
@@ -79,6 +83,7 @@ public class MainActivity extends Activity {
 		Fragment fragment =null;
 		
 		fragment= fm.findFragmentByTag(TAG_HOME);
+		Utils.Log("xxxxxxxxxxxxxxxxxx createFragment home:"+fragment);
 		if (fragment != null) {// 如果有，则使用，处理翻转之后状态未保存问题
 			fHome = (FragmentHome) fragment;
 		} else {// 如果为空，才去新建，不新建切换的时候就可以保存状态了。
@@ -154,7 +159,7 @@ public class MainActivity extends Activity {
 				for (int i = 0; i < mRadioButton.length; i++) {
 					if (mRadioButton[i] == checkedId) {
 						FragmentManager fm=getFragmentManager();
-						
+						Utils.Log("xxxxxxxxxxxxxxxxxx i:"+i);
 						FragmentTransaction ft = fm.beginTransaction();
 						// ft.setCustomAnimations(R.animator.slide_left_in, R.animator.slide_left_out);
 						ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);

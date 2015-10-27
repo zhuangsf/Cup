@@ -14,11 +14,13 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONObject;
 
+import com.sf.cup.login.LoginActivity;
 import com.sf.cup.utils.Utils;
 
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Handler;
@@ -40,6 +42,7 @@ public class FragmentHome extends Fragment {
 			+ FragmentHome.class.getSimpleName();
 	
 	Button buttonGet;
+	Button logoutBtn;
 	TextView textViewGet;
 	ListView homeListView;
 	String[] listTitle;
@@ -85,7 +88,6 @@ public class FragmentHome extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
     	View view=inflater.inflate(R.layout.tab_home, null);
-    	buttonGet=((Button)view.findViewById(R.id.getButton));
     	textViewGet=((TextView)view.findViewById(R.id.getText));
     	homeListView=(ListView) view.findViewById(R.id.homeListView); 
     	HomeListViewAdapter hlva=new HomeListViewAdapter(this.getActivity(), getData(), R.layout.tab_home_list_item,
@@ -94,6 +96,7 @@ public class FragmentHome extends Fragment {
     	setHeight(hlva);
     	homeListView.setAdapter(hlva);
     	
+    	buttonGet=((Button)view.findViewById(R.id.getButton));
     	buttonGet.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View arg0) {
@@ -104,6 +107,15 @@ public class FragmentHome extends Fragment {
 						httpGet("http://121.204.243.79:8080/Cup/user/jsonfeed");
 					}
 				}).start();
+			}
+		});
+    	
+    	logoutBtn=((Button)view.findViewById(R.id.logout));
+    	logoutBtn.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View arg0) {
+				Intent i = new Intent(getActivity(), LoginActivity.class);
+                startActivity(i);
 			}
 		});
     	

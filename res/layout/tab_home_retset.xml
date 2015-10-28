@@ -5,28 +5,38 @@
         android:orientation="vertical" 
          android:background="@android:color/holo_blue_bright">
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_marginBottom="50dp"
-            android:background="@android:color/holo_blue_light">
-
-            <Button
+          <RelativeLayout
+            android:id="@+id/header"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="@layout/header_gradient"
+            android:paddingBottom="5dp"
+            android:paddingTop="5dp" >
+         <Button
                 android:id="@+id/goBack"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignLeft="@android:id/title"
+                android:layout_alignParentLeft="true"
                 android:text="back" />
-
+ <!-- Logo Start -->
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toStartOf="@+id/title"
+                android:layout_marginLeft="10dp"
+                android:src="@drawable/ic_launcher" />
+ <!-- Logo Ends -->            
             <TextView
-                android:id="@+id/title"
+                android:id="@id/title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:text="恢复出厂设置"
+                android:text="恢复设置"
                 android:textColor="@android:color/white"
                 android:textSize="20sp" />
+           
 
+           
         </RelativeLayout>
 
         <LinearLayout

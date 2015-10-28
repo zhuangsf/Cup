@@ -15,7 +15,7 @@
             android:id="@+id/header"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:background="@layout/login_header_gradient"
+            android:background="@layout/header_gradient"
             android:paddingBottom="5dip"
             android:paddingTop="5dip"
              >
@@ -27,10 +27,11 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dip"
                 android:src="@drawable/ic_launcher"
-                android:layout_alignParentLeft="true"
+                android:layout_toStartOf="@+id/logintitle"
                  />
             <!-- Logo Ends -->
               <TextView
+                android:id="@id/logintitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="登录"

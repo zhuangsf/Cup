@@ -45,7 +45,9 @@ public class FragmentHome extends Fragment {
 	Button logoutBtn;
 	TextView textViewGet;
 	ListView homeListView;
+	ListView homeList2View;
 	String[] listTitle;
+	String[] list2Title;
 	private static final int PAIR_INFO_INDEX=0;
 	private static final int ACCOUNT_BIND_INDEX=1;
 	private static final int RESET_INDEX=2;
@@ -83,6 +85,7 @@ public class FragmentHome extends Fragment {
         super.onCreate(savedInstanceState);
         Resources res =getResources();
         listTitle=res.getStringArray(R.array.home_list_title);
+        list2Title=res.getStringArray(R.array.home_part2_list_title);
     }
  
     @Override
@@ -93,8 +96,15 @@ public class FragmentHome extends Fragment {
     	HomeListViewAdapter hlva=new HomeListViewAdapter(this.getActivity(), getData(), R.layout.tab_home_list_item,
     			new String[]{"title","info","img"},
     			new int[]{R.id.title_text,R.id.info_text,R.id.right_img});
-    	setHeight(hlva);
+    	setHeight(hlva,homeListView);
     	homeListView.setAdapter(hlva);
+    	
+    	homeList2View=(ListView) view.findViewById(R.id.homeList2View); 
+    	HomeListViewAdapter hlva2=new HomeListViewAdapter(this.getActivity(), getData2(), R.layout.tab_home_list_item,
+    			new String[]{"title","info","img"},
+    			new int[]{R.id.title_text,R.id.info_text,R.id.right_img});
+    	setHeight(hlva2,homeList2View);
+    	homeList2View.setAdapter(hlva2);
     	
     	buttonGet=((Button)view.findViewById(R.id.getButton));
     	buttonGet.setOnClickListener(new OnClickListener() {
@@ -153,20 +163,20 @@ public class FragmentHome extends Fragment {
         }  
           
     }  
-    public void setHeight(BaseAdapter comAdapter){  
+    public void setHeight(BaseAdapter comAdapter,ListView l){  
         int listViewHeight = 0;  
         int adaptCount = comAdapter.getCount();  
         Utils.Log("xxxxxxxxxxxxxxxxxx adaptCount:"+adaptCount);
         for(int i=0;i<adaptCount;i++){  
-            View temp = comAdapter.getView(i,null,homeListView);  
+            View temp = comAdapter.getView(i,null,l);  
             temp.measure(0,0);  
             listViewHeight += temp.getMeasuredHeight(); 
             Utils.Log("xxxxxxxxxxxxxxxxxx listViewHeight:"+listViewHeight);
         }  
-        LayoutParams layoutParams = this.homeListView.getLayoutParams();  
+        LayoutParams layoutParams = l.getLayoutParams();  
         layoutParams.width = LayoutParams.FILL_PARENT;  
-        layoutParams.height = listViewHeight+20;  
-        homeListView.setLayoutParams(layoutParams);  
+        layoutParams.height = listViewHeight+2;  
+        l.setLayoutParams(layoutParams);  
     }  
     
 	private List<Map<String, Object>> getData() {
@@ -175,6 +185,21 @@ public class FragmentHome extends Fragment {
 		for (int i = 0; i < listTitle.length; i++) {
 			map = new HashMap<String, Object>();
 			map.put("title", listTitle[i]);
+			map.put("info", "");
+			map.put("img", ">");
+			list.add(map);
+		}
+
+       
+        return list;
+    }
+	
+	private List<Map<String, Object>> getData2() {
+		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
+		Map<String, Object> map;
+		for (int i = 0; i < list2Title.length; i++) {
+			map = new HashMap<String, Object>();
+			map.put("title", list2Title[i]);
 			map.put("info", "");
 			map.put("img", ">");
 			list.add(map);

@@ -3,30 +3,41 @@
     android:id="@+id/dialog"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" >
+    android:orientation="vertical"
+     >
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal" >
+        android:orientation="horizontal"
+        android:gravity="center" >
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="模式：" />
+            android:text="模式："
+             />
         <EditText
             android:id="@+id/info_input"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:inputType="text"
+            android:hint="水温模式"
             android:minWidth="100dip"
              android:labelFor="@id/info_input"
               />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="°C"
+            android:visibility="invisible" />
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal" >
+        android:orientation="horizontal"
+        android:gravity="center"
+         >
 
         <TextView
             android:layout_width="wrap_content"
@@ -37,8 +48,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:inputType="number"
-            android:minWidth="100dip" 
+            android:minWidth="100dip"
+            android:hint="55"
              android:labelFor="@id/temp_input" />
+         <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="°C" />
     </LinearLayout>
 
 </LinearLayout>

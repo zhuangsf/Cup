@@ -11,15 +11,16 @@ import com.sf.cup.utils.Utils;
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 
@@ -28,7 +29,8 @@ public class FragmentWater extends Fragment {
 	ListView temperatureListView;
 	Button add_temperature_button;
 	List<Map<String, Object>> temperatureList = new ArrayList<Map<String, Object>>();
-
+	TemperatureListViewAdapter hlva;
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -39,7 +41,19 @@ public class FragmentWater extends Fragment {
 		View v = inflater.inflate(R.layout.tab_water, null);
 
 		temperatureListView = (ListView) v.findViewById(R.id.temperature_list);
-		TemperatureListViewAdapter hlva = new TemperatureListViewAdapter(this.getActivity(), getData(),
+		
+		Map<String, Object> m=new HashMap<String, Object>();
+		m.put("info_text", "aa");
+		m.put("temperature_text", "22");
+		m.put("radio_btn", false);
+		temperatureList.add(m);
+		m=new HashMap<String, Object>();
+		m.put("info_text", "a2a");
+		m.put("temperature_text", "40");
+		m.put("radio_btn", true);
+		temperatureList.add(m);
+		
+		hlva = new TemperatureListViewAdapter(this.getActivity(), temperatureList,
 				R.layout.tab_water_select_item, new String[] { "info_text", "temperature_text", "radio_btn" },
 				new int[] { R.id.info_text, R.id.temperature_text, R.id.radio_btn });
 		temperatureListView.setAdapter(hlva);
@@ -52,25 +66,52 @@ public class FragmentWater extends Fragment {
 				LayoutInflater inflater = getActivity().getLayoutInflater();
 				final View layout = inflater.inflate(R.layout.tab_water_select_dialog,
 						(ViewGroup) v.findViewById(R.id.dialog));
-				AlertDialog   ad = new AlertDialog.Builder(getActivity()).setPositiveButton("确定", null).setNegativeButton("取消", null).create();
+				AlertDialog ad = new AlertDialog.Builder(getActivity())
+						.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						EditText infoString = (EditText) layout.findViewById(R.id.info_input);
+						EditText tempString = (EditText) layout.findViewById(R.id.temp_input);
+						Map<String, Object> m=new HashMap<String, Object>();
+						m.put("info_text", infoString.getText().toString());
+						m.put("temperature_text", tempString.getText().toString());
+						m.put("radio_btn", false);
+						temperatureList.add(m);
+						Utils.Log("xxxxxxxxxxxxxxxxxx temperatureList:" + temperatureList);
+						doUpdate();
+					}
+
+				}).setNegativeButton("取消", null).create();
 				ad.setTitle("温度模式设定");
 				ad.setView(layout);
 				ad.show();
-				//TODO 这里有待验证是否能正确弹出输入窗口
-				layout.post(new Runnable() {
-			        @Override
-			        public void run() {
-			            InputMethodManager im = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-			            im.showSoftInput(layout, InputMethodManager.SHOW_FORCED);
-			        }
-			    });
-//				ad.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM); 
-//				ad.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
-//				ad.getWindow().setContentView(R.layout.tab_water_select_dialog);
+				
+				
+//				Map<String, Object> m=new HashMap<String, Object>();
+//				m.put("info_text", "1");
+//				m.put("temperature_text", "2");
+//				temperatureList.remove(0);
+//				doUpdate();
+				// TODO 这里有待验证是否能正确弹出输入窗口
+				// layout.post(new Runnable() {
+				// @Override
+				// public void run() {
+				// InputMethodManager im = (InputMethodManager)
+				// getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+				// im.showSoftInput(layout, InputMethodManager.SHOW_FORCED);
+				// }
+				// });
 			}
 		});
 
 		return v;
+	}
+	private void doUpdate(){
+		if(hlva!=null){
+			Utils.Log("update listview");
+			hlva.notifyDataSetChanged();
+			setHeight(hlva, temperatureListView);
+		}
 	}
 
 	public static FragmentWater newInstance(Bundle b) {
@@ -108,6 +149,8 @@ public class FragmentWater extends Fragment {
 			view.setOnClickListener(new MyListener(position));
 			return view;
 		}
+		
+		
 
 	}
 
@@ -126,17 +169,7 @@ public class FragmentWater extends Fragment {
 	}
 
 	private List<Map<String, Object>> getData() {
-		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
-		Map<String, Object> map;
-		for (int i = 0; i < temperatureList.size(); i++) {
-			map = new HashMap<String, Object>();
-			map.put("info_text", temperatureList.get(i).get("info_text"));
-			map.put("temperature_text", temperatureList.get(i).get("temperature_text"));
-			map.put("radio_btn", "false");
-			list.add(map);
-		}
-
-		return list;
+		return temperatureList;
 	}
 
 	/**

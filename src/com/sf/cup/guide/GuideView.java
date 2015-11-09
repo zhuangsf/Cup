@@ -2,8 +2,8 @@ package com.sf.cup.guide;
 
 import java.util.ArrayList;
 
-import com.sf.cup.MainActivity;
 import com.sf.cup.R;
+import com.sf.cup.login.LoginActivity;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -102,7 +102,7 @@ public class GuideView extends Activity{
 	            	public void onClick(View arg0) {
 	            		// TODO Auto-generated method stub
 	            		Intent intent = new Intent();  
-						intent.setClass(GuideView.this,MainActivity.class);  
+						intent.setClass(GuideView.this,LoginActivity.class);  
 						//����B  
 						startActivity(intent);  
 						finish(); 
@@ -114,7 +114,7 @@ public class GuideView extends Activity{
 					public void onClick(View arg0) {
 						// TODO Auto-generated method stub
 	            		Intent intent = new Intent();  
-						intent.setClass(GuideView.this,MainActivity.class);  
+						intent.setClass(GuideView.this,LoginActivity.class);  
 						//����B  
 						startActivity(intent);  
 						finish(); 

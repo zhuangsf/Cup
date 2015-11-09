@@ -11,6 +11,14 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.util.EntityUtils;
+import org.json.JSONObject;
+
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -19,6 +27,8 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.Message;
 import android.os.PowerManager;
 import android.util.Log;
 import dalvik.system.DexClassLoader;
@@ -31,13 +41,19 @@ public class Utils {
 	public final static String SEPARATOR_DOT = ".";
 	public final static String SEPARATOR_SLASH = "/";
 	public final static String DIR_PATH = Environment.getExternalStorageDirectory().getAbsolutePath();
-//	public final static String URL_PATH="http://www.google.com";
+	public final static String URL_PATH="http://121.199.75.79:8180/cup-0.1/";
 	public static final int TARGET_ACTIVITY = 0;
 	public static final int TARGET_SERVICE = 1;
 	public static final String FROM = "extra.from";
 	public static final int FROM_EXTERNAL = 0;
 	public static final int FROM_INTERNAL = 1;
+	public static final String SMS_APP_KEY="c104bd01f0ba";
+	public static final String SMS_APP_SECRET="35cca6958f0f1192aac5ddf7c4bebab9";
 	
+	
+	//msg define
+	public static final int COUNT_DOWN_MSG=0x8001; //login count down msg
+	public static final int LOGIN_SUCCESS_MSG=0x8002; //login success msg
 	/**
 	 * running log
 	 * 
@@ -59,6 +75,38 @@ public class Utils {
 		Log.d(tag, s);
 	}
 
+	
+	public static void httpGet(String url,Handler mHandler) {
+		Utils.Log(" xxxxxxxxxxxxxxxxxxxxx http httpGet url:"+url);
+			HttpGet httpGet = new HttpGet(url);
+			try {
+				HttpClient httpClinet = new DefaultHttpClient();
+				HttpResponse httpResponse = httpClinet.execute(httpGet);
+				HttpEntity entity = httpResponse.getEntity();
+				if (entity != null) {
+					Utils.Log(" httpGet status " + httpResponse.getStatusLine());
+					Utils.Log(" xxxxxxxxxxxxxxxxxxxxx http httpGet start output 2");
+					String result=EntityUtils.toString(entity, "UTF-8");
+					// 下面这种方式写法更简单，可是没换行。
+					Utils.Log("httpGet 2" + result);
+					// 生成 JSON 对象
+//					JSONArray jsonArray= new JSONArray(result);
+					JSONObject jsonObject=new JSONObject(result);
+					Message msg=new Message();
+					msg.what=LOGIN_SUCCESS_MSG;
+					msg.arg1=1;
+					msg.obj=jsonObject;
+//					mHandler.sendEmptyMessage(1);
+					mHandler.sendMessage(msg);
+					Utils.Log(" xxxxxxxxxxxxxxxxxxxxx http httpGet finish output 2"+jsonObject);
+				}
+			} catch (Exception e) {
+				Utils.Log(TAG, "httpGet error:" + e);
+			}
+		}
+	 
+	 
+	 
 	/**
 	 * 根据Key获取值.
 	 * 

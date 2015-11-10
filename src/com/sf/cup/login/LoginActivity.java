@@ -60,13 +60,20 @@ public class LoginActivity extends Activity {
 		};
 		SMSSDK.registerEventHandler(eh);
 		
+		//send code button may have 3 status  1:sending  2:wait 90seconds 3:send code
         send_code=(Button)findViewById(R.id.send_code);
         send_code.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				//1检查号码是否正确
+				//1 network connect
+				if(Utils.getNetWorkType(LoginActivity.this)==-1){
+					Toast.makeText(LoginActivity.this, "请打开网络", Toast.LENGTH_SHORT).show();
+					return ;
+				}
 				
-				//2，调用发验证码接口
+				//2检查号码是否正确
+				
+				//3，调用发验证码接口
 				phoneNumString=phone_num.getText().toString();
 				if (!TextUtils.isEmpty(phoneNumString)) {
 					SMSSDK.getVerificationCode("86", phoneNumString);
@@ -166,8 +173,14 @@ public class LoginActivity extends Activity {
 			if (result == SMSSDK.RESULT_COMPLETE) {
 				//短信注册成功后，返回MainActivity,然后提示新好友
 				if (event == SMSSDK.EVENT_SUBMIT_VERIFICATION_CODE) {//提交验证码成功
-	                HashMap<String,Object> phoneMap = (HashMap<String, Object>) data;
-	                Utils.httpGet(Utils.URL_PATH+"/user/phonelogin?phone="+(String) phoneMap.get("phone"), mHandler);
+					final  HashMap<String,Object>  phoneMap = (HashMap<String, Object>) data;
+	                new Thread(new Runnable() {
+						@Override
+						public void run() {
+							Utils.httpGet(Utils.URL_PATH+"/user/phonelogin?phone="+(String) phoneMap.get("phone"), mHandler);
+						}
+					}).start();
+	                
 //					Toast.makeText(getApplicationContext(), "提交验证码成功", Toast.LENGTH_SHORT).show();
 //					textView2.setText("提交验证码成功");
 				} else if (event == SMSSDK.EVENT_GET_VERIFICATION_CODE){

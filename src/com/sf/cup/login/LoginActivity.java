@@ -2,6 +2,7 @@ package com.sf.cup.login;
 
 import java.util.HashMap;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.sf.cup.MainActivity;
@@ -9,7 +10,9 @@ import com.sf.cup.R;
 import com.sf.cup.utils.Utils;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
@@ -43,6 +46,19 @@ public class LoginActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+		SharedPreferences p;
+		p = getSharedPreferences(Utils.SHARE_PREFERENCE_CUP,Context.MODE_PRIVATE);
+		String phonenum=p.getString(Utils.SHARE_PREFERENCE_CUP_PHONE, null);
+		if(!TextUtils.isEmpty(phonenum)){
+			//already login
+			Utils.Log("already login phonenum ==>>"+phonenum);
+	    	Intent i = new Intent(getApplicationContext(), MainActivity.class);
+	        startActivity(i);
+	        finish();
+		}
+		
+		
 		setContentView(R.layout.login);
  
 		//start sms init
@@ -237,9 +253,8 @@ public class LoginActivity extends Activity {
             }else if(msg.what ==Utils.LOGIN_SUCCESS_MSG){
             	JSONObject jsonObject=(JSONObject)msg.obj;
             	//1,这里需要把这些都写入preferrence 方便后面的界面显示调用。
-            	
             	Utils.Log("login success jsonObject:"+jsonObject);
-            	
+            	saveAccountImfo(jsonObject);
             	//2,启动应用
             	Intent i = new Intent(getApplicationContext(), MainActivity.class);
                 startActivity(i);
@@ -249,6 +264,37 @@ public class LoginActivity extends Activity {
             }
         }  	
 	};
+	private void saveAccountImfo(JSONObject j){
+		SharedPreferences p;
+		SharedPreferences.Editor e;
+		p = getSharedPreferences(Utils.SHARE_PREFERENCE_CUP,Context.MODE_PRIVATE);
+		e = p.edit();
+		
+		try {
+		JSONObject result=new JSONObject(j.toString());
+		String phone= result.getString("phone");
+		String birthday =  result.getString("birthday");
+		String nickname =result.getString("nickname");
+		String avatar = result.getString("avatar");
+		String height = result.getString("height");
+		String city = result.getString("city");
+		String accountid =result.getString("accountid");
+		
+
+		e.putString(Utils.SHARE_PREFERENCE_CUP_PHONE, phone);
+		e.putString(Utils.SHARE_PREFERENCE_CUP_BIRTHDAY, birthday);
+		e.putString(Utils.SHARE_PREFERENCE_CUP_NICKNAME, nickname);
+		e.putString(Utils.SHARE_PREFERENCE_CUP_AVATAR, avatar);
+		e.putString(Utils.SHARE_PREFERENCE_CUP_HEIGHT, height);
+		e.putString(Utils.SHARE_PREFERENCE_CUP_CITY, city);
+		e.putString(Utils.SHARE_PREFERENCE_CUP_ACCOUNTID, accountid);
+		
+		e.commit();
+		} catch (JSONException e1) {
+			Utils.Log(TAG,"saveAccountImfo error :"+e1);
+		}
+		
+	}
 	private void countDown(long starttime,Handler h){
 		boolean isrun=true;
 		try {

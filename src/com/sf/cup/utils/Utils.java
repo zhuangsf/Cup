@@ -50,6 +50,16 @@ public class Utils {
 	public static final String SMS_APP_KEY="c104bd01f0ba";
 	public static final String SMS_APP_SECRET="35cca6958f0f1192aac5ddf7c4bebab9";
 	
+	public static final String SHARE_PREFERENCE_CUP="CUP";
+	public static final String SHARE_PREFERENCE_CUP_PHONE="PHONE";
+	public static final String SHARE_PREFERENCE_CUP_BIRTHDAY="BIRTHDAY";
+	public static final String SHARE_PREFERENCE_CUP_NICKNAME="NICKNAME";
+	public static final String SHARE_PREFERENCE_CUP_AVATAR="AVATAR";
+	public static final String SHARE_PREFERENCE_CUP_HEIGHT="HEIGHT";
+	public static final String SHARE_PREFERENCE_CUP_CITY="CITY";
+	public static final String SHARE_PREFERENCE_CUP_ACCOUNTID="ACCOUNTID";
+	
+	
 	
 	//msg define
 	public static final int COUNT_DOWN_MSG=0x8001; //login count down msg

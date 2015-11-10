@@ -26,35 +26,7 @@
         android:orientation="horizontal" >
          <!--   android:background="@drawable/mmfooter_bg"  -->
  
-        <RadioButton
-            android:id="@+id/rbHome"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:layout_weight="1"
-            android:background="@drawable/tab_selector_checked_bg"
-            android:button="@null"
-            android:checked="true"
-            android:drawableTop="@drawable/tab_selector_home"
-            android:gravity="center_horizontal|bottom"
-            android:paddingTop="2dp"
-            android:text="主页"
-            android:textColor="@color/tab_selector_font_color" />
- 
-        <RadioButton
-            android:id="@+id/rbData"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:layout_weight="1"
-            android:background="@drawable/tab_selector_checked_bg"
-            android:button="@null"
-            android:drawableTop="@drawable/tab_selector_data"
-            android:gravity="center_horizontal|bottom"
-            android:paddingTop="2dp"
-            android:text="数据"
-            android:textColor="@color/tab_selector_font_color" />
-        
+               
           <RadioButton
             android:id="@+id/rbTime"
             android:layout_width="0dp"
@@ -81,21 +53,23 @@
             android:gravity="center_horizontal|bottom"
             android:paddingTop="2dp"
             android:text="水温"
+            android:checked="true"
             android:textColor="@color/tab_selector_font_color" />
  
-        <RadioButton
-            android:id="@+id/rbMe"
+         <RadioButton
+            android:id="@+id/rbHome"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
             android:layout_weight="1"
             android:background="@drawable/tab_selector_checked_bg"
             android:button="@null"
-            android:drawableTop="@drawable/tab_selector_me"
+            android:drawableTop="@drawable/tab_selector_home"
             android:gravity="center_horizontal|bottom"
             android:paddingTop="2dp"
             android:text="我"
             android:textColor="@color/tab_selector_font_color" />
+ 
     </RadioGroup>
      
        

@@ -48,6 +48,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/header"
             android:orientation="vertical"
+            android:background="@android:color/holo_purple"
             android:padding="10dip" >
 
             <LinearLayout
@@ -123,6 +124,7 @@
                     android:id="@+id/phone_num"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
+                    android:background="@drawable/edittext_shape"
                     android:hint="请填写手机号码"
                     android:inputType="phone"
                     android:singleLine="true" />
@@ -141,6 +143,7 @@
                     android:layout_weight="3"
                     android:gravity="center"
                     android:inputType="number"
+                    android:background="@drawable/edittext_shape"
                     android:hint="请输入验证码" />
 
                 <Button

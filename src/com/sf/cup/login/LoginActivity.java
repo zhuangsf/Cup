@@ -95,7 +95,6 @@ public class LoginActivity extends Activity {
 					SMSSDK.getVerificationCode("86", phoneNumString);
 					send_code.setEnabled(false);
 					send_code.setBackgroundResource(R.drawable.long_button_shape_disable);
-					send_code.setTextColor(Color.WHITE);
 					timestamp = System.currentTimeMillis();
 					countDownThread = new Thread(new Runnable() {
 						@Override
@@ -124,7 +123,6 @@ public class LoginActivity extends Activity {
 				} else {
 					send_code.setEnabled(false);
 					send_code.setBackgroundResource(R.drawable.long_button_shape_disable);
-					send_code.setTextColor(Color.WHITE);
 				}
 			}
 			@Override
@@ -150,7 +148,6 @@ public class LoginActivity extends Activity {
 					} else {
 						btnLogin.setEnabled(false);
 						btnLogin.setBackgroundResource(R.drawable.long_button_shape_disable);
-						btnLogin.setTextColor(Color.WHITE);
 					}
 				}
 				@Override
@@ -272,14 +269,17 @@ public class LoginActivity extends Activity {
 		
 		try {
 		JSONObject result=new JSONObject(j.toString());
-		String phone= result.getString("phone");
-		String birthday =  result.getString("birthday");
-		String nickname =result.getString("nickname");
-		String avatar = result.getString("avatar");
-		String height = result.getString("height");
-		String city = result.getString("city");
-		String accountid =result.getString("accountid");
-		
+		String phone= result.optString("phone","");
+		String birthday =  result.optString("birthday","");
+		String nickname =result.optString("nickname","");
+		String avatar = result.optString("avatar","");
+		String height = result.optString("height","");
+		String city = result.optString("city","");
+		String accountid = result.optString("accountid","");
+		String sex =result.optString("sex","");
+		String scene =result.optString("scene","");
+		String constitution =result.optString("constitution","");
+		String weight =result.optString("weight","");
 
 		e.putString(Utils.SHARE_PREFERENCE_CUP_PHONE, phone);
 		e.putString(Utils.SHARE_PREFERENCE_CUP_BIRTHDAY, birthday);
@@ -288,6 +288,10 @@ public class LoginActivity extends Activity {
 		e.putString(Utils.SHARE_PREFERENCE_CUP_HEIGHT, height);
 		e.putString(Utils.SHARE_PREFERENCE_CUP_CITY, city);
 		e.putString(Utils.SHARE_PREFERENCE_CUP_ACCOUNTID, accountid);
+		e.putString(Utils.SHARE_PREFERENCE_CUP_SEX, sex);
+		e.putString(Utils.SHARE_PREFERENCE_CUP_SCENE, scene);
+		e.putString(Utils.SHARE_PREFERENCE_CUP_CONSTITUTION, constitution);
+		e.putString(Utils.SHARE_PREFERENCE_CUP_WEIGHT, weight);
 		
 		e.commit();
 		} catch (JSONException e1) {

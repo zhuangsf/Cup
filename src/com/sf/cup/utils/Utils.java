@@ -58,6 +58,10 @@ public class Utils {
 	public static final String SHARE_PREFERENCE_CUP_HEIGHT="HEIGHT";
 	public static final String SHARE_PREFERENCE_CUP_CITY="CITY";
 	public static final String SHARE_PREFERENCE_CUP_ACCOUNTID="ACCOUNTID";
+	public static final String SHARE_PREFERENCE_CUP_SEX="SEX";
+	public static final String SHARE_PREFERENCE_CUP_SCENE="SCENE";
+	public static final String SHARE_PREFERENCE_CUP_CONSTITUTION="CONSTITUTION";
+	public static final String SHARE_PREFERENCE_CUP_WEIGHT="WEIGHT";
 	
 	
 	

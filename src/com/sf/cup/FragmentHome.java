@@ -14,13 +14,11 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONObject;
 
-import com.sf.cup.login.LoginActivity;
 import com.sf.cup.utils.Utils;
 
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.Context;
-import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Handler;
@@ -42,17 +40,15 @@ public class FragmentHome extends Fragment {
 			+ FragmentHome.class.getSimpleName();
 	
 	Button buttonGet;
-	Button logoutBtn;
 	TextView textViewGet;
 	ListView homeListView;
 	ListView homeList2View;
 	String[] listTitle;
 	String[] list2Title;
-	private static final int PAIR_INFO_INDEX=0;
-	private static final int ACCOUNT_BIND_INDEX=1;
+	private static final int ABOUT_INDEX=0;
+	private static final int PAIR_INFO_INDEX=1;
 	private static final int RESET_INDEX=2;
 	private static final int HARDWARE_UPDATE_INDEX=3;
-	private static final int ABOUT_INDEX=4;
 	
 	
 	Handler mHandler = new Handler()
@@ -86,6 +82,9 @@ public class FragmentHome extends Fragment {
         Resources res =getResources();
         listTitle=res.getStringArray(R.array.home_list_title);
         list2Title=res.getStringArray(R.array.home_part2_list_title);
+        
+        
+        
     }
  
     @Override
@@ -120,14 +119,6 @@ public class FragmentHome extends Fragment {
 			}
 		});
     	
-    	logoutBtn=((Button)view.findViewById(R.id.logout));
-    	logoutBtn.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View arg0) {
-				Intent i = new Intent(getActivity(), LoginActivity.class);
-                startActivity(i);
-			}
-		});
     	
         return view;
     }
@@ -153,10 +144,20 @@ public class FragmentHome extends Fragment {
         @Override  
         public void onClick(View v) {  
             Toast.makeText(FragmentHome.this.getActivity(),((TextView)v.findViewById(R.id.title_text)).getText()+""+mPosition, Toast.LENGTH_SHORT).show();
-            if(RESET_INDEX==mPosition){
+            if(ABOUT_INDEX==mPosition){
+            	
+            }else if (PAIR_INFO_INDEX==mPosition){
+            
+            }else if(RESET_INDEX==mPosition){
             	FragmentTransaction ft=getActivity().getFragmentManager().beginTransaction();
             	ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
             	ft.add(R.id.fragmentfield, new FragmentHomeReset());
+            	ft.addToBackStack(null);
+				ft.commit();
+            }else if (HARDWARE_UPDATE_INDEX==mPosition){
+            	FragmentTransaction ft=getActivity().getFragmentManager().beginTransaction();
+            	ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+            	ft.add(R.id.fragmentfield, new FragmentHomeHardwareUpdate());
             	ft.addToBackStack(null);
 				ft.commit();
             }

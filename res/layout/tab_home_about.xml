@@ -61,17 +61,26 @@
             android:layout_width="fill_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:orientation="vertical" >
+            android:orientation="vertical"
+            android:gravity="center" >
+            
+            <!-- draw line by myself -->
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="1dp"
+                android:background="@drawable/cup_login_bg"
+                android:visibility="visible" />
 
             <ListView
                 android:id="@+id/about_list_view"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:headerDividersEnabled="true"
+                android:divider="@drawable/cup_login_bg"
+                android:dividerHeight="1dp"
                 android:footerDividersEnabled="true"
-                android:background="@drawable/cyan"
-                 >
+                android:headerDividersEnabled="true" >
             </ListView>
+
         </LinearLayout>
 
         <LinearLayout

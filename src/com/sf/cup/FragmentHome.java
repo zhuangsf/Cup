@@ -33,7 +33,6 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class FragmentHome extends Fragment {
 	private final static String TAG = FragmentHome.class.getPackage().getName() + "."
@@ -92,14 +91,14 @@ public class FragmentHome extends Fragment {
     	View view=inflater.inflate(R.layout.tab_home, null);
     	textViewGet=((TextView)view.findViewById(R.id.getText));
     	homeListView=(ListView) view.findViewById(R.id.homeListView); 
-    	HomeListViewAdapter hlva=new HomeListViewAdapter(this.getActivity(), getData(), R.layout.tab_home_list_item,
+    	HomeListViewAdapter1 hlva=new HomeListViewAdapter1(this.getActivity(), getData(), R.layout.tab_home_list_item,
     			new String[]{"title","info","img"},
     			new int[]{R.id.title_text,R.id.info_text,R.id.right_img});
     	setHeight(hlva,homeListView);
     	homeListView.setAdapter(hlva);
     	
     	homeList2View=(ListView) view.findViewById(R.id.homeList2View); 
-    	HomeListViewAdapter hlva2=new HomeListViewAdapter(this.getActivity(), getData2(), R.layout.tab_home_list_item,
+    	HomeListViewAdapter2 hlva2=new HomeListViewAdapter2(this.getActivity(), getData2(), R.layout.tab_home_list_item,
     			new String[]{"title","info","img"},
     			new int[]{R.id.title_text,R.id.info_text,R.id.right_img});
     	setHeight(hlva2,homeList2View);
@@ -122,23 +121,22 @@ public class FragmentHome extends Fragment {
     	
         return view;
     }
-    private class HomeListViewAdapter extends SimpleAdapter{
-
-		public HomeListViewAdapter(Context context, List<Map<String, Object>> data, int resource, String[] from,int[] to) {
+    private class HomeListViewAdapter1 extends SimpleAdapter{
+		public HomeListViewAdapter1(Context context, List<Map<String, Object>> data, int resource, String[] from,int[] to) {
 			super(context, data, resource, from, to);
 		}
 		
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
 			View view=super.getView(position, convertView, parent);
-			view.setOnClickListener(new MyListener(position));
+			view.setOnClickListener(new MyListener1(position));
 			return view;
 		}
     	
     }
-    private class MyListener implements OnClickListener{  
+    private class MyListener1 implements OnClickListener{  
         int mPosition;  
-        public MyListener(int inPosition){  
+        public MyListener1(int inPosition){  
             mPosition= inPosition;  
         }  
         @Override  
@@ -174,8 +172,41 @@ public class FragmentHome extends Fragment {
 				ft.commit();
             }
         }  
+    } 
+    
+    private class HomeListViewAdapter2 extends SimpleAdapter{
+		public HomeListViewAdapter2(Context context, List<Map<String, Object>> data, int resource, String[] from,int[] to) {
+			super(context, data, resource, from, to);
+		}
+		
+		@Override
+		public View getView(int position, View convertView, ViewGroup parent) {
+			View view=super.getView(position, convertView, parent);
+			view.setOnClickListener(new MyListener2(position));
+			return view;
+		}
+    	
+    }
+    private class MyListener2 implements OnClickListener{  
+        int mPosition;  
+        public MyListener2(int inPosition){  
+            mPosition= inPosition;  
+        }  
+        @Override  
+        public void onClick(View v) {  
+            if(0==mPosition){
+            	//go to personal info
+            }
+        }  
           
     }  
+    
+    
+    
+    
+    
+    
+    
     public void setHeight(BaseAdapter comAdapter,ListView l){  
         int listViewHeight = 0;  
         int adaptCount = comAdapter.getCount();  

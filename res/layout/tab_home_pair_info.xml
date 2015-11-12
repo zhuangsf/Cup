@@ -34,7 +34,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="固件升级"
+            android:text="配对信息"
             android:textColor="@android:color/white"
             android:textSize="20sp" />
     </RelativeLayout>
@@ -54,28 +54,19 @@
              >
 
             <TextView
-                android:id="@+id/hardware_info"
+                android:id="@+id/pair_info"
                 android:layout_width="fill_parent"
                 android:layout_height="60dp"
                 android:layout_marginLeft="20dp"
                 android:gravity="center_vertical"
                 android:background="@android:color/white"
                 android:textSize="7pt"
-                android:text="Clc29\n序列号：WC2536546582555856332" >
+                android:text="无配对信息" >
             </TextView>
         </LinearLayout>
         
         
-          <Button
-                android:id="@+id/btn_hardware_update"
-                android:layout_width="fill_parent"
-                android:layout_height="40dp"
-                android:layout_marginTop="50dp"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
-                android:textColor="@drawable/white"
-                android:background="@drawable/long_button_selector"
-                android:text="升级" />
+        
     </LinearLayout>
 
 </LinearLayout>

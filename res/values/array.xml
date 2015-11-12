@@ -10,4 +10,10 @@
     <string-array name="home_part2_list_title">
         <item>个人信息</item>
     </string-array> 
+    
+    
+     <string-array name="home_about_list_title">
+        <item>进入官网</item>
+        <item>购买</item>
+    </string-array>
 </resources>

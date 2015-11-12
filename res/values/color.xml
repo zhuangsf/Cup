@@ -19,7 +19,7 @@
 
 
 
-<drawable name="cup_login">#ffe5e5e5</drawable>
+<drawable name="cup_login_bg">#ffe5e5e5</drawable>
 <drawable name="cup_button_pink">#ffe30090</drawable>
 <drawable name="cup_button_gray">#ff515151</drawable>
 </resources> 

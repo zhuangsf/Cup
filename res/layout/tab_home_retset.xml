@@ -1,86 +1,95 @@
 <?xml version="1.0" encoding="utf-8"?>
-    <LinearLayout  xmlns:android="http://schemas.android.com/apk/res/android" 
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical" 
-         android:background="@android:color/holo_blue_bright">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/cup_login_bg"
+    android:orientation="vertical" >
 
-          <RelativeLayout
-            android:id="@+id/header"
-            android:layout_width="fill_parent"
+    <RelativeLayout
+        android:id="@+id/header"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="@layout/header_gradient"
+        android:paddingBottom="5dp"
+        android:paddingTop="5dp" >
+
+        <!-- Logo Start -->
+
+        <ImageView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@layout/header_gradient"
-            android:paddingBottom="5dp"
-            android:paddingTop="5dp" >
-         <Button
-                android:id="@+id/goBack"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:text="back" />
- <!-- Logo Start -->
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_toStartOf="@+id/title"
-                android:layout_marginLeft="10dp"
-                android:src="@drawable/ic_launcher" />
- <!-- Logo Ends -->            
-            <TextView
-                android:id="@id/title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:text="恢复设置"
-                android:textColor="@android:color/white"
-                android:textSize="20sp" />
-           
+            android:layout_marginLeft="10dp"
+            android:layout_toStartOf="@+id/title"
+            android:src="@drawable/ic_launcher" />
+        <!-- Logo Ends -->
 
-           
-        </RelativeLayout>
+        <TextView
+            android:id="@id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="恢复出厂设置"
+            android:textColor="@android:color/white"
+            android:textSize="20sp" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_marginTop="20dp"
+        android:orientation="vertical" >
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="50dp"
-            android:orientation="vertical"
-             >
+            android:background="@android:color/white"
+            android:orientation="vertical" >
 
             <TextView
                 android:id="@+id/showInfo"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_width="fill_parent"
+                android:layout_height="60dp"
+                android:layout_marginLeft="20dp"
                 android:background="@android:color/white"
-                android:text="xxxxxxxxxxxx"
-                 android:layout_marginBottom="10dp"
-                 >
-            </TextView>
-              <TextView
-                android:id="@+id/showInfo2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" 
-                android:text="xadfasdf"
-                >
+                android:gravity="center_vertical"
+                android:text="Clc29"
+                android:textSize="7pt" >
             </TextView>
         </LinearLayout>
 
-           <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_marginBottom="50dp"
-            android:orientation="horizontal"
-            android:gravity="center" >
-        <Button
-            android:id="@+id/cancel"
-            android:layout_width="wrap_content"
+        <TextView
+            android:id="@+id/showInfo2"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="取消"
-             android:layout_marginRight="15dp" />
-        <Button
-            android:id="@+id/ok"
-            android:layout_width="wrap_content"
+            android:layout_marginTop="20dp"
+            android:background="@null"
+            android:gravity="center_horizontal"
+            android:text="恢复出厂设置将会清空所有数据\n删除当前账号绑定关系\n是否继续操作？"
+            android:textSize="7pt" >
+        </TextView>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="继续" />
+            android:layout_marginTop="20dp"
+            android:gravity="center"
+            android:orientation="horizontal" >
+
+            <Button
+                android:id="@+id/reset_ok"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="40dp"
+                android:background="@drawable/long_button_selector"
+                android:text="继续" />
+
+            <Button
+                android:id="@+id/reset_cancel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/long_button_selector"
+                android:text="取消" />
         </LinearLayout>
     </LinearLayout>
 
+</LinearLayout>

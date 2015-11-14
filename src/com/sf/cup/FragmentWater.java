@@ -119,7 +119,6 @@ public class FragmentWater extends Fragment {
 //				m.put("temperature_text", "2");
 //				temperatureList.remove(0);
 //				doUpdate();
-				// TODO 这里有待验证是否能正确弹出输入窗口
 				// layout.post(new Runnable() {
 				// @Override
 				// public void run() {
@@ -155,7 +154,7 @@ public class FragmentWater extends Fragment {
 				//1,show confirm dialog
 				
 				
-				//2 send message to bluetooth
+				//2 TODO send message to bluetooth
 				//show waiting dialog
 				
 				//3 update ui 
@@ -299,7 +298,7 @@ public class FragmentWater extends Fragment {
 		for (int i = 0; i < adaptCount; i++) {
 			View temp = comAdapter.getView(i, null, l);
 			temp.measure(0, 0);
-			listViewHeight += temp.getMeasuredHeight();
+			listViewHeight += temp.getMeasuredHeight()+10;// the divide height
 			Utils.Log("xxxxxxxxxxxxxxxxxx listViewHeight:" + listViewHeight);
 		}
 		LayoutParams layoutParams = l.getLayoutParams();

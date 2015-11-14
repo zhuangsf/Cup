@@ -63,6 +63,8 @@ public class Utils {
 	public static final String SHARE_PREFERENCE_CUP_CONSTITUTION="CONSTITUTION";
 	public static final String SHARE_PREFERENCE_CUP_WEIGHT="WEIGHT";
 	
+	public static final String SHARE_PREFERENCE_CUP_TEMPERATURE_MODE_ENABLE="TEMPERATURE_MODE_ENABLE";
+	
 	
 	
 	//msg define

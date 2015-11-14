@@ -12,6 +12,9 @@ import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
+import android.content.res.Resources;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -23,6 +26,7 @@ import android.view.ViewGroup.LayoutParams;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RadioButton;
@@ -37,8 +41,11 @@ public class FragmentWater extends Fragment {
 	List<Map<String, Object>> temperatureList = new ArrayList<Map<String, Object>>(); //list view 就是一直玩弄这个
 	TemperatureListViewAdapter hlva;
 	
+	FrameLayout temperature_mode;
+	View maskView;
 	LinearLayout temperature_setting;
 	boolean temperature_mode_enable=false;
+	int temperature_setting_value=55;
 	
 	private static final String VIEW_INFO_TEXT="info_text";
 	private static final String VIEW_TEMPERATURE_TEXT="temperature_text";
@@ -48,6 +55,12 @@ public class FragmentWater extends Fragment {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+		
+		SharedPreferences p;
+		p = getActivity().getSharedPreferences(Utils.SHARE_PREFERENCE_CUP,Context.MODE_PRIVATE);
+		temperature_mode_enable=p.getBoolean(Utils.SHARE_PREFERENCE_CUP_TEMPERATURE_MODE_ENABLE, false);
+		
 	}
 
 	@Override
@@ -138,22 +151,133 @@ public class FragmentWater extends Fragment {
 		temperature_setting.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				Utils.Log("xxxxxxxxxxxxxxxxxx temperature_setting:" + v);
 				//1,show confirm dialog
 				
-				//2,turn on/off the temperature mode
 				
-				//3,change display
-				TextView t=(TextView)v.findViewById(R.id.temperature_du);
-				if(temperature_mode_enable){
-					t.setTextColor(R.drawable.cup_pink);
-				}else{
-					t.setTextColor(R.drawable.darkgray);
-				}
+				//2 send message to bluetooth
+				//show waiting dialog
+				
+				//3 update ui 
+				temperature_mode_enable=!temperature_mode_enable;
+				updateUiShow();
+				
+				//4 save value  temperature_mode_enable
+				SharedPreferences.Editor e=getPpreferenceEdit();
+				e.putBoolean(Utils.SHARE_PREFERENCE_CUP_TEMPERATURE_MODE_ENABLE, temperature_mode_enable);
+				e.commit();
 			}
 		});
 		
+		
+		temperature_mode=(FrameLayout)v.findViewById(R.id.temperature_mode);
+		//create a mask to disable mode change
+		maskView=new View(getActivity());
+		maskView.setLayoutParams(new ViewGroup.LayoutParams(
+		            ViewGroup.LayoutParams.FILL_PARENT,
+		            ViewGroup.LayoutParams.FILL_PARENT));
+		maskView.setBackgroundColor(0x88000000);
+		maskView.setClickable(true);// set true  to disable other view click
+		
+		
+		
+		
+		
+		
+		
+		updateUiShow();// create first time
 		return v;
 	}
+	
+	private void updateUiShow(){
+		//1,turn on/off the temperature mode
+		setMaskToModeSetting(temperature_mode_enable);
+		
+		//2,change display
+		TextView t=(TextView)temperature_setting.findViewById(R.id.temperature_du);
+		Utils.Log("xxxxxxxxxxxxxxxxxx temperature_mode_enable:" + temperature_mode_enable +"t color:"+Integer.toHexString(t.getCurrentTextColor()));
+		if(temperature_mode_enable){
+			t.setTextColor(getActivity().getResources().getColor(R.drawable.cup_pink));
+		}else{
+			t.setTextColor(getActivity().getResources().getColor(R.drawable.darkgray));
+		}
+		setTemperaturePic(temperature_setting,temperature_mode_enable);
+	}
+
+	int enableTemperaturePicId1[]={
+			R.drawable.login_logo,
+			R.drawable.login_logo,
+			R.drawable.login_logo,
+			R.drawable.login_logo,
+			R.drawable.login_logo,
+			R.drawable.login_logo,
+			R.drawable.login_logo,
+			R.drawable.login_logo
+	};
+	int enableTemperaturePicId2[]={
+			R.drawable.login_logo,
+			R.drawable.login_logo,
+			R.drawable.login_logo,
+			R.drawable.login_logo,
+			R.drawable.login_logo,
+			R.drawable.login_logo,
+			R.drawable.login_logo,
+			R.drawable.login_logo,
+			R.drawable.login_logo,
+			R.drawable.login_logo
+	};
+	private void setTemperaturePic(View v, boolean isEnable) {
+		View v1 = (View) v.findViewById(R.id.temperature_value1);
+		View v2 = (View) v.findViewById(R.id.temperature_value2);
+		Resources resources = getActivity().getResources();
+		int temperatureValue1 = getSettingValue() / 10;
+		int temperatureValue2 = getSettingValue() % 10;
+		Drawable bgDrawable1;
+		Drawable bgDrawable2;
+		if (isEnable) {
+			bgDrawable1 = resources.getDrawable(enableTemperaturePicId1[temperatureValue1]);
+			bgDrawable2 = resources.getDrawable(enableTemperaturePicId1[temperatureValue2]);
+		} else {
+			bgDrawable1 = resources.getDrawable(enableTemperaturePicId2[temperatureValue1]);
+			bgDrawable2 = resources.getDrawable(enableTemperaturePicId2[temperatureValue2]);
+		}
+		v1.setBackground(bgDrawable1);
+		v2.setBackground(bgDrawable2);
+
+	}
+	private int getSettingValue(){
+		if(temperature_setting_value<10||temperature_setting_value>99){
+			temperature_setting_value=55;
+		}
+		//get temperature which select mode define 
+		
+		return temperature_setting_value;
+	}
+	
+	private void setMaskToModeSetting(boolean isEnable){
+//		temperature_mode
+		
+		if(!isEnable)
+		{
+			temperature_mode.addView(maskView);
+		}else
+		{
+			temperature_mode.removeView(maskView);
+		}
+	}
+	
+	
+	
+	private SharedPreferences.Editor getPpreferenceEdit(){
+		SharedPreferences p;
+		SharedPreferences.Editor e;
+		p = getActivity().getSharedPreferences(Utils.SHARE_PREFERENCE_CUP,Context.MODE_PRIVATE);
+		e = p.edit();
+		return e;
+	}
+	
+	
+	
 	private void doUpdate(){
 		if(hlva!=null){
 			Utils.Log("update listview");

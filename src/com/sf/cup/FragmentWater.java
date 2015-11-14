@@ -23,9 +23,11 @@ import android.view.ViewGroup.LayoutParams;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.SimpleAdapter;
+import android.widget.TextView;
 
 public class FragmentWater extends Fragment {
 
@@ -34,6 +36,9 @@ public class FragmentWater extends Fragment {
 	Button cancel_temperature_button;
 	List<Map<String, Object>> temperatureList = new ArrayList<Map<String, Object>>(); //list view 就是一直玩弄这个
 	TemperatureListViewAdapter hlva;
+	
+	LinearLayout temperature_setting;
+	boolean temperature_mode_enable=false;
 	
 	private static final String VIEW_INFO_TEXT="info_text";
 	private static final String VIEW_TEMPERATURE_TEXT="temperature_text";
@@ -123,6 +128,27 @@ public class FragmentWater extends Fragment {
 					m.put(VIEW_RADIO_BTN,false);
 				}
 				doUpdate();
+			}
+		});
+		
+		
+		
+		//click to open/close the temperature mode
+		temperature_setting=(LinearLayout)v.findViewById(R.id.temperature_setting);
+		temperature_setting.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				//1,show confirm dialog
+				
+				//2,turn on/off the temperature mode
+				
+				//3,change display
+				TextView t=(TextView)v.findViewById(R.id.temperature_du);
+				if(temperature_mode_enable){
+					t.setTextColor(R.drawable.cup_pink);
+				}else{
+					t.setTextColor(R.drawable.darkgray);
+				}
 			}
 		});
 		

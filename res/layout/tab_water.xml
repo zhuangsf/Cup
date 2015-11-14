@@ -190,7 +190,6 @@
                         android:id="@+id/temperature_list"
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
-                        android:layout_margin="5dp"
                          android:dividerHeight="10dp"
                          android:divider="@null"
                         

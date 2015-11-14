@@ -282,6 +282,15 @@ public class FragmentWater extends Fragment {
 			Utils.Log("update listview");
 			hlva.notifyDataSetChanged();
 			setHeight(hlva, temperatureListView);
+			
+			
+			Utils.Log("xxxxxxxxxxxxxxxxxx count:"+temperatureList.size());
+			if(temperatureList.size()>=5)
+			{
+				add_temperature_button.setEnabled(false);
+			}else{
+				add_temperature_button.setEnabled(true);
+			}
 		}
 	}
 
@@ -298,7 +307,7 @@ public class FragmentWater extends Fragment {
 		for (int i = 0; i < adaptCount; i++) {
 			View temp = comAdapter.getView(i, null, l);
 			temp.measure(0, 0);
-			listViewHeight += temp.getMeasuredHeight()+10;// the divide height
+			listViewHeight += temp.getMeasuredHeight()+15;// the divide height
 			Utils.Log("xxxxxxxxxxxxxxxxxx listViewHeight:" + listViewHeight);
 		}
 		LayoutParams layoutParams = l.getLayoutParams();
@@ -338,8 +347,23 @@ public class FragmentWater extends Fragment {
 					}
 			        temperatureList.get(p).put(VIEW_RADIO_BTN, true);
 			        TemperatureListViewAdapter.this.notifyDataSetChanged();
+			        
+			        
 				}
 			});
+			
+			TextView delete_model=(TextView)view.findViewById(R.id.delete_model);
+			delete_model.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+			        temperatureList.remove(p);
+			        TemperatureListViewAdapter.this.notifyDataSetChanged();
+			        //better to show a confirm dialog
+			        
+			        
+				}
+			});
+			
 			
 			view.setOnTouchListener(new OnTouchListener() {
 				@Override
@@ -375,6 +399,19 @@ public class FragmentWater extends Fragment {
 			
 			
 			return view;
+		}
+		
+		@Override
+		public void notifyDataSetChanged() {
+			super.notifyDataSetChanged();
+			//TODO
+			//0 ,show a waiting dialog
+			
+			//1, send request to cup
+			
+			//2,  update the mode
+			
+			//3, save status to perferrence
 		}
 		
 		

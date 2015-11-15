@@ -22,7 +22,7 @@
         android:id="@+id/tab_menu"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:background="@android:color/holo_blue_light"
+        android:background="@drawable/cup_dark_gray"
         android:orientation="horizontal" >
          <!--   android:background="@drawable/mmfooter_bg"  -->
  

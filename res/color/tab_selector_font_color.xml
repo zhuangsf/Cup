@@ -2,8 +2,8 @@
 <!-- 字体颜色 -->
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
  
-    <item android:state_checked="true" android:color="@android:color/white"/>
-    <item android:state_checked="false" android:color="@android:color/darker_gray"/>
-    <item android:color="@android:color/darker_gray"/>
+    <item android:state_checked="true" android:color="@drawable/cup_pink"/>
+    <item android:state_checked="false" android:color="@android:color/white"/>
+    <item android:color="@android:color/holo_blue_bright"/>
  
 </selector>

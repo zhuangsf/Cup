@@ -169,7 +169,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="15dp"
                     android:text="恒温设定"
-                    android:textColor="@drawable/black"
+                    android:textColor="@drawable/darkgray"
                     android:textSize="15sp" />
 
                 <TextView
@@ -177,7 +177,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="默认温度"
-                    android:textColor="@drawable/darkgray"
+                    android:textColor="@drawable/black"
                     android:textSize="20sp" />
 
                 <LinearLayout

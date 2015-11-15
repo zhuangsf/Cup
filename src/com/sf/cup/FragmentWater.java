@@ -27,6 +27,7 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RadioButton;
@@ -36,7 +37,7 @@ import android.widget.TextView;
 public class FragmentWater extends Fragment {
 
 	ListView temperatureListView; 
-	Button add_temperature_button;
+	ImageView add_temperature_button;
 	Button cancel_temperature_button;
 	List<Map<String, Object>> temperatureList = new ArrayList<Map<String, Object>>(); //list view 就是一直玩弄这个
 	TemperatureListViewAdapter hlva;
@@ -51,6 +52,13 @@ public class FragmentWater extends Fragment {
 	private static final String VIEW_TEMPERATURE_TEXT="temperature_text";
 	private static final String VIEW_RADIO_BTN="radio_btn";
 	
+	
+	TextView water_status_text1;
+	TextView water_status_text2;
+	TextView water_status_text3;
+	ImageView water_status_pic1;
+	ImageView water_status_pic2;
+	ImageView water_status_pic3;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -86,7 +94,7 @@ public class FragmentWater extends Fragment {
 		temperatureListView.setAdapter(hlva);
 		setHeight(hlva, temperatureListView);
 
-		add_temperature_button = (Button) v.findViewById(R.id.add_temperature_button);
+		add_temperature_button = (ImageView) v.findViewById(R.id.add_temperature_button);
 		add_temperature_button.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -181,7 +189,13 @@ public class FragmentWater extends Fragment {
 		
 		
 		
-		
+		//status  view
+		water_status_text1=(TextView)v.findViewById(R.id.water_status_text1);
+		water_status_text2=(TextView)v.findViewById(R.id.water_status_text2);
+		water_status_text3=(TextView)v.findViewById(R.id.water_status_text3);
+		water_status_pic1=(ImageView)v.findViewById(R.id.water_status_pic1);
+		water_status_pic2=(ImageView)v.findViewById(R.id.water_status_pic2);
+		water_status_pic3=(ImageView)v.findViewById(R.id.water_status_pic3);		
 		
 		
 		updateUiShow();// create first time
@@ -203,27 +217,29 @@ public class FragmentWater extends Fragment {
 		setTemperaturePic(temperature_setting,temperature_mode_enable);
 	}
 
-	int enableTemperaturePicId1[]={
-			R.drawable.login_logo,
-			R.drawable.login_logo,
-			R.drawable.login_logo,
-			R.drawable.login_logo,
-			R.drawable.login_logo,
-			R.drawable.login_logo,
-			R.drawable.login_logo,
-			R.drawable.login_logo
+	int enableTemperaturePicId[]={
+			R.drawable.num_focus_0,
+			R.drawable.num_focus_1,
+			R.drawable.num_focus_2,
+			R.drawable.num_focus_3,
+			R.drawable.num_focus_4,
+			R.drawable.num_focus_5,
+			R.drawable.num_focus_6,
+			R.drawable.num_focus_7,
+			R.drawable.num_focus_8,
+			R.drawable.num_focus_9
 	};
-	int enableTemperaturePicId2[]={
-			R.drawable.login_logo,
-			R.drawable.login_logo,
-			R.drawable.login_logo,
-			R.drawable.login_logo,
-			R.drawable.login_logo,
-			R.drawable.login_logo,
-			R.drawable.login_logo,
-			R.drawable.login_logo,
-			R.drawable.login_logo,
-			R.drawable.login_logo
+	int disableTemperaturePicId[]={
+			R.drawable.num_disable_0,
+			R.drawable.num_disable_1,
+			R.drawable.num_disable_2,
+			R.drawable.num_disable_3,
+			R.drawable.num_disable_4,
+			R.drawable.num_disable_5,
+			R.drawable.num_disable_6,
+			R.drawable.num_disable_7,
+			R.drawable.num_disable_8,
+			R.drawable.num_disable_9
 	};
 	private void setTemperaturePic(View v, boolean isEnable) {
 		View v1 = (View) v.findViewById(R.id.temperature_value1);
@@ -234,11 +250,11 @@ public class FragmentWater extends Fragment {
 		Drawable bgDrawable1;
 		Drawable bgDrawable2;
 		if (isEnable) {
-			bgDrawable1 = resources.getDrawable(enableTemperaturePicId1[temperatureValue1]);
-			bgDrawable2 = resources.getDrawable(enableTemperaturePicId1[temperatureValue2]);
+			bgDrawable1 = resources.getDrawable(enableTemperaturePicId[temperatureValue1]);
+			bgDrawable2 = resources.getDrawable(enableTemperaturePicId[temperatureValue2]);
 		} else {
-			bgDrawable1 = resources.getDrawable(enableTemperaturePicId2[temperatureValue1]);
-			bgDrawable2 = resources.getDrawable(enableTemperaturePicId2[temperatureValue2]);
+			bgDrawable1 = resources.getDrawable(disableTemperaturePicId[temperatureValue1]);
+			bgDrawable2 = resources.getDrawable(disableTemperaturePicId[temperatureValue2]);
 		}
 		v1.setBackground(bgDrawable1);
 		v2.setBackground(bgDrawable2);

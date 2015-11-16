@@ -35,7 +35,6 @@
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="0dp"
-        android:background="@android:color/white"
         android:layout_weight="2"
         android:gravity="center" >
 
@@ -60,9 +59,10 @@
         android:rowCount="3" >
 
         <LinearLayout
+            android:id="@+id/fitsr_linearlayout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="5dp"
+            android:layout_margin="10dp"
             android:background="@drawable/alarm_linearlayout"
             android:gravity="center"
             android:orientation="vertical" >
@@ -73,18 +73,19 @@
                 android:layout_height="wrap_content"
                 android:text="00:00"
                 android:textSize="20sp" />
-
-            <Switch
+             <Switch
                 android:id="@+id/switch1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                 />
+                android:switchMinWidth="70dp"
+                android:textOn="开"
+                android:textOff="关" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="5dp"
+            android:layout_margin="10dp"
             android:background="@drawable/alarm_linearlayout"
             android:gravity="center"
             android:orientation="vertical" >
@@ -99,17 +100,21 @@
             <Switch
                 android:id="@+id/switch2"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:switchMinWidth="70dp"
+                android:textOn="开"
+                android:textOff="关" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="5dp"
+            android:layout_margin="10dp"
             android:background="@drawable/alarm_linearlayout"
             android:gravity="center"
             android:orientation="vertical" >
 
+s            
             <TextView
                 android:id="@+id/alarm3"
                 android:layout_width="wrap_content"
@@ -120,13 +125,16 @@
             <Switch
                 android:id="@+id/switch3"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:switchMinWidth="70dp"
+                android:textOn="开"
+                android:textOff="关" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="5dp"
+            android:layout_margin="10dp"
             android:background="@drawable/alarm_linearlayout"
             android:gravity="center"
             android:orientation="vertical" >
@@ -141,13 +149,16 @@
             <Switch
                 android:id="@+id/switch4"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:switchMinWidth="70dp"
+                android:textOn="开"
+                android:textOff="关" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="5dp"
+            android:layout_margin="10dp"
             android:background="@drawable/alarm_linearlayout"
             android:gravity="center"
             android:orientation="vertical" >
@@ -162,13 +173,16 @@
             <Switch
                 android:id="@+id/switch5"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:switchMinWidth="70dp"
+                android:textOn="开"
+                android:textOff="关" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="5dp"
+            android:layout_margin="10dp"
             android:background="@drawable/alarm_linearlayout"
             android:gravity="center"
             android:orientation="vertical" >
@@ -183,13 +197,16 @@
             <Switch
                 android:id="@+id/switch6"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:switchMinWidth="70dp"
+                android:textOn="开"
+                android:textOff="关" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="5dp"
+            android:layout_margin="10dp"
             android:background="@drawable/alarm_linearlayout"
             android:gravity="center"
             android:orientation="vertical" >
@@ -199,18 +216,23 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="00:00"
-                android:textSize="20sp" />
+                android:textSize="20sp"
+                 />
 
             <Switch
                 android:id="@+id/switch7"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:switchMinWidth="70dp"
+                android:textOn="开"
+                android:textOff="关"
+                 />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="5dp"
+            android:layout_margin="10dp"
             android:background="@drawable/alarm_linearlayout"
             android:gravity="center"
             android:orientation="vertical" >
@@ -220,18 +242,23 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="00:00"
-                android:textSize="20sp" />
+                android:textSize="20sp"
+                 />
 
             <Switch
                 android:id="@+id/switch8"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                 android:switchMinWidth="70dp"
+                android:textOn="开"
+                android:textOff="关"
+                 />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="5dp"
+            android:layout_margin="10dp"
             android:background="@drawable/alarm_linearlayout"
             android:gravity="center"
             android:orientation="vertical" >
@@ -246,7 +273,10 @@
             <Switch
                 android:id="@+id/switch9"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                 android:switchMinWidth="70dp"
+                android:textOn="开"
+                android:textOff="关" />
         </LinearLayout>
     </GridLayout>
     </LinearLayout>

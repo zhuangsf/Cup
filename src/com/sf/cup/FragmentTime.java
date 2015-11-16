@@ -17,8 +17,29 @@ public class FragmentTime extends Fragment {
  
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.tab_time, null);
+    	View v=inflater.inflate(R.layout.tab_time, null);
+        return v;
     }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
  
     public static FragmentTime newInstance(Bundle b){
     	FragmentTime fd=new FragmentTime();

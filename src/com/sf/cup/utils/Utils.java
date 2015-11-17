@@ -50,6 +50,7 @@ public class Utils {
 	public static final String SMS_APP_KEY="c104bd01f0ba";
 	public static final String SMS_APP_SECRET="35cca6958f0f1192aac5ddf7c4bebab9";
 	
+	//user
 	public static final String SHARE_PREFERENCE_CUP="CUP";
 	public static final String SHARE_PREFERENCE_CUP_PHONE="PHONE";
 	public static final String SHARE_PREFERENCE_CUP_BIRTHDAY="BIRTHDAY";
@@ -63,8 +64,13 @@ public class Utils {
 	public static final String SHARE_PREFERENCE_CUP_CONSTITUTION="CONSTITUTION";
 	public static final String SHARE_PREFERENCE_CUP_WEIGHT="WEIGHT";
 	
+	//water
 	public static final String SHARE_PREFERENCE_CUP_TEMPERATURE_MODE_ENABLE="TEMPERATURE_MODE_ENABLE";
 	
+	
+	//time
+	public static String IS_FROM_ALARM="IS_FROM_ALARM";
+	public static String FROM_ALARM_INDEX="FROM_ALARM_INDEX";
 	
 	
 	//msg define
@@ -350,4 +356,39 @@ public class Utils {
 		Utils.Log("downLoadFile finish"+file);
 		return file;
 	}
+	
+	
+	  /*
+     * 毫秒转化时分秒毫秒
+     */
+    public static String formatTime(Long ms) {
+        Integer ss = 1000;
+        Integer mi = ss * 60;
+        Integer hh = mi * 60;
+        Integer dd = hh * 24;
+
+        Long day = ms / dd;
+        Long hour = (ms - day * dd) / hh;
+        Long minute = (ms - day * dd - hour * hh) / mi;
+        Long second = (ms - day * dd - hour * hh - minute * mi) / ss;
+        Long milliSecond = ms - day * dd - hour * hh - minute * mi - second * ss;
+        
+        StringBuffer sb = new StringBuffer();
+        if(day > 0) {
+            sb.append(day+"天");
+        }
+        if(hour > 0) {
+            sb.append(hour+"小时");
+        }
+        if(minute > 0) {
+            sb.append(minute+"分钟");
+        }
+        if(second > 0) {
+            sb.append(second+"秒");
+        }
+//        if(milliSecond > 0) {
+//            sb.append(milliSecond+"毫秒");
+//        }
+        return sb.toString();
+    }
 }

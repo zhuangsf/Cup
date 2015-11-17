@@ -1,77 +1,235 @@
 package com.sf.cup;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
 
+import com.sf.cup.utils.Utils;
+
+import android.app.AlarmManager;
 import android.app.Fragment;
+import android.app.PendingIntent;
+import android.app.TimePickerDialog;
+import android.app.TimePickerDialog.OnTimeSetListener;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
+import android.widget.Switch;
+import android.widget.TextView;
+import android.widget.TimePicker;
+import android.widget.Toast;
 
 public class FragmentTime extends Fragment {
- 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
- 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-    	View v=inflater.inflate(R.layout.tab_time, null);
-        return v;
-    }
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
- 
-    public static FragmentTime newInstance(Bundle b){
-    	FragmentTime fd=new FragmentTime();
-			fd.setArguments(b);
-			return fd;
+	TextView alarm1;
+	TextView alarm2;
+	TextView alarm3;
+	TextView alarm4;
+	TextView alarm5;
+	TextView alarm6;
+	TextView alarm7;
+	TextView alarm8;
+	TextView alarm9;
+	List<TextView> alarmList=new ArrayList<TextView>();
+	Calendar c;
+	Switch switch1;
+	Switch switch2;
+	Switch switch3;
+	Switch switch4;
+	Switch switch5;
+	Switch switch6;
+	Switch switch7;
+	Switch switch8;
+	Switch switch9;
+	List<Switch> swtichList=new ArrayList<Switch>();
+
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+	}
+
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		View v = inflater.inflate(R.layout.tab_time, null);
+		c = Calendar.getInstance();
+
+		alarm1 = (TextView) v.findViewById(R.id.alarm1);
+		switch1 = (Switch) v.findViewById(R.id.switch1);
+		alarm2 = (TextView) v.findViewById(R.id.alarm2);
+		switch2 = (Switch) v.findViewById(R.id.switch2);
+		alarm3 = (TextView) v.findViewById(R.id.alarm3);
+		switch3 = (Switch) v.findViewById(R.id.switch3);
+		alarm4 = (TextView) v.findViewById(R.id.alarm4);
+		switch4 = (Switch) v.findViewById(R.id.switch4);
+		alarm5 = (TextView) v.findViewById(R.id.alarm5);
+		switch5 = (Switch) v.findViewById(R.id.switch5);
+		alarm6 = (TextView) v.findViewById(R.id.alarm6);
+		switch6 = (Switch) v.findViewById(R.id.switch6);
+		alarm7 = (TextView) v.findViewById(R.id.alarm7);
+		switch7 = (Switch) v.findViewById(R.id.switch7);
+		alarm8 = (TextView) v.findViewById(R.id.alarm8);
+		switch8 = (Switch) v.findViewById(R.id.switch8);
+		alarm9 = (TextView) v.findViewById(R.id.alarm9);
+		switch9 = (Switch) v.findViewById(R.id.switch9);
+		swtichList.add(switch1);
+		swtichList.add(switch2);
+		swtichList.add(switch3);
+		swtichList.add(switch4);
+		swtichList.add(switch5);
+		swtichList.add(switch6);
+		swtichList.add(switch7);
+		swtichList.add(switch8);
+		swtichList.add(switch9);
+		alarmList.add(alarm1);
+		alarmList.add(alarm2);
+		alarmList.add(alarm3);
+		alarmList.add(alarm4);
+		alarmList.add(alarm5);
+		alarmList.add(alarm6);
+		alarmList.add(alarm7);
+		alarmList.add(alarm8);
+		alarmList.add(alarm9);
+		
+		//get the setting from preferrence
+		initAlarm();
+		
+		for(int i = 0;i<9;i++){
+			setSwitchListener(i);
+			setAlarmTextClickListener(i);
 		}
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    /**
-   	 * to avoid IllegalStateException: No activity
-   	 */
-   	@Override
-   	public void onDetach() {
-   	    super.onDetach();
-   	    try {
-   	        Field childFragmentManager = Fragment.class.getDeclaredField("mChildFragmentManager");
-   	        childFragmentManager.setAccessible(true);
-   	        childFragmentManager.set(this, null);
+		return v;
+	}
+	
+	//get the setting from preferrence
+	private void initAlarm(){
+		
+	}
 
-   	    } catch (NoSuchFieldException e) {
-   	        throw new RuntimeException(e);
-   	    } catch (IllegalAccessException e) {
-   	        throw new RuntimeException(e);
-   	    }
+	
+	private Intent getIntent(int requestCode){
+		Intent intent = new Intent(getActivity(), MainActivity.class);
+		intent.setAction("android.intent.action.MAIN");
+		intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+		intent.putExtra(Utils.IS_FROM_ALARM, true);
+		intent.putExtra(Utils.FROM_ALARM_INDEX, requestCode);
+		return intent;
+	}
+	
+	private PendingIntent getPendingIntent(int requestCode){
+		PendingIntent senderPI = PendingIntent.getActivity(getActivity(), requestCode, getIntent(requestCode),PendingIntent.FLAG_UPDATE_CURRENT);
+		
+		return senderPI;
+	}
+	
+	private void setSwitchListener(final int index){
+		Utils.Log("xxxxxxxxxxxxxxxx index:"+index+" swtich:"+swtichList.get(index));
+		swtichList.get(index).setOnCheckedChangeListener(new OnCheckedChangeListener() {
+			@Override
+			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+				if (isChecked) {
+					String timeString=alarmList.get(index).getText().toString();
+					String[] timeArray=timeString.split(":");
+					c.set(Calendar.HOUR_OF_DAY, Integer.parseInt(timeArray[0]));
+					c.set(Calendar.MINUTE,  Integer.parseInt(timeArray[1]));
+					Utils.Log("xxxxxxxxx hour:"+Integer.parseInt(timeArray[0])+" min:"+Integer.parseInt(timeArray[1]));
+					if (c.getTimeInMillis() < Calendar.getInstance().getTimeInMillis()) {
+						c.add(Calendar.DAY_OF_MONTH, 1);
+					}
+					long tmpMills = c.getTimeInMillis() - System.currentTimeMillis();
+					Toast.makeText(getActivity(), "闹钟"+(index+1)+" 设置:" + Utils.formatTime(tmpMills) + "后", Toast.LENGTH_LONG).show();
+					AlarmManager am = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
+					am.set(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), getPendingIntent(index));
+				} else {
+					AlarmManager am = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
+					am.cancel(getPendingIntent(index));
+				}
+			}
+		});
+	}
+	
+	private void setAlarmTextClickListener(final int index){
+		alarmList.get(index).setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				int hour = c.get(Calendar.HOUR_OF_DAY);
+				int minute = c.get(Calendar.MINUTE);
 
-   	}
+				TimePickerDialog tpd = new TimePickerDialog(getActivity(), new OnTimeSetListener() {
+					@Override
+					public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+						c = timePicker(index,hourOfDay, minute);
+						// TODO 这里设置的值，要保存起来，写进preference
+						if (!swtichList.get(index).isChecked()) {
+							swtichList.get(index).setChecked(true);
+						} else {
+							long tmpMills = c.getTimeInMillis() - System.currentTimeMillis();
+							Toast.makeText(getActivity(), "闹钟"+(index+1)+" 设置:" + Utils.formatTime(tmpMills) + "后",Toast.LENGTH_LONG).show();
+							AlarmManager am = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
+							am.set(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), getPendingIntent(index));
+						}
+					}
+				}, hour, minute, true);
+				tpd.show();
+			}
+		});
+	}
+	
+	
+	private Calendar timePicker(int i,int hourOfDay, int minute) {
+		String timeString = minute < 10 ? hourOfDay + ":0" + minute : hourOfDay + ":" + minute;
+		alarmList.get(i).setText(timeString);
+		c.setTimeInMillis(System.currentTimeMillis());
+		c.set(Calendar.HOUR_OF_DAY, hourOfDay);
+		c.set(Calendar.MINUTE, minute);
+		c.set(Calendar.SECOND, 0);
+		c.set(Calendar.MILLISECOND, 0);
+		Utils.Log("xxxxxxxxx edit alarm :" + hourOfDay + ":" + minute + ":" + c.getTimeInMillis() + ":"
+				+ Calendar.getInstance().getTimeInMillis());
+		// 避免设置时间比当前时间小时 马上响应的情况发生
+		if (c.getTimeInMillis() < Calendar.getInstance().getTimeInMillis()) {
+			// c.set(Calendar.DAY_OF_MONTH, c.get(Calendar.DAY_OF_MONTH) + 1);
+			c.add(Calendar.DAY_OF_MONTH, 1);
+			Utils.Log("xxxxxxxxx edit alarm 2:" + (c.get(Calendar.MONTH) + 1) + ":" + c.get(Calendar.DAY_OF_MONTH));
+		}
+		return c;
+	}
+
+	
+	
+	
+	
+	
+	
+	
+	
+	public static FragmentTime newInstance(Bundle b) {
+		FragmentTime fd = new FragmentTime();
+		fd.setArguments(b);
+		return fd;
+	}
+
+	/**
+	 * to avoid IllegalStateException: No activity
+	 */
+	@Override
+	public void onDetach() {
+		super.onDetach();
+		try {
+			Field childFragmentManager = Fragment.class.getDeclaredField("mChildFragmentManager");
+			childFragmentManager.setAccessible(true);
+			childFragmentManager.set(this, null);
+
+		} catch (NoSuchFieldException e) {
+			throw new RuntimeException(e);
+		} catch (IllegalAccessException e) {
+			throw new RuntimeException(e);
+		}
+
+	}
 }

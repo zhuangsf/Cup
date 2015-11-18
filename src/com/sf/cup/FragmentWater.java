@@ -170,7 +170,7 @@ public class FragmentWater extends Fragment {
 				updateUiShow();
 				
 				//4 save value  temperature_mode_enable
-				SharedPreferences.Editor e=getPpreferenceEdit();
+				SharedPreferences.Editor e=Utils.getSharedPpreferenceEdit(getActivity());
 				e.putBoolean(Utils.SHARE_PREFERENCE_CUP_TEMPERATURE_MODE_ENABLE, temperature_mode_enable);
 				e.commit();
 			}
@@ -281,15 +281,6 @@ public class FragmentWater extends Fragment {
 		}
 	}
 	
-	
-	
-	private SharedPreferences.Editor getPpreferenceEdit(){
-		SharedPreferences p;
-		SharedPreferences.Editor e;
-		p = getActivity().getSharedPreferences(Utils.SHARE_PREFERENCE_CUP,Context.MODE_PRIVATE);
-		e = p.edit();
-		return e;
-	}
 	
 	
 	

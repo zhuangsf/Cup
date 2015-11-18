@@ -20,6 +20,7 @@ import org.apache.http.util.EntityUtils;
 import org.json.JSONObject;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
@@ -74,6 +75,7 @@ public class Utils {
 	public static String FROM_ALARM_INDEX="FROM_ALARM_INDEX";
 	public static final String SHARE_PREFERENCE_CUP_ALARM_IS_ON="ALARMON";
 	public static final String SHARE_PREFERENCE_CUP_ALARM_TIME="ALARMTIME";
+	public static final String SHARE_PREFERENCE_CUP_ALARM_ENABLE="ALARM_ENABLE";
 	
 	
 	
@@ -399,4 +401,16 @@ public class Utils {
         }
         return sb.toString();
     }
+    
+    
+    public static SharedPreferences getSharedPpreference(Context c){
+    	SharedPreferences p;
+		p = c.getSharedPreferences(Utils.SHARE_PREFERENCE_CUP,Context.MODE_PRIVATE);
+		return p;
+    }
+    public static SharedPreferences.Editor getSharedPpreferenceEdit(Context c){
+    	SharedPreferences.Editor e;
+		e = getSharedPpreference(c).edit();
+		return e;
+	}
 }

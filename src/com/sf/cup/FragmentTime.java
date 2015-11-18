@@ -22,6 +22,8 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -49,10 +51,18 @@ public class FragmentTime extends Fragment {
 	Switch switch8;
 	Switch switch9;
 	List<Switch> swtichList=new ArrayList<Switch>();
+	View maskView;
+	FrameLayout alarm_layout;
+	ImageView time_logo;
+	boolean alarmEnable=true;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+		SharedPreferences p;
+		p = Utils.getSharedPpreference(getActivity());
+		alarmEnable=p.getBoolean(Utils.SHARE_PREFERENCE_CUP_ALARM_ENABLE, true);
 	}
 
 	@Override
@@ -104,6 +114,40 @@ public class FragmentTime extends Fragment {
 			setSwitchListener(i);
 			setAlarmTextClickListener(i);
 		}
+		
+		
+		
+		
+		time_logo=(ImageView)v.findViewById(R.id.time_logo);
+		time_logo.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				alarmEnable=!alarmEnable;
+				//TODO show waiting dialog
+				
+				//1,update ui
+				updateAlarm();
+				
+				//2,update all alarm                only click can change the diff status
+				updateAlarmStatus();
+				
+				//3, save the status                  only click can change the diff status
+				SharedPreferences.Editor e=Utils.getSharedPpreferenceEdit(getActivity());
+				e.putBoolean(Utils.SHARE_PREFERENCE_CUP_ALARM_ENABLE, alarmEnable);
+				e.commit();
+				
+			}
+		});
+		alarm_layout=(FrameLayout)v.findViewById(R.id.alarm_layout);
+		//create a mask to disable mode change
+		maskView=new View(getActivity());
+		maskView.setLayoutParams(new ViewGroup.LayoutParams(
+		            ViewGroup.LayoutParams.FILL_PARENT,
+		            ViewGroup.LayoutParams.FILL_PARENT));
+		maskView.setBackgroundColor(0x88000000);
+		maskView.setClickable(true);// set true  to disable other view click
+		
+		updateAlarm();
 		return v;
 	}
 	
@@ -118,11 +162,51 @@ public class FragmentTime extends Fragment {
 				String text=p.getString(Utils.SHARE_PREFERENCE_CUP_ALARM_TIME+i, "00:00");
 				swtichList.get(i).setChecked(checked);
 				alarmList.get(i).setText(text);
-				
-				
 			}
 	}
 
+	
+	private void updateAlarm(){
+		if(!alarmEnable)
+		{
+			//2,update mask
+			alarm_layout.addView(maskView);
+			//3,change clock ui
+			time_logo.setImageResource(R.drawable.time_logo_disable);
+		}else
+		{
+			alarm_layout.removeView(maskView);
+			time_logo.setImageResource(R.drawable.time_logo_enable);
+		}
+	}
+	
+	private void updateAlarmStatus(){
+		if(!alarmEnable)
+		{
+			for(int i = 0;i<9;i++){
+				if(swtichList.get(i).isChecked()){
+					AlarmManager am = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
+					am.cancel(getPendingIntent(i));
+				}
+			}
+		}else{
+			for(int i = 0;i<9;i++){
+				if(swtichList.get(i).isChecked()){
+					String timeString=alarmList.get(i).getText().toString();
+					String[] timeArray=timeString.split(":");
+					c.set(Calendar.HOUR_OF_DAY, Integer.parseInt(timeArray[0]));
+					c.set(Calendar.MINUTE,  Integer.parseInt(timeArray[1]));
+					Utils.Log("xxxxxxxxx hour:"+Integer.parseInt(timeArray[0])+" min:"+Integer.parseInt(timeArray[1]));
+					if (c.getTimeInMillis() < Calendar.getInstance().getTimeInMillis()) {
+						c.add(Calendar.DAY_OF_MONTH, 1);
+					}
+					long tmpMills = c.getTimeInMillis() - System.currentTimeMillis();
+					AlarmManager am = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
+					am.set(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), getPendingIntent(i));
+				}
+			}
+		}
+	}
 	
 	private Intent getIntent(int requestCode){
 		Intent intent = new Intent(getActivity(), MainActivity.class);
@@ -178,6 +262,15 @@ public class FragmentTime extends Fragment {
 		alarmList.get(index).setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				//选中的时候设置他的初始值
+				String timeString=alarmList.get(index).getText().toString();
+				String[] timeArray=timeString.split(":");
+				c.set(Calendar.HOUR_OF_DAY, Integer.parseInt(timeArray[0]));
+				c.set(Calendar.MINUTE,  Integer.parseInt(timeArray[1]));
+				Utils.Log("xxxxxxxxx hour:"+Integer.parseInt(timeArray[0])+" min:"+Integer.parseInt(timeArray[1]));
+				if (c.getTimeInMillis() < Calendar.getInstance().getTimeInMillis()) {
+					c.add(Calendar.DAY_OF_MONTH, 1);
+				}
 				int hour = c.get(Calendar.HOUR_OF_DAY);
 				int minute = c.get(Calendar.MINUTE);
 

@@ -189,6 +189,7 @@ public class MainActivity extends Activity {
        	
        	new AlertDialog.Builder(this)
 			.setMessage("亲！已到设定饮水时间咯！\n请及时享用哦")
+			.setTitle("温馨提示")
 			.setPositiveButton("确定", null)
 			.create()
 			.show();

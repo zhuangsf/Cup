@@ -30,6 +30,7 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.os.PowerManager;
+import android.text.TextUtils;
 import android.util.Log;
 import dalvik.system.DexClassLoader;
 
@@ -71,6 +72,9 @@ public class Utils {
 	//time
 	public static String IS_FROM_ALARM="IS_FROM_ALARM";
 	public static String FROM_ALARM_INDEX="FROM_ALARM_INDEX";
+	public static final String SHARE_PREFERENCE_CUP_ALARM_IS_ON="ALARMON";
+	public static final String SHARE_PREFERENCE_CUP_ALARM_TIME="ALARMTIME";
+	
 	
 	
 	//msg define
@@ -389,6 +393,10 @@ public class Utils {
 //        if(milliSecond > 0) {
 //            sb.append(milliSecond+"∫¡√Î");
 //        }
+        
+        if(TextUtils.isEmpty(sb.toString())){
+            sb.append("1√Î");
+        }
         return sb.toString();
     }
 }

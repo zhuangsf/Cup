@@ -14,6 +14,7 @@ import android.app.TimePickerDialog;
 import android.app.TimePickerDialog.OnTimeSetListener;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -108,7 +109,18 @@ public class FragmentTime extends Fragment {
 	
 	//get the setting from preferrence
 	private void initAlarm(){
-		
+		 //SharedPreferences 初始化界面
+			SharedPreferences p;
+			p = getActivity().getSharedPreferences(Utils.SHARE_PREFERENCE_CUP,Context.MODE_PRIVATE);
+			
+			for(int i=0;i<9;i++){
+				boolean checked=p.getBoolean(Utils.SHARE_PREFERENCE_CUP_ALARM_IS_ON+i, false);
+				String text=p.getString(Utils.SHARE_PREFERENCE_CUP_ALARM_TIME+i, "00:00");
+				swtichList.get(i).setChecked(checked);
+				alarmList.get(i).setText(text);
+				
+				
+			}
 	}
 
 	
@@ -149,6 +161,15 @@ public class FragmentTime extends Fragment {
 					AlarmManager am = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
 					am.cancel(getPendingIntent(index));
 				}
+				
+				 //SharedPreferences保存数据
+				SharedPreferences p;
+				SharedPreferences.Editor e;
+				p = getActivity().getSharedPreferences(Utils.SHARE_PREFERENCE_CUP,Context.MODE_PRIVATE);
+				e = p.edit();
+				
+				e.putBoolean(Utils.SHARE_PREFERENCE_CUP_ALARM_IS_ON+index, isChecked);
+				e.commit();
 			}
 		});
 	}
@@ -184,6 +205,7 @@ public class FragmentTime extends Fragment {
 	private Calendar timePicker(int i,int hourOfDay, int minute) {
 		String timeString = minute < 10 ? hourOfDay + ":0" + minute : hourOfDay + ":" + minute;
 		alarmList.get(i).setText(timeString);
+		
 		c.setTimeInMillis(System.currentTimeMillis());
 		c.set(Calendar.HOUR_OF_DAY, hourOfDay);
 		c.set(Calendar.MINUTE, minute);
@@ -197,6 +219,15 @@ public class FragmentTime extends Fragment {
 			c.add(Calendar.DAY_OF_MONTH, 1);
 			Utils.Log("xxxxxxxxx edit alarm 2:" + (c.get(Calendar.MONTH) + 1) + ":" + c.get(Calendar.DAY_OF_MONTH));
 		}
+		
+		 //SharedPreferences保存数据
+		SharedPreferences p;
+		SharedPreferences.Editor e;
+		p = getActivity().getSharedPreferences(Utils.SHARE_PREFERENCE_CUP,Context.MODE_PRIVATE);
+		e = p.edit();
+		e.putString(Utils.SHARE_PREFERENCE_CUP_ALARM_TIME+i, timeString);
+		e.commit();
+		
 		return c;
 	}
 

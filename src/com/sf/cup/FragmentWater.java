@@ -16,11 +16,12 @@ import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.BaseAdapter;
@@ -101,12 +102,14 @@ public class FragmentWater extends Fragment {
 				LayoutInflater inflater = getActivity().getLayoutInflater();
 				final View layout = inflater.inflate(R.layout.tab_water_select_dialog,
 						(ViewGroup) v.findViewById(R.id.dialog));
-				AlertDialog ad = new AlertDialog.Builder(getActivity())
+				final EditText infoString = (EditText) layout.findViewById(R.id.info_input);
+				final EditText tempString = (EditText) layout.findViewById(R.id.temp_input);
+				
+				final AlertDialog ad = new AlertDialog.Builder(getActivity())
 						.setPositiveButton("确定", new DialogInterface.OnClickListener() {
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
-						EditText infoString = (EditText) layout.findViewById(R.id.info_input);
-						EditText tempString = (EditText) layout.findViewById(R.id.temp_input);
+						
 						Map<String, Object> m=new HashMap<String, Object>();
 						m.put(VIEW_INFO_TEXT, infoString.getText().toString());
 						m.put(VIEW_TEMPERATURE_TEXT, tempString.getText().toString());
@@ -117,10 +120,79 @@ public class FragmentWater extends Fragment {
 					}
 
 				}).setNegativeButton("取消", null).create();
+				
 				ad.setTitle("温度模式设定");
 				ad.setView(layout);
 				ad.show();
 				
+				try {  
+				    Field mAlert = AlertDialog.class.getDeclaredField("mAlert");  
+				    mAlert.setAccessible(true);  
+				    Object alertController = mAlert.get(ad);  
+				  
+				    Field mTitleView = alertController.getClass().getDeclaredField("mTitleView");  
+				    mTitleView.setAccessible(true);  
+				  
+				    TextView title = (TextView) mTitleView.get(alertController);  
+				    title.setTextColor(0xffff0022);   
+				    title.setGravity(Gravity.CENTER);
+				  
+				} catch (NoSuchFieldException e) {  
+				    e.printStackTrace();  
+				} catch (IllegalArgumentException e) {  
+				    e.printStackTrace();  
+				} catch (IllegalAccessException e) {  
+				    e.printStackTrace();  
+				}  
+				
+				
+				
+				
+				Button adPosiButton=ad.getButton(AlertDialog.BUTTON_POSITIVE);
+				adPosiButton.setEnabled(false);
+				adPosiButton.setBackground(getActivity().getResources().getDrawable(R.drawable.long_button_selector));
+				 LinearLayout.LayoutParams lp1=new LinearLayout.LayoutParams(
+							LinearLayout.LayoutParams.WRAP_CONTENT,
+							LinearLayout.LayoutParams.WRAP_CONTENT);
+				 lp1.setMargins(50, 0, 0, 0);
+				adPosiButton.setLayoutParams(lp1);
+				
+				LinearLayout l=	(LinearLayout) adPosiButton.getParent();
+				l.setGravity(Gravity.CENTER);
+				l.setBackground(null);
+				l.setDividerDrawable(null);
+				
+				Button adNegaButton=ad.getButton(AlertDialog.BUTTON_NEGATIVE);
+				adNegaButton.setEnabled(false);
+				adNegaButton.setBackground(getActivity().getResources().getDrawable(R.drawable.long_button_selector));
+				 LinearLayout.LayoutParams lp2=new LinearLayout.LayoutParams(
+							LinearLayout.LayoutParams.WRAP_CONTENT,
+							LinearLayout.LayoutParams.WRAP_CONTENT);
+				 lp2.setMargins(0, 0, 50, 0);
+				adNegaButton.setLayoutParams(lp2);
+				
+				tempString.addTextChangedListener(new TextWatcher() {
+					@Override
+					public void onTextChanged(CharSequence s, int start, int before, int count) {
+						Utils.Log("xxxxxxxxxxxxxxxxxx onTextChanged:" + s);
+					}
+					@Override
+					public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+						Utils.Log("xxxxxxxxxxxxxxxxxx beforeTextChanged start:" + start+" count:"+count+" after:"+after);
+					}
+					@Override
+					public void afterTextChanged(Editable s) {
+						Utils.Log("xxxxxxxxxxxxxxxxxx afterTextChanged:" + s);
+						ad.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
+						if(s!=null&&!"".equals(s)){
+							int a=Integer.parseInt(s.toString());
+							if(a<=80&&a>=20){
+								ad.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);
+							}
+							
+						}
+					}
+				});
 				
 //				Map<String, Object> m=new HashMap<String, Object>();
 //				m.put("info_text", "1");
@@ -310,12 +382,10 @@ public class FragmentWater extends Fragment {
 	public void setHeight(BaseAdapter comAdapter, ListView l) {
 		int listViewHeight = 0;
 		int adaptCount = comAdapter.getCount();
-		Utils.Log("xxxxxxxxxxxxxxxxxx adaptCount:" + adaptCount);
 		for (int i = 0; i < adaptCount; i++) {
 			View temp = comAdapter.getView(i, null, l);
 			temp.measure(0, 0);
 			listViewHeight += temp.getMeasuredHeight()+15;// the divide height
-			Utils.Log("xxxxxxxxxxxxxxxxxx listViewHeight:" + listViewHeight);
 		}
 		LayoutParams layoutParams = l.getLayoutParams();
 		layoutParams.width = LayoutParams.FILL_PARENT;
@@ -359,7 +429,7 @@ public class FragmentWater extends Fragment {
 				}
 			});
 			
-			TextView delete_model=(TextView)view.findViewById(R.id.delete_model);
+			ImageView delete_model=(ImageView)view.findViewById(R.id.delete_model);
 			delete_model.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
@@ -371,7 +441,7 @@ public class FragmentWater extends Fragment {
 				}
 			});
 			
-			
+			/*
 			view.setOnTouchListener(new OnTouchListener() {
 				@Override
 				public boolean onTouch(View v, MotionEvent event) {
@@ -404,7 +474,7 @@ public class FragmentWater extends Fragment {
 				}
 			});
 			
-			
+			*/
 			return view;
 		}
 		
@@ -443,6 +513,12 @@ public class FragmentWater extends Fragment {
 		return temperatureList;
 	}
 
+	
+	
+	
+	
+	
+	
 	/**
 	 * to avoid IllegalStateException: No activity
 	 */

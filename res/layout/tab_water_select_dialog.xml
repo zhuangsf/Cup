@@ -48,8 +48,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:inputType="number"
+            android:maxLength="2"
             android:minWidth="100dip"
-            android:hint="55"
+            android:hint="20-80"
              android:labelFor="@id/temp_input" />
          <TextView
             android:layout_width="wrap_content"

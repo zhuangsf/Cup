@@ -191,7 +191,7 @@
                         android:id="@+id/temperature_value1"
                         android:layout_width="60dp"
                         android:layout_height="100dp"
-                        android:background="@drawable/num_disable_5" >
+                        android:background="@drawable/num_disable_0" >
                     </View>
 
                     <View
@@ -199,7 +199,7 @@
                         android:layout_width="60dp"
                         android:layout_height="100dp"
                         android:layout_marginLeft="10dp"
-                        android:background="@drawable/num_disable_5" >
+                        android:background="@drawable/num_disable_0" >
                     </View>
 
                     <TextView

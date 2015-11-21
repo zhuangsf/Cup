@@ -16,10 +16,15 @@ import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.os.SystemClock;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -32,6 +37,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RadioButton;
+import android.widget.RelativeLayout;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
@@ -47,7 +53,8 @@ public class FragmentWater extends Fragment {
 	View maskView;
 	LinearLayout temperature_setting;
 	boolean temperature_mode_enable=false;
-	int temperature_setting_value=55;
+	int temperature_setting_value=00;
+	int temperature_mode_index=-1;
 	
 	private static final String VIEW_INFO_TEXT="info_text";
 	private static final String VIEW_TEMPERATURE_TEXT="temperature_text";
@@ -61,10 +68,38 @@ public class FragmentWater extends Fragment {
 	ImageView water_status_pic2;
 	ImageView water_status_pic3;
 	
+	
+	EditText infoString;
+	EditText tempString; 
+	
+	
+	Handler mHandler = new Handler()
+	  {
+	    @Override
+		public void handleMessage(Message paramAnonymousMessage)
+	    {
+	    Utils.Log("handle:"+paramAnonymousMessage);
+	     switch (paramAnonymousMessage.what)
+	     {
+				case 1:
+					//alertdialog with edittext cant not open im.  
+					try {
+						Thread.sleep(200);
+						infoString.dispatchTouchEvent( MotionEvent.obtain( SystemClock.uptimeMillis(), SystemClock.uptimeMillis(), MotionEvent.ACTION_DOWN, infoString.getRight(), infoString.getRight() + 5, 0));
+						infoString.dispatchTouchEvent( MotionEvent.obtain( SystemClock.uptimeMillis(), SystemClock.uptimeMillis(), MotionEvent.ACTION_UP, infoString.getRight(), infoString.getRight() + 5, 0));
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+					
+					break;
+				case 2:
+					break;
+			}
+	    }
+	  };
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
 		
 		SharedPreferences p;
 		p = getActivity().getSharedPreferences(Utils.SHARE_PREFERENCE_CUP,Context.MODE_PRIVATE);
@@ -78,16 +113,47 @@ public class FragmentWater extends Fragment {
 
 		temperatureListView = (ListView) v.findViewById(R.id.temperature_list);
 		
+		SharedPreferences p=Utils.getSharedPpreference(getActivity());
+		int isFirst=p.getInt(Utils.SHARE_PREFERENCE_CUP_OPEN_COUNTS, 0);
+		Utils.Log("isFirst must be bigger than 2 or there must be a bug :"+isFirst);
+		//isFirst must be bigger than 2 or there must be a bug 
 		Map<String, Object> m=new HashMap<String, Object>();
-		m.put("info_text", "aa");
-		m.put(VIEW_TEMPERATURE_TEXT, "22");
-		m.put(VIEW_RADIO_BTN, false);
-		temperatureList.add(m);
-		m=new HashMap<String, Object>();
-		m.put(VIEW_INFO_TEXT, "a2a");
-		m.put(VIEW_TEMPERATURE_TEXT, "40");
-		m.put(VIEW_RADIO_BTN, true);
-		temperatureList.add(m);
+		if(isFirst==2){
+			m.put(VIEW_INFO_TEXT, "早上第一杯水温");
+			m.put(VIEW_TEMPERATURE_TEXT, "45");
+			m.put(VIEW_RADIO_BTN, false);
+			temperatureList.add(m);
+			m=new HashMap<String, Object>();
+			m.put(VIEW_INFO_TEXT, "泡咖啡");
+			m.put(VIEW_TEMPERATURE_TEXT, "75");
+			m.put(VIEW_RADIO_BTN, true);
+			temperatureList.add(m);	
+			SharedPreferences.Editor e = Utils.getSharedPpreferenceEdit(getActivity());
+					e.putString(Utils.SHARE_PREFERENCE_CUP_TEMPERATURE_MODE_INFO[0], "早上第一杯水温");
+					e.putString(Utils.SHARE_PREFERENCE_CUP_TEMPERATURE_MODE_VALUE[0], "45");
+					e.putString(Utils.SHARE_PREFERENCE_CUP_TEMPERATURE_MODE_INFO[0], "泡咖啡");
+					e.putString(Utils.SHARE_PREFERENCE_CUP_TEMPERATURE_MODE_VALUE[0], "75");
+					e.commit();
+		}else{
+			for(int i=0;i<5;i++){
+				String text=p.getString(Utils.SHARE_PREFERENCE_CUP_TEMPERATURE_MODE_INFO[i], "");
+				String value=p.getString(Utils.SHARE_PREFERENCE_CUP_TEMPERATURE_MODE_VALUE[i], "");
+				temperature_mode_index=p.getInt(Utils.SHARE_PREFERENCE_CUP_TEMPERATURE_MODE, -1);
+				if(!TextUtils.isEmpty(text)&&!TextUtils.isEmpty(value)){
+					m=new HashMap<String, Object>();
+					m.put(VIEW_INFO_TEXT, text);
+					m.put(VIEW_TEMPERATURE_TEXT, value);
+					if(temperature_mode_index==i){
+						m.put(VIEW_RADIO_BTN, true);
+						temperature_setting_value=Integer.parseInt(value);
+					}else{
+						m.put(VIEW_RADIO_BTN, false);
+					}
+					temperatureList.add(m);
+				}
+			}
+		}
+		
 		
 		hlva = new TemperatureListViewAdapter(this.getActivity(), temperatureList,
 				R.layout.tab_water_select_item, new String[] { VIEW_INFO_TEXT, VIEW_TEMPERATURE_TEXT, VIEW_RADIO_BTN },
@@ -102,8 +168,8 @@ public class FragmentWater extends Fragment {
 				LayoutInflater inflater = getActivity().getLayoutInflater();
 				final View layout = inflater.inflate(R.layout.tab_water_select_dialog,
 						(ViewGroup) v.findViewById(R.id.dialog));
-				final EditText infoString = (EditText) layout.findViewById(R.id.info_input);
-				final EditText tempString = (EditText) layout.findViewById(R.id.temp_input);
+				infoString = (EditText) layout.findViewById(R.id.info_input);
+				tempString = (EditText) layout.findViewById(R.id.temp_input);
 				
 				final AlertDialog ad = new AlertDialog.Builder(getActivity())
 						.setPositiveButton("确定", new DialogInterface.OnClickListener() {
@@ -115,7 +181,6 @@ public class FragmentWater extends Fragment {
 						m.put(VIEW_TEMPERATURE_TEXT, tempString.getText().toString());
 						m.put(VIEW_RADIO_BTN, false);
 						temperatureList.add(m);
-						Utils.Log("xxxxxxxxxxxxxxxxxx temperatureList:" + temperatureList);
 						doUpdate();
 					}
 
@@ -124,6 +189,7 @@ public class FragmentWater extends Fragment {
 				ad.setTitle("温度模式设定");
 				ad.setView(layout);
 				ad.show();
+				ad.getCurrentFocus();
 				
 				try {  
 				    Field mAlert = AlertDialog.class.getDeclaredField("mAlert");  
@@ -150,7 +216,12 @@ public class FragmentWater extends Fragment {
 				
 				Button adPosiButton=ad.getButton(AlertDialog.BUTTON_POSITIVE);
 				adPosiButton.setEnabled(false);
-				adPosiButton.setBackground(getActivity().getResources().getDrawable(R.drawable.long_button_selector));
+				
+				Message msg=new Message();
+				msg.what=1;
+				msg.arg1=1;
+				mHandler.sendMessage(msg);
+				/*adPosiButton.setBackground(getActivity().getResources().getDrawable(R.drawable.long_button_selector));
 				 LinearLayout.LayoutParams lp1=new LinearLayout.LayoutParams(
 							LinearLayout.LayoutParams.WRAP_CONTENT,
 							LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -169,27 +240,52 @@ public class FragmentWater extends Fragment {
 							LinearLayout.LayoutParams.WRAP_CONTENT,
 							LinearLayout.LayoutParams.WRAP_CONTENT);
 				 lp2.setMargins(0, 0, 50, 0);
-				adNegaButton.setLayoutParams(lp2);
+				adNegaButton.setLayoutParams(lp2);*/
 				
 				tempString.addTextChangedListener(new TextWatcher() {
 					@Override
 					public void onTextChanged(CharSequence s, int start, int before, int count) {
-						Utils.Log("xxxxxxxxxxxxxxxxxx onTextChanged:" + s);
 					}
 					@Override
 					public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-						Utils.Log("xxxxxxxxxxxxxxxxxx beforeTextChanged start:" + start+" count:"+count+" after:"+after);
 					}
 					@Override
 					public void afterTextChanged(Editable s) {
-						Utils.Log("xxxxxxxxxxxxxxxxxx afterTextChanged:" + s);
 						ad.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
-						if(s!=null&&!"".equals(s)){
+						if(s!=null&&!"".equals(s.toString())){
+							try {
 							int a=Integer.parseInt(s.toString());
-							if(a<=80&&a>=20){
+							String info_text=infoString.getText().toString();
+							if(a<=80&&a>=20&&!TextUtils.isEmpty(info_text)){
 								ad.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);
 							}
-							
+							} catch (Exception e) {
+								// i dont care this error
+							}							
+						}
+					}
+				});
+				infoString.addTextChangedListener(new TextWatcher() {
+					@Override
+					public void onTextChanged(CharSequence s, int start, int before, int count) {
+					}
+					@Override
+					public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+					}
+					@Override
+					public void afterTextChanged(Editable s) {
+						ad.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
+						if(s!=null&&!"".equals(s.toString())){
+							try {
+							String temp_text=tempString.getText().toString();
+							Utils.Log("xxxxxxxxxxxxxxxxxx afterTextChanged temp_text:" + temp_text);
+							int a=Integer.parseInt(temp_text.toString());
+							if(a<=80&&a>=20&&!TextUtils.isEmpty(s)){
+								ad.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);
+							}
+							} catch (Exception e) {
+								// i dont care this error
+							}							
 						}
 					}
 				});
@@ -211,7 +307,7 @@ public class FragmentWater extends Fragment {
 		});
 
 		
-		
+		//visiable gone
 		cancel_temperature_button=(Button)v.findViewById(R.id.cancel_temperature_button);
 		cancel_temperature_button.setOnClickListener(new OnClickListener() {
 			@Override
@@ -332,11 +428,8 @@ public class FragmentWater extends Fragment {
 		v2.setBackground(bgDrawable2);
 
 	}
+	//get temperature which select mode define 
 	private int getSettingValue(){
-		if(temperature_setting_value<10||temperature_setting_value>99){
-			temperature_setting_value=55;
-		}
-		//get temperature which select mode define 
 		
 		return temperature_setting_value;
 	}
@@ -356,18 +449,31 @@ public class FragmentWater extends Fragment {
 	
 	
 	
-	private void doUpdate(){
-		if(hlva!=null){
-			Utils.Log("update listview");
+	private void doUpdate() {
+		if (hlva != null) {
+			int size = temperatureList.size();
+			Utils.Log("update listview count:" + size);
 			hlva.notifyDataSetChanged();
 			setHeight(hlva, temperatureListView);
-			
-			
-			Utils.Log("xxxxxxxxxxxxxxxxxx count:"+temperatureList.size());
-			if(temperatureList.size()>=5)
-			{
+
+			SharedPreferences.Editor e = Utils.getSharedPpreferenceEdit(getActivity());
+			for (int i = 0; i < 5; i++) {
+				if (i < size) {
+					String text = (String) temperatureList.get(i).get(VIEW_INFO_TEXT);
+					String value = (String) temperatureList.get(i).get(VIEW_TEMPERATURE_TEXT);
+					e.putString(Utils.SHARE_PREFERENCE_CUP_TEMPERATURE_MODE_INFO[i], text);
+					e.putString(Utils.SHARE_PREFERENCE_CUP_TEMPERATURE_MODE_VALUE[i], value);
+				} else {
+					e.putString(Utils.SHARE_PREFERENCE_CUP_TEMPERATURE_MODE_INFO[i], "");
+					e.putString(Utils.SHARE_PREFERENCE_CUP_TEMPERATURE_MODE_VALUE[i], "");
+				}
+
+			}
+			e.commit();
+
+			if (size >= 5) {
 				add_temperature_button.setEnabled(false);
-			}else{
+			} else {
 				add_temperature_button.setEnabled(true);
 			}
 		}
@@ -414,18 +520,23 @@ public class FragmentWater extends Fragment {
 			radio.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
-					 // 重置，确保最多只有一项被选中
-			        for (String key : states.keySet()) {
-			          states.put(key, false);
-			        }
-			        states.put(String.valueOf(p), radio.isChecked());
-			        for(Map<String, Object> m :temperatureList){
-						m.put(VIEW_RADIO_BTN,false);
+					if(temperature_mode_index==p){
+						temperatureList.get(p).put(VIEW_RADIO_BTN, false);
+						temperature_mode_index = -1;
+					} else {
+						temperature_mode_index = p;
+						// 重置，确保最多只有一项被选中
+//						for (String key : states.keySet()) {
+//							states.put(key, false);
+//						}
+//						states.put(String.valueOf(p), radio.isChecked());
+						for (Map<String, Object> m : temperatureList) {
+							m.put(VIEW_RADIO_BTN, false);
+						}
+						temperatureList.get(p).put(VIEW_RADIO_BTN, true);
 					}
-			        temperatureList.get(p).put(VIEW_RADIO_BTN, true);
-			        TemperatureListViewAdapter.this.notifyDataSetChanged();
-			        
-			        
+					// update temperaturemode
+					TemperatureListViewAdapter.this.notifyDataSetChanged();
 				}
 			});
 			
@@ -433,13 +544,50 @@ public class FragmentWater extends Fragment {
 			delete_model.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
-			        temperatureList.remove(p);
-			        TemperatureListViewAdapter.this.notifyDataSetChanged();
+					//################ for delete must be carefull
+					temperatureList.remove(p);
+					if(temperature_mode_index==p)
+					{
+						temperature_mode_index=-1;
+					}else
+					{
+						for (int i=0;i<temperatureList.size();i++) {
+							if((boolean)temperatureList.get(i).get(VIEW_RADIO_BTN))
+							{
+								temperature_mode_index=i;
+							}
+						}
+					}
+			       // TemperatureListViewAdapter.this.notifyDataSetChanged();
+			        doUpdate();
 			        //better to show a confirm dialog
-			        
-			        
 				}
 			});
+			
+			RelativeLayout temperature_mode=(RelativeLayout) view.findViewById(R.id.temperature_mode);  
+			temperature_mode.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					if(temperature_mode_index==p){
+						temperatureList.get(p).put(VIEW_RADIO_BTN, false);
+						temperature_mode_index = -1;
+					} else {
+						temperature_mode_index = p;
+						// 重置，确保最多只有一项被选中
+//						for (String key : states.keySet()) {
+//							states.put(key, false);
+//						}
+//						states.put(String.valueOf(p), radio.isChecked());
+						for (Map<String, Object> m : temperatureList) {
+							m.put(VIEW_RADIO_BTN, false);
+						}
+						temperatureList.get(p).put(VIEW_RADIO_BTN, true);
+					}
+					// update temperaturemode
+					TemperatureListViewAdapter.this.notifyDataSetChanged();
+				}
+			});
+			
 			
 			/*
 			view.setOnTouchListener(new OnTouchListener() {
@@ -480,15 +628,27 @@ public class FragmentWater extends Fragment {
 		
 		@Override
 		public void notifyDataSetChanged() {
-			super.notifyDataSetChanged();
 			//TODO
 			//0 ,show a waiting dialog
 			
 			//1, send request to cup
 			
-			//2,  update the mode
+			//2  update the mode select
+			super.notifyDataSetChanged();
+			 //3,update temperature
+			if(temperature_mode_index==-1){
+				temperature_setting_value=00;
+			}else{
+				temperature_setting_value=Integer.parseInt((String)temperatureList.get(temperature_mode_index).get(VIEW_TEMPERATURE_TEXT));
+			}
+	        setTemperaturePic(temperature_setting,temperature_mode_enable);
+	        
+	        //4,record this index
+	     
+	        SharedPreferences.Editor e=Utils.getSharedPpreferenceEdit(getActivity());
+			e.putInt(Utils.SHARE_PREFERENCE_CUP_TEMPERATURE_MODE, temperature_mode_index);
+			e.commit();
 			
-			//3, save status to perferrence
 		}
 		
 		

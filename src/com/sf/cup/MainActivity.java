@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.sf.cup.guide.GuideView;
+import com.sf.cup.login.LoginActivity;
 import com.sf.cup.utils.Utils;
 
 import android.app.Activity;
@@ -11,11 +13,14 @@ import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.media.MediaPlayer;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RadioGroup.OnCheckedChangeListener;
@@ -65,6 +70,39 @@ public class MainActivity extends Activity {
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		
+		//1,is first open app  start guide
+		SharedPreferences p=Utils.getSharedPpreference(this);
+		SharedPreferences.Editor e = Utils.getSharedPpreferenceEdit(this);
+		int isFirst=p.getInt(Utils.SHARE_PREFERENCE_CUP_OPEN_COUNTS, 0);
+		if(isFirst==0){
+	    	Intent i = new Intent(this, GuideView.class);
+	        startActivity(i);
+	        finish();
+		}
+		//2,login first
+		String phonenum=p.getString(Utils.SHARE_PREFERENCE_CUP_PHONE, null);
+		if(TextUtils.isEmpty(phonenum)){
+	    	Intent i = new Intent(this, LoginActivity.class);
+	        startActivity(i);
+	        finish();
+		}
+		
+		
+		//TODO 3,must connect bt
+		
+		
+		
+		
+		
+		
+		
+		if(isFirst>0){
+			e.putInt(Utils.SHARE_PREFERENCE_CUP_OPEN_COUNTS,isFirst+1);
+			e.commit();
+		}
+		
+		
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 

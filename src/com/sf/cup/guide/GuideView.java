@@ -2,11 +2,13 @@ package com.sf.cup.guide;
 
 import java.util.ArrayList;
 
+import com.sf.cup.MainActivity;
 import com.sf.cup.R;
-import com.sf.cup.login.LoginActivity;
+import com.sf.cup.utils.Utils;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.v4.view.PagerAdapter;
@@ -99,22 +101,29 @@ public class GuideView extends Activity{
 	            {
 	            pageViews.get(arg1).setOnClickListener(new View.OnClickListener() {
 	            	@Override
-	            	public void onClick(View arg0) {
-	            		// TODO Auto-generated method stub
-	            		Intent intent = new Intent();  
-						intent.setClass(GuideView.this,LoginActivity.class);  
-						//����B  
-						startActivity(intent);  
-						finish(); 
-	            	}
+					public void onClick(View arg0) {
+	            		SharedPreferences p=Utils.getSharedPpreference(GuideView.this);
+						SharedPreferences.Editor e = Utils.getSharedPpreferenceEdit(GuideView.this);
+						e.putInt(Utils.SHARE_PREFERENCE_CUP_OPEN_COUNTS,p.getInt(Utils.SHARE_PREFERENCE_CUP_OPEN_COUNTS, 0)+1 );
+						e.commit();
+						Intent intent = new Intent();
+						intent.setClass(GuideView.this, MainActivity.class);
+						// ����B
+						startActivity(intent);
+						finish();
+					}
 	            });
 	            ((Button)pageViews.get(arg1).findViewById(R.id.buttonStart)).setOnClickListener(new View.OnClickListener() {
 					
 					@Override
 					public void onClick(View arg0) {
-						// TODO Auto-generated method stub
+						SharedPreferences p=Utils.getSharedPpreference(GuideView.this);
+				        SharedPreferences.Editor e=Utils.getSharedPpreferenceEdit(GuideView.this);
+				        e.putInt(Utils.SHARE_PREFERENCE_CUP_OPEN_COUNTS,p.getInt(Utils.SHARE_PREFERENCE_CUP_OPEN_COUNTS, 0)+1 );
+						e.commit();
+						
 	            		Intent intent = new Intent();  
-						intent.setClass(GuideView.this,LoginActivity.class);  
+						intent.setClass(GuideView.this,MainActivity.class);  
 						//����B  
 						startActivity(intent);  
 						finish(); 

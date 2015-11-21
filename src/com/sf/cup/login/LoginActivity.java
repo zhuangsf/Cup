@@ -13,7 +13,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -46,18 +45,6 @@ public class LoginActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
-		SharedPreferences p;
-		p = getSharedPreferences(Utils.SHARE_PREFERENCE_CUP,Context.MODE_PRIVATE);
-		String phonenum=p.getString(Utils.SHARE_PREFERENCE_CUP_PHONE, null);
-		if(!TextUtils.isEmpty(phonenum)){
-			//already login
-			Utils.Log("already login phonenum ==>>"+phonenum);
-	    	Intent i = new Intent(getApplicationContext(), MainActivity.class);
-	        startActivity(i);
-	        finish();
-		}
-		
 		
 		setContentView(R.layout.login);
  

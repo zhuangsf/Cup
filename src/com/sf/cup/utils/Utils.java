@@ -10,6 +10,7 @@ import java.lang.reflect.Method;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Random;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -131,6 +132,31 @@ public class Utils {
 		Log.d(tag, s);
 	}
 
+
+	/**
+	 * 0-1
+	 * @return
+	 */
+	 public static final float frand() {
+	        return (float) Math.random();
+	    }
+	  /**
+	   * 
+	   * @param n
+	   * @return  random num  0-n
+	   */
+	  public static final int irand(int n){
+		  return new Random().nextInt(n);
+	  }
+	  
+	  /**
+	   * 
+	   * @param n
+	   * @return random num m-n
+	   */
+	  public static final int irand(int m,int n){
+		  return new Random().nextInt(n)+m;
+	  }
 	
 	public static void httpGet(String url,Handler mHandler) {
 		Utils.Log(" xxxxxxxxxxxxxxxxxxxxx http httpGet url:"+url);

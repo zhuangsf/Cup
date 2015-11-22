@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import com.sf.cup.utils.Utils;
 
@@ -12,9 +14,13 @@ import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
+import android.media.MediaPlayer;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -22,7 +28,6 @@ import android.os.SystemClock;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -54,6 +59,7 @@ public class FragmentWater extends Fragment {
 	LinearLayout temperature_setting;
 	boolean temperature_mode_enable=false;
 	int temperature_setting_value=00;
+	int temperature_current_value=20;
 	int temperature_mode_index=-1;
 	
 	private static final String VIEW_INFO_TEXT="info_text";
@@ -68,6 +74,7 @@ public class FragmentWater extends Fragment {
 	ImageView water_status_pic2;
 	ImageView water_status_pic3;
 	
+	TextView current_cup_temperature;
 	
 	EditText infoString;
 	EditText tempString; 
@@ -93,10 +100,90 @@ public class FragmentWater extends Fragment {
 					
 					break;
 				case 2:
+					//get cup temperature from bt
+					temperature_current_value=paramAnonymousMessage.arg1;
+					updateCurrentTemperature();
+						
+					
 					break;
 			}
 	    }
 	  };
+	  
+	  private void updateCurrentTemperature(){
+		  //1,update current temperature
+		  current_cup_temperature.setText(""+temperature_current_value); 
+		  //2,update status
+		  water_status_text1.setTextColor(getActivity().getResources().getColor(R.drawable.darkgray));
+		  water_status_text2.setTextColor(getActivity().getResources().getColor(R.drawable.darkgray));
+		  water_status_text3.setTextColor(getActivity().getResources().getColor(R.drawable.darkgray));
+		  water_status_pic1.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.water_status_point_disable));
+		  water_status_pic2.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.water_status_point_disable));
+		  water_status_pic3.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.water_status_point_disable));
+		  if(temperature_mode_index==-1||!temperature_mode_enable){
+			  water_status_text1.setTextColor(getActivity().getResources().getColor(R.drawable.cup_pink));
+			  water_status_pic1.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.water_status_point_focus));
+		  } else if(temperature_mode_index!=-1){
+			  if(temperature_current_value!=temperature_setting_value){
+				  water_status_text2.setTextColor(getActivity().getResources().getColor(R.drawable.cup_pink));
+				  water_status_pic2.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.water_status_point_focus));
+			  }else{
+				  water_status_text3.setTextColor(getActivity().getResources().getColor(R.drawable.cup_pink));
+				  water_status_pic3.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.water_status_point_focus));
+				  temperatureComplete();
+			  }
+		  } 
+//		  Utils.Log("updateCurrentTemperature temperature_mode_index:"+temperature_mode_index+" temperature_mode_enable:"+temperature_mode_enable);
+	  }
+	  private void temperatureComplete(){
+	       try {  
+	       	
+	       	new AlertDialog.Builder(getActivity())
+				.setMessage("亲！已到设定饮水温度咯！\n请及时享用哦")
+				.setTitle("温馨提示")
+				.setPositiveButton("确定", null)
+				.create()
+				.show();
+	       	
+	           // 创建MediaPlayer对象  
+	       	MediaPlayer  mp = new MediaPlayer();  
+	           // 将音乐保存在res/raw/xingshu.mp3,R.java中自动生成{public static final int xingshu=0x7f040000;}  
+	           Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);  
+//	           mp = MediaPlayer.create(this, notification);  
+	           mp.setDataSource(getActivity(),notification);
+	           // 在MediaPlayer取得播放资源与stop()之后要准备PlayBack的状态前一定要使用MediaPlayer.prepeare()  
+	           mp.prepare();  
+	           // 开始播放音乐  
+	           mp.start();  
+	           // 音乐播放完毕的事件处理  
+	           mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {  
+	               public void onCompletion(MediaPlayer mp) {  
+	                   // 循环播放  
+	                   try {  
+//	                       mp.start();  
+	                   } catch (IllegalStateException e) {  
+	                       e.printStackTrace();  
+	                   }  
+	               }  
+	           });  
+	           // 播放音乐时发生错误的事件处理  
+	           mp.setOnErrorListener(new MediaPlayer.OnErrorListener() {  
+	               public boolean onError(MediaPlayer mp, int what, int extra) {  
+	                   // 释放资源  
+	                   try {  
+	                       mp.release();  
+	                   } catch (Exception e) {  
+	                       e.printStackTrace();  
+	                   }  
+	                   return false;  
+	               }  
+	           });  
+	       } catch (Exception e) {  
+	           e.printStackTrace();  
+	       } 
+		}
+		
+	  
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -162,6 +249,16 @@ public class FragmentWater extends Fragment {
 		setHeight(hlva, temperatureListView);
 
 		add_temperature_button = (ImageView) v.findViewById(R.id.add_temperature_button);
+		int size = temperatureList.size();
+		if (size >= 5) {
+			add_temperature_button.setEnabled(false);
+			add_temperature_button.setClickable(false);
+			add_temperature_button.setBackground(getActivity().getResources().getDrawable(R.drawable.water_mode_add_disable));
+		} else {
+			add_temperature_button.setEnabled(true);
+			add_temperature_button.setClickable(true);
+			add_temperature_button.setBackground(getActivity().getResources().getDrawable(R.drawable.mode_add_selector));
+		}
 		add_temperature_button.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -200,9 +297,8 @@ public class FragmentWater extends Fragment {
 				    mTitleView.setAccessible(true);  
 				  
 				    TextView title = (TextView) mTitleView.get(alertController);  
-				    title.setTextColor(0xffff0022);   
-				    title.setGravity(Gravity.CENTER);
-				  
+//				    title.setTextColor(0xffff0022);   
+//				    title.setGravity(Gravity.CENTER);
 				} catch (NoSuchFieldException e) {  
 				    e.printStackTrace();  
 				} catch (IllegalArgumentException e) {  
@@ -210,9 +306,6 @@ public class FragmentWater extends Fragment {
 				} catch (IllegalAccessException e) {  
 				    e.printStackTrace();  
 				}  
-				
-				
-				
 				
 				Button adPosiButton=ad.getButton(AlertDialog.BUTTON_POSITIVE);
 				adPosiButton.setEnabled(false);
@@ -290,19 +383,6 @@ public class FragmentWater extends Fragment {
 					}
 				});
 				
-//				Map<String, Object> m=new HashMap<String, Object>();
-//				m.put("info_text", "1");
-//				m.put("temperature_text", "2");
-//				temperatureList.remove(0);
-//				doUpdate();
-				// layout.post(new Runnable() {
-				// @Override
-				// public void run() {
-				// InputMethodManager im = (InputMethodManager)
-				// getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-				// im.showSoftInput(layout, InputMethodManager.SHOW_FORCED);
-				// }
-				// });
 			}
 		});
 
@@ -366,8 +446,46 @@ public class FragmentWater extends Fragment {
 		water_status_pic3=(ImageView)v.findViewById(R.id.water_status_pic3);		
 		
 		
+		current_cup_temperature=(TextView)v.findViewById(R.id.current_cup_temperature); 
+		//create a thread to get cup temperature period
+		getTemperatureFromBT();
+		
 		updateUiShow();// create first time
 		return v;
+	}
+	
+	private Timer timer = new Timer(true);
+	private void getTemperatureFromBT(){
+		 
+		//任务
+		TimerTask task = new TimerTask() {
+		  public void run() {
+			//TODO
+				int temp=Utils.irand(20,60);
+				Message msg=new Message();
+				msg.what=2;
+				msg.arg1=temp;
+				mHandler.sendMessage(msg);
+		  }
+		};
+		 
+		//启动定时器
+		timer.schedule(task, 5000, 3000);
+		/*
+		mHandler.postDelayed(new Runnable() {  
+            public void run() {  
+            	//周期执行！3min来一次
+				//TODO
+				int temp=Utils.irand(20,80);
+				Message msg=new Message();
+				msg.what=2;
+				msg.arg1=temp;
+				Utils.Log("xxxxxxxxxxxxxxxxxx getTemperatureFromBT:" + temp);
+				mHandler.sendMessage(msg);
+            }  
+        }, 1000);  
+		*/
+
 	}
 	
 	private void updateUiShow(){
@@ -383,6 +501,9 @@ public class FragmentWater extends Fragment {
 			t.setTextColor(getActivity().getResources().getColor(R.drawable.darkgray));
 		}
 		setTemperaturePic(temperature_setting,temperature_mode_enable);
+		
+		//3,update the status
+		updateCurrentTemperature();
 	}
 
 	int enableTemperaturePicId[]={
@@ -473,8 +594,12 @@ public class FragmentWater extends Fragment {
 
 			if (size >= 5) {
 				add_temperature_button.setEnabled(false);
+				add_temperature_button.setClickable(false);
+				add_temperature_button.setBackground(getActivity().getResources().getDrawable(R.drawable.water_mode_add_disable));
 			} else {
 				add_temperature_button.setEnabled(true);
+				add_temperature_button.setClickable(true);
+				add_temperature_button.setBackground(getActivity().getResources().getDrawable(R.drawable.mode_add_selector));
 			}
 		}
 	}
@@ -549,6 +674,11 @@ public class FragmentWater extends Fragment {
 					if(temperature_mode_index==p)
 					{
 						temperature_mode_index=-1;
+						//TODO
+						//0 ,show a waiting dialog
+						
+						//1, send request to cup
+						
 					}else
 					{
 						for (int i=0;i<temperatureList.size();i++) {
@@ -643,7 +773,10 @@ public class FragmentWater extends Fragment {
 			}
 	        setTemperaturePic(temperature_setting,temperature_mode_enable);
 	        
-	        //4,record this index
+	        //4,update current temperature and status
+	        updateCurrentTemperature();
+	        
+	        //5,record this index
 	     
 	        SharedPreferences.Editor e=Utils.getSharedPpreferenceEdit(getActivity());
 			e.putInt(Utils.SHARE_PREFERENCE_CUP_TEMPERATURE_MODE, temperature_mode_index);
@@ -673,6 +806,24 @@ public class FragmentWater extends Fragment {
 		return temperatureList;
 	}
 
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	@Override
+	public void onDestroy() {
+		super.onDestroy();
+		timer.cancel();  
+
+	}
 	
 	
 	

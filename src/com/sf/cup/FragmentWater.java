@@ -78,6 +78,7 @@ public class FragmentWater extends Fragment {
 	
 	EditText infoString;
 	EditText tempString; 
+	AlertDialog alertDialog;
 	
 	
 	Handler mHandler = new Handler()
@@ -137,13 +138,16 @@ public class FragmentWater extends Fragment {
 	  }
 	  private void temperatureComplete(){
 	       try {  
+	    	  if(alertDialog==null){ 
+	    		  alertDialog=
+	    			 new AlertDialog.Builder(getActivity())
+					.setMessage("亲！已到设定饮水温度咯！\n请及时享用哦")
+					.setTitle("温馨提示")
+					.setPositiveButton("确定", null)
+					.create() ;  
+	    	  }
 	       	
-	       	new AlertDialog.Builder(getActivity())
-				.setMessage("亲！已到设定饮水温度咯！\n请及时享用哦")
-				.setTitle("温馨提示")
-				.setPositiveButton("确定", null)
-				.create()
-				.show();
+	    	  alertDialog.show();
 	       	
 	           // 创建MediaPlayer对象  
 	       	MediaPlayer  mp = new MediaPlayer();  

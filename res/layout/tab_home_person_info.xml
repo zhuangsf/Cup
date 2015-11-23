@@ -48,7 +48,8 @@
                 android:id="@+id/persionlist_view_pic"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/white" >
+                android:background="@drawable/white"
+                android:fastScrollEnabled="false" >
             </ListView>
         </LinearLayout>
 
@@ -60,7 +61,9 @@
                 android:id="@+id/persionlist_view1"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/white" >
+                android:background="@drawable/white"
+                android:scrollbars="none"
+                 >
             </ListView>
         </LinearLayout>
 
@@ -73,7 +76,9 @@
                 android:id="@+id/persionlist_view2"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/white" >
+                android:background="@drawable/white"
+                android:scrollbars="none"
+                 >
             </ListView>
         </LinearLayout>
     </LinearLayout>

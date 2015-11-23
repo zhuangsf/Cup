@@ -16,4 +16,19 @@
         <item>进入官网</item>
         <item>购买</item>
     </string-array>
+    
+     
+       <string-array name="person_list_title1">
+        <item>昵称</item>
+        <item>性别</item>
+        <item>手机</item>
+    </string-array>
+    
+       <string-array name="person_list_title2">
+        <item>场景</item>
+        <item>体质</item>
+        <item>身高</item>
+        <item>体重</item>
+        <item>生日</item>
+    </string-array>
 </resources>

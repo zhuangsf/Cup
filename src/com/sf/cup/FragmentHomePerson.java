@@ -6,19 +6,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.util.EntityUtils;
-import org.json.JSONObject;
-
 import com.sf.cup.utils.Utils;
 
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Handler;
@@ -29,25 +22,18 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
-import android.widget.TextView;
 
-public class FragmentHome extends Fragment {
-	private final static String TAG = FragmentHome.class.getPackage().getName() + "."
-			+ FragmentHome.class.getSimpleName();
+public class FragmentHomePerson extends Fragment {
+	private final static String TAG = FragmentHomePerson.class.getPackage().getName() + "."
+			+ FragmentHomePerson.class.getSimpleName();
 	
-	Button buttonGet;
-	TextView textViewGet;
-	ListView homeListView;
-	ListView homeList2View;
-	String[] listTitle;
+	ListView persionlist_view_pic;
+	ListView persionlist_view1;
+	ListView persionlist_view2;
+	String[] list1Title;
 	String[] list2Title;
-	private static final int ABOUT_INDEX=0;
-	private static final int PAIR_INFO_INDEX=1;
-	private static final int RESET_INDEX=2;
-	private static final int HARDWARE_UPDATE_INDEX=3;
 	
 	
 	Handler mHandler = new Handler()
@@ -59,8 +45,6 @@ public class FragmentHome extends Fragment {
 	     switch (paramAnonymousMessage.what)
 	     {
 				case 1:
-					Utils.Log("xxxxxxxxxxxxxxxSG_WAT_START-1---:"+paramAnonymousMessage.obj);
-					textViewGet.setText(paramAnonymousMessage.obj.toString());
 					break;
 				case 2:
 					break;
@@ -68,8 +52,8 @@ public class FragmentHome extends Fragment {
 	    }
 	  };
 	  
-	  public static FragmentHome newInstance(Bundle b){
-		  FragmentHome fd=new FragmentHome();
+	  public static FragmentHomePerson newInstance(Bundle b){
+		  FragmentHomePerson fd=new FragmentHomePerson();
 			fd.setArguments(b);
 			return fd;
 		}
@@ -79,8 +63,8 @@ public class FragmentHome extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Resources res =getResources();
-        listTitle=res.getStringArray(R.array.home_list_title);
-        list2Title=res.getStringArray(R.array.home_part2_list_title);
+        list1Title=res.getStringArray(R.array.person_list_title1);
+        list2Title=res.getStringArray(R.array.person_list_title2);
         
         
         
@@ -88,41 +72,25 @@ public class FragmentHome extends Fragment {
  
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-    	View view=inflater.inflate(R.layout.tab_home, null);
-    	textViewGet=((TextView)view.findViewById(R.id.getText));
-    	homeListView=(ListView) view.findViewById(R.id.homeListView); 
-    	HomeListViewAdapter1 hlva=new HomeListViewAdapter1(this.getActivity(), getData(), R.layout.tab_home_list_item,
+    	View view=inflater.inflate(R.layout.tab_home_person_info, null);
+    	persionlist_view1=(ListView) view.findViewById(R.id.persionlist_view1); 
+    	PersonListViewAdapter1 hlva=new PersonListViewAdapter1(this.getActivity(), getData1(), R.layout.tab_home_list_item,
     			new String[]{"title","info","img"},
     			new int[]{R.id.title_text,R.id.info_text,R.id.right_img});
-    	setHeight(hlva,homeListView);
-    	homeListView.setAdapter(hlva);
+    	setHeight(hlva,persionlist_view1);
+    	persionlist_view1.setAdapter(hlva);
     	
-    	homeList2View=(ListView) view.findViewById(R.id.homeList2View); 
-    	HomeListViewAdapter2 hlva2=new HomeListViewAdapter2(this.getActivity(), getData2(), R.layout.tab_home_list_item,
+    	persionlist_view2=(ListView) view.findViewById(R.id.persionlist_view2); 
+    	PersonListViewAdapter2 hlva2=new PersonListViewAdapter2(this.getActivity(), getData2(), R.layout.tab_home_list_item,
     			new String[]{"title","info","img"},
     			new int[]{R.id.title_text,R.id.info_text,R.id.right_img});
-    	setHeight(hlva2,homeList2View);
-    	homeList2View.setAdapter(hlva2);
-    	
-    	buttonGet=((Button)view.findViewById(R.id.getButton));
-    	buttonGet.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View arg0) {
-				
-				new Thread(new Runnable() {
-					@Override
-					public void run() {
-						httpGet("http://121.204.243.79:8080/Cup/user/jsonfeed");
-					}
-				}).start();
-			}
-		});
-    	
+    	setHeight(hlva2,persionlist_view2);
+    	persionlist_view2.setAdapter(hlva2);
     	
         return view;
     }
-    private class HomeListViewAdapter1 extends SimpleAdapter{
-		public HomeListViewAdapter1(Context context, List<Map<String, Object>> data, int resource, String[] from,int[] to) {
+    private class PersonListViewAdapter1 extends SimpleAdapter{
+		public PersonListViewAdapter1(Context context, List<Map<String, Object>> data, int resource, String[] from,int[] to) {
 			super(context, data, resource, from, to);
 		}
 		
@@ -142,40 +110,33 @@ public class FragmentHome extends Fragment {
         @Override  
         public void onClick(View v) {  
 //            Toast.makeText(FragmentHome.this.getActivity(),((TextView)v.findViewById(R.id.title_text)).getText()+""+mPosition, Toast.LENGTH_SHORT).show();
-            if(ABOUT_INDEX==mPosition){
+            if(0==mPosition){
             	FragmentTransaction ft=getActivity().getFragmentManager().beginTransaction();
             	ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
             	ft.add(R.id.fragmentfield, new FragmentHomeAbout());
-            	ft.remove(FragmentHome.this);
+            	ft.remove(FragmentHomePerson.this);
             	ft.addToBackStack(null);
 				ft.commit();
-            }else if (PAIR_INFO_INDEX==mPosition){
+            }else if (1==mPosition){
             	FragmentTransaction ft=getActivity().getFragmentManager().beginTransaction();
             	ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
             	ft.add(R.id.fragmentfield, new FragmentHomePairInfo());
-            	ft.remove(FragmentHome.this);
+            	ft.remove(FragmentHomePerson.this);
             	ft.addToBackStack(null);
 				ft.commit();
-            }else if(RESET_INDEX==mPosition){
+            }else if(2==mPosition){
             	FragmentTransaction ft=getActivity().getFragmentManager().beginTransaction();
             	ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
             	ft.add(R.id.fragmentfield, new FragmentHomeReset());
-            	ft.remove(FragmentHome.this);
-            	ft.addToBackStack(null);
-				ft.commit();
-            }else if (HARDWARE_UPDATE_INDEX==mPosition){
-            	FragmentTransaction ft=getActivity().getFragmentManager().beginTransaction();
-            	ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-            	ft.add(R.id.fragmentfield, new FragmentHomeHardwareUpdate());
-            	ft.remove(FragmentHome.this);
+            	ft.remove(FragmentHomePerson.this);
             	ft.addToBackStack(null);
 				ft.commit();
             }
         }  
     } 
     
-    private class HomeListViewAdapter2 extends SimpleAdapter{
-		public HomeListViewAdapter2(Context context, List<Map<String, Object>> data, int resource, String[] from,int[] to) {
+    private class PersonListViewAdapter2 extends SimpleAdapter{
+		public PersonListViewAdapter2(Context context, List<Map<String, Object>> data, int resource, String[] from,int[] to) {
 			super(context, data, resource, from, to);
 		}
 		
@@ -198,8 +159,8 @@ public class FragmentHome extends Fragment {
             	//go to personal info
             	FragmentTransaction ft=getActivity().getFragmentManager().beginTransaction();
             	ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-            	ft.add(R.id.fragmentfield, new FragmentHomePerson());
-            	ft.remove(FragmentHome.this);
+            	ft.add(R.id.fragmentfield, new FragmentHomeAbout());
+            	ft.remove(FragmentHomePerson.this);
             	ft.addToBackStack(null);
 				ft.commit();
             }
@@ -229,13 +190,15 @@ public class FragmentHome extends Fragment {
         l.setLayoutParams(layoutParams);  
     }  
     
-	private List<Map<String, Object>> getData() {
+	private List<Map<String, Object>> getData1() {
 		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
 		Map<String, Object> map;
-		for (int i = 0; i < listTitle.length; i++) {
+		SharedPreferences p=Utils.getSharedPpreference(getActivity());
+		for (int i = 0; i < list1Title.length; i++) {
 			map = new HashMap<String, Object>();
-			map.put("title", listTitle[i]);
-			map.put("info", "");
+			map.put("title", list1Title[i]);
+			String info=p.getString(Utils.SHARE_PREFERENCE_CUP_PERSON_1[i], "");
+			map.put("info", info);
 			map.put("img", ">");
 			list.add(map);
 		}
@@ -247,10 +210,12 @@ public class FragmentHome extends Fragment {
 	private List<Map<String, Object>> getData2() {
 		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
 		Map<String, Object> map;
+		SharedPreferences p=Utils.getSharedPpreference(getActivity());
 		for (int i = 0; i < list2Title.length; i++) {
 			map = new HashMap<String, Object>();
 			map.put("title", list2Title[i]);
-			map.put("info", "");
+			String info=p.getString(Utils.SHARE_PREFERENCE_CUP_PERSON_2[i], "");
+			map.put("info",info);
 			map.put("img", ">");
 			list.add(map);
 		}
@@ -258,36 +223,6 @@ public class FragmentHome extends Fragment {
        
         return list;
     }
-    
-    private void httpGet(String url) {
-		HttpGet httpGet = new HttpGet(url);
-		try {
-			HttpClient httpClinet = new DefaultHttpClient();
-			HttpResponse httpResponse = httpClinet.execute(httpGet);
-			HttpEntity entity = httpResponse.getEntity();
-			if (entity != null) {
-				Utils.Log(" httpGet status " + httpResponse.getStatusLine());
-				Utils.Log(" xxxxxxxxxxxxxxxxxxxxx http httpGet start output 2");
-				String result=EntityUtils.toString(entity, "UTF-8");
-				// 下面这种方式写法更简单，可是没换行。
-				Utils.Log("httpGet 2" + result);
-				// 生成 JSON 对象
-//				JSONArray jsonArray= new JSONArray(result);
-				JSONObject jsonObject=new JSONObject(result);
-				Message msg=new Message();
-				msg.what=1;
-				msg.arg1=1;
-				msg.obj=jsonObject;
-//				mHandler.sendEmptyMessage(1);
-				mHandler.sendMessage(msg);
-				Utils.Log(" xxxxxxxxxxxxxxxxxxxxx http httpGet finish output 2"+jsonObject);
-			}
-		} catch (Exception e) {
-			Utils.Log(TAG, "httpGet error:" + e);
-		}
-	}
- 
-    
     
     
     

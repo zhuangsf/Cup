@@ -216,12 +216,10 @@ public class FragmentHome extends Fragment {
     public void setHeight(BaseAdapter comAdapter,ListView l){  
         int listViewHeight = 0;  
         int adaptCount = comAdapter.getCount();  
-        Utils.Log("xxxxxxxxxxxxxxxxxx adaptCount:"+adaptCount);
         for(int i=0;i<adaptCount;i++){  
             View temp = comAdapter.getView(i,null,l);  
             temp.measure(0,0);  
             listViewHeight += temp.getMeasuredHeight(); 
-            Utils.Log("xxxxxxxxxxxxxxxxxx listViewHeight:"+listViewHeight);
         }  
         LayoutParams layoutParams = l.getLayoutParams();  
         layoutParams.width = LayoutParams.FILL_PARENT;  

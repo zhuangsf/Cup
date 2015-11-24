@@ -2,6 +2,7 @@ package com.sf.cup;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,8 +12,8 @@ import org.json.JSONObject;
 import com.sf.cup.utils.Utils;
 
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.app.Fragment;
-import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
@@ -21,9 +22,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.os.SystemClock;
-import android.text.Editable;
-import android.text.TextUtils;
-import android.text.TextWatcher;
+import android.text.InputFilter;
+import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -31,11 +31,12 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.BaseAdapter;
-import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class FragmentHomePerson extends Fragment {
 	private final static String TAG = FragmentHomePerson.class.getPackage().getName() + "."
@@ -53,6 +54,16 @@ public class FragmentHomePerson extends Fragment {
 	List<Map<String, Object>> personList2 = new ArrayList<Map<String, Object>>(); //list view 就是一直玩弄这个
 	
 	EditText person_info;
+	
+	AlertDialog ad;
+	
+	
+	
+	
+	
+	
+	
+	
 	Handler mHandler = new Handler()
 	  {
 	    @Override
@@ -142,38 +153,56 @@ public class FragmentHomePerson extends Fragment {
         }  
         @Override  
 		public void onClick(View v) {
-			// Toast.makeText(FragmentHome.this.getActivity(),((TextView)v.findViewById(R.id.title_text)).getText()+""+mPosition,
-			// Toast.LENGTH_SHORT).show();
-			
-			LayoutInflater inflater = getActivity().getLayoutInflater();
-			final View layout = inflater.inflate(R.layout.tab_home_person_dialog,
-					(ViewGroup) v.findViewById(R.id.dialog));
-			TextView person_title = (TextView) layout.findViewById(R.id.person_title);
-			person_info = (EditText) layout.findViewById(R.id.person_info);
-			if (0 == mPosition) {
-			} else if (1 == mPosition) {
-			} else if (2 == mPosition) {
+        	
+			switch (mPosition) {
+			case 1:
+				String sexString=(String)personList1.get(mPosition).get("info");
+				int initSexCheck="男".equals(sexString)?0:1;
+				ad = new AlertDialog.Builder(getActivity()).setTitle((String)personList1.get(mPosition).get("title"))
+						.setSingleChoiceItems(new String[] { "男", "女" }, initSexCheck, new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog, int which) {
+								String sex = which == 0 ? "男" : "女";
+								personList1.get(mPosition).put("info", sex);
+								SharedPreferences.Editor e = Utils.getSharedPpreferenceEdit(getActivity());
+								e.putString(Utils.SHARE_PREFERENCE_CUP_PERSON_1[mPosition], sex);
+								e.commit();
+								doUpdate1();
+							}
+						}).setNegativeButton("确定", null).show();
+				break;
+			case 2:
+				//could not change the phone number
+				Toast.makeText(getActivity(), "手机号码绑定，无法修改", Toast.LENGTH_SHORT).show();
+				break;
+			case 0:
+				LayoutInflater inflater = getActivity().getLayoutInflater();
+	        	final View layout = inflater.inflate(R.layout.tab_home_person_dialog,(ViewGroup) v.findViewById(R.id.dialog));
+				TextView person_title = (TextView) layout.findViewById(R.id.person_title);
+				person_info = (EditText) layout.findViewById(R.id.person_info);
+				person_info.setFilters(new InputFilter[]{new InputFilter.LengthFilter(5)}); 
+				person_info.setText((String)personList2.get(mPosition).get("info"));
+				person_title.setText(list1Title[mPosition]);
+				ad = new AlertDialog.Builder(getActivity())
+						.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+							@Override
+							public void onClick(DialogInterface dialog, int which) {
+								personList1.get(mPosition).put("info", person_info.getText().toString());
+								SharedPreferences.Editor e = Utils.getSharedPpreferenceEdit(getActivity());
+								e.putString(Utils.SHARE_PREFERENCE_CUP_PERSON_1[mPosition],
+										person_info.getText().toString());
+								e.commit();
+								doUpdate1();
+							}
+						}).setNegativeButton("取消", null).create();
+				ad.setTitle("个人信息设置");
+				ad.setView(layout);
+				ad.show();
+				Message msg = new Message();
+				msg.what = 1;
+				msg.arg1 = 1;
+				mHandler.sendMessage(msg);
+				break;
 			}
-			person_title.setText(list1Title[mPosition]);
-			final AlertDialog ad = new AlertDialog.Builder(getActivity())
-					.setPositiveButton("确定", new DialogInterface.OnClickListener() {
-						@Override
-						public void onClick(DialogInterface dialog, int which) {
-							personList1.get(mPosition).put("info", person_info.getText().toString());
-							SharedPreferences.Editor e = Utils.getSharedPpreferenceEdit(getActivity());
-							e.putString(Utils.SHARE_PREFERENCE_CUP_PERSON_1[mPosition], person_info.getText().toString());
-							e.commit();
-							doUpdate1();
-						}
-					}).setNegativeButton("取消", null).create();
-
-			ad.setTitle("个人信息设定");
-			ad.setView(layout);
-			ad.show();
-			Message msg=new Message();
-			msg.what=1;
-			msg.arg1=1;
-			mHandler.sendMessage(msg);
 		}  
     } 
     
@@ -190,7 +219,8 @@ public class FragmentHomePerson extends Fragment {
 		}
     	
     }
-    private class MyListener2 implements OnClickListener{  
+    private class MyListener2 implements OnClickListener{
+    	Message msg;
         int mPosition;  
         public MyListener2(int inPosition){  
             mPosition= inPosition;  
@@ -198,34 +228,86 @@ public class FragmentHomePerson extends Fragment {
         @Override  
         public void onClick(View v) {  
         	LayoutInflater inflater = getActivity().getLayoutInflater();
-			final View layout = inflater.inflate(R.layout.tab_home_person_dialog,
+        	final View layout = inflater.inflate(R.layout.tab_home_person_dialog,
 					(ViewGroup) v.findViewById(R.id.dialog));
 			TextView person_title = (TextView) layout.findViewById(R.id.person_title);
 			person_info = (EditText) layout.findViewById(R.id.person_info);
-			if (0 == mPosition) {
-			} else if (1 == mPosition) {
-			} else if (2 == mPosition) {
-			}
+			person_info.setText((String)personList2.get(mPosition).get("info"));
 			person_title.setText(list2Title[mPosition]);
-			final AlertDialog ad = new AlertDialog.Builder(getActivity())
+			
+			switch (mPosition) {
+			case 2:
+			case 3:
+				person_info.setFilters(new InputFilter[]{new InputFilter.LengthFilter(3)}); 
+				person_info.setInputType(InputType.TYPE_CLASS_NUMBER);
+				  ad = new AlertDialog.Builder(getActivity())
 					.setPositiveButton("确定", new DialogInterface.OnClickListener() {
 						@Override
 						public void onClick(DialogInterface dialog, int which) {
 							personList2.get(mPosition).put("info", person_info.getText().toString());
 							SharedPreferences.Editor e = Utils.getSharedPpreferenceEdit(getActivity());
-							e.putString(Utils.SHARE_PREFERENCE_CUP_PERSON_2[mPosition], person_info.getText().toString());
+							e.putString(Utils.SHARE_PREFERENCE_CUP_PERSON_2[mPosition],
+									person_info.getText().toString());
 							e.commit();
 							doUpdate2();
 						}
 					}).setNegativeButton("取消", null).create();
-
-			ad.setTitle("个人信息设定");
+			ad.setTitle("个人信息设置");
 			ad.setView(layout);
 			ad.show();
-			Message msg=new Message();
-			msg.what=1;
-			msg.arg1=1;
+			msg = new Message();
+			msg.what = 1;
+			msg.arg1 = 1;
 			mHandler.sendMessage(msg);
+				break;
+			case 0:
+			case 1:
+				person_info.setFilters(new InputFilter[]{new InputFilter.LengthFilter(5)}); 
+				ad = new AlertDialog.Builder(getActivity())
+						.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+							@Override
+							public void onClick(DialogInterface dialog, int which) {
+								personList2.get(mPosition).put("info", person_info.getText().toString());
+								SharedPreferences.Editor e = Utils.getSharedPpreferenceEdit(getActivity());
+								e.putString(Utils.SHARE_PREFERENCE_CUP_PERSON_2[mPosition],
+										person_info.getText().toString());
+								e.commit();
+								doUpdate2();
+							}
+						}).setNegativeButton("取消", null).create();
+
+				ad.setTitle("个人信息设置");
+				ad.setView(layout);
+				ad.show();
+				msg = new Message();
+				msg.what = 1;
+				msg.arg1 = 1;
+				mHandler.sendMessage(msg);
+				break;
+				
+			case 4:
+				Calendar c = Calendar.getInstance();
+				String [] dateSpilt=((String)personList2.get(mPosition).get("info")).split("-");
+				
+				DatePickerDialog   dialog = new DatePickerDialog(getActivity(),
+		                new DatePickerDialog.OnDateSetListener() {
+		                    public void onDateSet(DatePicker dp, int year,int month, int dayOfMonth) {
+//		                        et.setText("您选择了：" + year + "年" + (month+1) + "月" + dayOfMonth + "日");
+		                    	String dateFormat=year+"-"+month+"-"+dayOfMonth;
+		                    	personList2.get(mPosition).put("info", dateFormat);
+								SharedPreferences.Editor e = Utils.getSharedPpreferenceEdit(getActivity());
+								e.putString(Utils.SHARE_PREFERENCE_CUP_PERSON_2[mPosition],dateFormat);
+								e.commit();
+								doUpdate2();
+		                    }
+		                }, 
+		                Integer.parseInt(dateSpilt[0]), // 传入年份
+		                Integer.parseInt(dateSpilt[1]), // 传入月份
+		                Integer.parseInt(dateSpilt[2]) // 传入天数
+		            );
+				dialog.show();
+				break;
+			}
         }  
           
     }  

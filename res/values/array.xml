@@ -27,8 +27,8 @@
        <string-array name="person_list_title2">
         <item>场景</item>
         <item>体质</item>
-        <item>身高</item>
-        <item>体重</item>
+        <item>身高（cm）</item>
+        <item>体重（kg）</item>
         <item>生日</item>
     </string-array>
 </resources>

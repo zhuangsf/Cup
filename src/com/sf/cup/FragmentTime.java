@@ -278,7 +278,7 @@ public class FragmentTime extends Fragment {
 					@Override
 					public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
 						c = timePicker(index,hourOfDay, minute);
-						// TODO 这里设置的值，要保存起来，写进preference
+						// TODO  there is a bug that  cant cancel or return 
 						if (!swtichList.get(index).isChecked()) {
 							swtichList.get(index).setChecked(true);
 						} else {

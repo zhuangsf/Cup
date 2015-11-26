@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.sf.cup.utils.FileUtil;
@@ -291,6 +292,7 @@ public class FragmentHomePerson extends Fragment {
 			case 1:
 				String sexString = (String) personList1.get(mPosition).get("info");
 				int initSexCheck = "ÄÐ".equals(sexString) ? 0 : 1;
+				//TODO    display null at first time         !!!!!!!!!!!!!!!!!!!!!!
 				ad = new AlertDialog.Builder(getActivity()).setTitle((String) personList1.get(mPosition).get("title"))
 						.setSingleChoiceItems(new String[] { "ÄÐ", "Å®" }, initSexCheck,
 								new DialogInterface.OnClickListener() {
@@ -519,7 +521,7 @@ public class FragmentHomePerson extends Fragment {
 	public void onPause() {
 		super.onPause();
 		SharedPreferences p = Utils.getSharedPpreference(getActivity());
-		JSONObject result = new JSONObject();
+		final JSONObject result = new JSONObject();
 		String nickname = p.getString(Utils.SHARE_PREFERENCE_CUP_PERSON_1[0], "");
 		String sex = p.getString(Utils.SHARE_PREFERENCE_CUP_PERSON_1[1], "");
 		String phone = p.getString(Utils.SHARE_PREFERENCE_CUP_PERSON_1[2], "");
@@ -529,11 +531,56 @@ public class FragmentHomePerson extends Fragment {
 		String height = p.getString(Utils.SHARE_PREFERENCE_CUP_PERSON_2[2], "");
 		String weight = p.getString(Utils.SHARE_PREFERENCE_CUP_PERSON_2[3], "");
 		String birthday = p.getString(Utils.SHARE_PREFERENCE_CUP_PERSON_2[4], "");
+		
+		final String accountid = p.getString(Utils.SHARE_PREFERENCE_CUP_ACCOUNTID, "");
 		String avatar = "";
 
-		// send to server
+		if(TextUtils.isEmpty(accountid)){
+			// it must be a bug   missing the accountid
+			return ;
+		}
+		try {
+			result.put("accountid", accountid);
+			
+			result.put("nickname", nickname);
+			result.put("sex", sex);
+
+			result.put("scene", scene);
+			result.put("constitution", constitution);
+			result.put("height", height);
+			result.put("weight", weight);
+			result.put("birthday", birthday);
+			result.put("nickname", nickname);
+			Utils.Log("xxxxxxxxxxxxxxxxxx httpPut result:" + result);
+			// send to server
+			new Thread(new Runnable() {
+				@Override
+				public void run() {
+					// http://121.199.75.79:8180/cup-0.1/user/saveme
+					Utils.httpPut(Utils.URL_PATH + "/user/saveme", result, mHandler);
+				}
+			}).start();
+		} catch (Exception e) {
+			Utils.Log("xxxxxxxxxxxxxxxxxx httpPut error:" + e);
+			e.printStackTrace();
+		}
 	}
 
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	/**
 	 * to avoid IllegalStateException: No activity
 	 */

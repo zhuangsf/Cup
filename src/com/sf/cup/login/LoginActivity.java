@@ -234,7 +234,7 @@ public class LoginActivity extends Activity {
             		send_code.setEnabled(true);
             		send_code.setBackgroundResource(R.drawable.long_button_selector);
             	}
-            }else if(msg.what ==Utils.LOGIN_SUCCESS_MSG){
+            }else if(msg.what ==Utils.GET_SUCCESS_MSG){
             	JSONObject jsonObject=(JSONObject)msg.obj;
             	//1,这里需要把这些都写入preferrence 方便后面的界面显示调用。
             	Utils.Log("login success jsonObject:"+jsonObject);

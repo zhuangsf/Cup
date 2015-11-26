@@ -86,7 +86,7 @@ public class FragmentWater extends Fragment {
 	    @Override
 		public void handleMessage(Message paramAnonymousMessage)
 	    {
-	    Utils.Log("handle:"+paramAnonymousMessage);
+//	    Utils.Log("handle:"+paramAnonymousMessage);
 	     switch (paramAnonymousMessage.what)
 	     {
 				case 1:

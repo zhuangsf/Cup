@@ -16,7 +16,12 @@ import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpPut;
+import org.apache.http.conn.ConnectTimeoutException;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.protocol.HTTP;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONObject;
 
@@ -123,7 +128,9 @@ public class Utils {
 	
 	//msg define
 	public static final int COUNT_DOWN_MSG=0x8001; //login count down msg
-	public static final int LOGIN_SUCCESS_MSG=0x8002; //login success msg
+	public static final int GET_SUCCESS_MSG=0x8002; //get success msg
+	public static final int POST_SUCCESS_MSG=0x8003; //post success msg
+	public static final int PUT_SUCCESS_MSG=0x8004; //put success msg
 	/**
 	 * running log
 	 * 
@@ -171,6 +178,7 @@ public class Utils {
 		  return new Random().nextInt(n)+m;
 	  }
 	
+	  @SuppressWarnings("deprecation")
 	public static void httpGet(String url,Handler mHandler) {
 		Utils.Log(" xxxxxxxxxxxxxxxxxxxxx http httpGet url:"+url);
 			HttpGet httpGet = new HttpGet(url);
@@ -188,7 +196,7 @@ public class Utils {
 //					JSONArray jsonArray= new JSONArray(result);
 					JSONObject jsonObject=new JSONObject(result);
 					Message msg=new Message();
-					msg.what=LOGIN_SUCCESS_MSG;
+					msg.what=GET_SUCCESS_MSG;
 					msg.arg1=1;
 					msg.obj=jsonObject;
 //					mHandler.sendEmptyMessage(1);
@@ -200,8 +208,89 @@ public class Utils {
 			}
 		}
 	 
+	/**
+	 * Post
+	 * 
+	 * @param url
+	 * @param paramList
+	 */
+	@SuppressWarnings("deprecation")
+	public static void httpPost(String url, JSONObject jsonObj,Handler mHandler) {
+		HttpClient httpClient = new DefaultHttpClient();
+		HttpPost httpPost = new HttpPost(url);
+		long timestamp = System.currentTimeMillis();
+		try {
+			// 设置参数
+//			httpPost.setEntity(new StringEntity(DesEncrypt.encrypt(jsonObj.toString(), DesEncrypt.KEY), HTTP.UTF_8));
+			httpPost.setEntity(new StringEntity(jsonObj.toString(), HTTP.UTF_8));
+			HttpResponse httpResponse = httpClient.execute(httpPost);
+			HttpEntity entity = httpResponse.getEntity();
+			if (entity != null) {
+				Utils.Log(" httpPost status " + httpResponse.getStatusLine());
+				Utils.Log(" xxxxxxxxxxxxxxxxxxxxx http httpPost start output ");
+				String entitySrc = EntityUtils.toString(entity, "UTF-8");
+				JSONObject jsonObject=new JSONObject(entitySrc);
+				Message msg=new Message();
+				msg.what=POST_SUCCESS_MSG;
+				msg.arg1=1;
+				msg.obj=jsonObject;
+//				mHandler.sendEmptyMessage(1);
+				mHandler.sendMessage(msg);
+				Utils.Log("entitySrc  " + entitySrc);
+				Utils.Log(" xxxxxxxxxxxxxxxxxxxxx http httpPost finish output ");
+			}
+		} catch (ConnectTimeoutException e) {
+			Utils.Log(TAG, "httpPost time out error:" + e);
+		} catch (Exception e) {
+			Utils.Log(TAG, "httpPost error:" + e);
+		}
+		Utils.Log("httpPost spend time:"
+				+ (System.currentTimeMillis() - timestamp) + "ms");
+	}
 	 
+	/**
+	 * Put
+	 * 
+	 * @param url
+	 * @param paramList
+	 */
+	@SuppressWarnings("deprecation")
+	public static void httpPut(String url, JSONObject jsonObj,Handler mHandler) {
+		HttpClient httpClient = new DefaultHttpClient();
+		HttpPut httpPut = new HttpPut(url);
+		long timestamp = System.currentTimeMillis();
+		try {
+			// 设置参数
+//			httpPost.setEntity(new StringEntity(DesEncrypt.encrypt(jsonObj.toString(), DesEncrypt.KEY), HTTP.UTF_8));
+			httpPut.setEntity(new StringEntity(jsonObj.toString(), HTTP.UTF_8));
+//			httpPut.setHeader("accountid",accountid);
+			httpPut.addHeader("content-type", "application/json");
+			HttpResponse httpResponse = httpClient.execute(httpPut);
+			HttpEntity entity = httpResponse.getEntity();
+			if (entity != null) {
+				Utils.Log(" httpPut status " + httpResponse.getStatusLine());
+				Utils.Log(" xxxxxxxxxxxxxxxxxxxxx http httpPut start output ");
+				String entitySrc = EntityUtils.toString(entity, "UTF-8");
+				JSONObject jsonObject=new JSONObject(entitySrc);
+				Message msg=new Message();
+				msg.what=PUT_SUCCESS_MSG;
+				msg.arg1=1;
+				msg.obj=jsonObject;
+//				mHandler.sendEmptyMessage(1);
+				mHandler.sendMessage(msg);
+				Utils.Log("entitySrc  " + entitySrc);
+				Utils.Log(" xxxxxxxxxxxxxxxxxxxxx http httpPut finish output ");
+			}
+		} catch (ConnectTimeoutException e) {
+			Utils.Log(TAG, "httpPut time out error:" + e);
+		} catch (Exception e) {
+			Utils.Log(TAG, "httpPut error:" + e);
+		}
+		Utils.Log("httpPut spend time:"
+				+ (System.currentTimeMillis() - timestamp) + "ms");
+	}
 	 
+	
 	/**
 	 * 根据Key获取值.
 	 * 

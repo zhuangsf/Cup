@@ -49,18 +49,21 @@
                 android:layout_weight="1"
                 android:gravity="center"
                 android:orientation="horizontal" >
+
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="vertical" >
+
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="8"
                         android:layout_marginTop="10dp"
+                        android:layout_weight="8"
                         android:background="@drawable/water_current_temp_bg"
                         android:gravity="center"
                         android:orientation="vertical" >
+
                         <TextView
                             android:id="@+id/current_cup_temperature"
                             android:layout_width="wrap_content"
@@ -70,11 +73,13 @@
                             android:textColor="@drawable/white"
                             android:textSize="25sp" />
                     </LinearLayout>
+
                     <LinearLayout
                         android:layout_width="fill_parent"
-                        android:layout_height="wrap_content" 
-                         android:layout_weight="1"
-                        android:gravity="center">
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center" >
+
                         <TextView
                             android:layout_width="fill_parent"
                             android:layout_height="wrap_content"
@@ -84,76 +89,76 @@
                             android:textSize="15sp" />
                     </LinearLayout>
                 </LinearLayout>
+
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="fill_parent"
-                    android:orientation="vertical" 
-                    android:gravity="center"
-                    android:layout_marginTop="30dp"
                     android:layout_marginBottom="10dp"
-                    >
+                    android:layout_marginTop="30dp"
+                    android:gravity="center"
+                    android:orientation="vertical" >
+
                     <ImageView
                         android:id="@+id/water_status_pic1"
-                        android:layout_weight="1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_weight="1"
                         android:src="@drawable/water_status_point_focus" >
                     </ImageView>
 
                     <ImageView
                         android:id="@+id/water_status_pic2"
-                        android:layout_weight="1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_weight="1"
                         android:src="@drawable/water_status_point_disable" >
                     </ImageView>
 
                     <ImageView
                         android:id="@+id/water_status_pic3"
-                        android:layout_weight="1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_weight="1"
                         android:src="@drawable/water_status_point_disable" >
                     </ImageView>
                 </LinearLayout>
+
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="fill_parent"
-                    android:orientation="vertical" 
-                    android:gravity="center"
-                    android:layout_marginTop="30dp"
                     android:layout_marginBottom="10dp"
-                    >
+                    android:layout_marginTop="30dp"
+                    android:gravity="center"
+                    android:orientation="vertical" >
+
                     <TextView
                         android:id="@+id/water_status_text1"
-                        android:layout_weight="1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_weight="1"
                         android:gravity="center"
-                        android:textColor="@drawable/cup_pink"
                         android:text="自然温"
-                         >
+                        android:textColor="@drawable/cup_pink" >
                     </TextView>
+
                     <TextView
                         android:id="@+id/water_status_text2"
-                        android:layout_weight="1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_weight="1"
                         android:gravity="center"
-                        android:textColor="@drawable/darkgray"
                         android:text="恒温中"
-                        >
+                        android:textColor="@drawable/darkgray" >
                     </TextView>
 
                     <TextView
                         android:id="@+id/water_status_text3"
-                        android:layout_weight="1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_weight="1"
                         android:gravity="center"
-                        android:textColor="@drawable/darkgray"
                         android:text="已恒温"
-                         >
+                        android:textColor="@drawable/darkgray" >
                     </TextView>
                 </LinearLayout>
             </LinearLayout>
@@ -223,60 +228,63 @@
             android:layout_weight="3"
             android:background="@drawable/cup_light_gray" >
 
-            <LinearLayout
+            <ScrollView
                 android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:orientation="vertical" >
-
-                <RelativeLayout
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_horizontal"
-                    android:layout_marginTop="5dp"
-                     >
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentLeft="true"
-                        android:layout_centerVertical="true"
-                        android:layout_marginLeft="20dp"
-                        android:gravity="center"
-                        android:text="恒温设定"
-                        android:textColor="@drawable/black"
-                        android:textSize="20sp" />
-
-                    <ImageView
-                        android:id="@+id/add_temperature_button"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:layout_centerInParent="true"
-                        android:layout_marginRight="10dp"
-                        android:background="@drawable/mode_add_selector"
-                        />
-
-                    <Button
-                        android:id="@+id/cancel_temperature_button"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="cancel all"
-                        android:visibility="gone" />
-                </RelativeLayout>
+                android:layout_height="fill_parent" >
 
                 <LinearLayout
                     android:layout_width="fill_parent"
-                    android:layout_height="wrap_content" >
+                    android:layout_height="fill_parent"
+                    android:orientation="vertical" >
 
-                    <ListView
-                        android:id="@+id/temperature_list"
+                    <RelativeLayout
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
-                        android:divider="@null"
-                        android:dividerHeight="10dp" >
-                    </ListView>
+                        android:layout_marginTop="5dp"
+                        android:gravity="center_horizontal" >
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentLeft="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginLeft="20dp"
+                            android:gravity="center"
+                            android:text="恒温设定"
+                            android:textColor="@drawable/black"
+                            android:textSize="20sp" />
+
+                        <ImageView
+                            android:id="@+id/add_temperature_button"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerInParent="true"
+                            android:layout_marginRight="10dp"
+                            android:background="@drawable/mode_add_selector" />
+
+                        <Button
+                            android:id="@+id/cancel_temperature_button"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="cancel all"
+                            android:visibility="gone" />
+                    </RelativeLayout>
+
+                    <LinearLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content" >
+
+                        <ListView
+                            android:id="@+id/temperature_list"
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:divider="@null"
+                            android:dividerHeight="10dp" >
+                        </ListView>
+                    </LinearLayout>
                 </LinearLayout>
-            </LinearLayout>
+            </ScrollView>
         </FrameLayout>
     </LinearLayout>
 

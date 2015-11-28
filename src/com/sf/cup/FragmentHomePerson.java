@@ -126,6 +126,14 @@ public class FragmentHomePerson extends Fragment {
 		Resources res = getResources();
 		list1Title = res.getStringArray(R.array.person_list_title1);
 		list2Title = res.getStringArray(R.array.person_list_title2);
+		
+		SharedPreferences p=Utils.getSharedPpreference(getActivity());
+		String sex=p.getString(Utils.SHARE_PREFERENCE_CUP_SEX, "");
+		if(TextUtils.isEmpty(sex)){
+			SharedPreferences.Editor e=Utils.getSharedPpreferenceEdit(getActivity());
+			e.putString(Utils.SHARE_PREFERENCE_CUP_SEX, "Ů");
+			e.commit();
+		}
 
 	}
 

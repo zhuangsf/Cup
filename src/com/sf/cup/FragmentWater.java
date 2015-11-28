@@ -222,8 +222,8 @@ public class FragmentWater extends Fragment {
 			SharedPreferences.Editor e = Utils.getSharedPpreferenceEdit(getActivity());
 					e.putString(Utils.SHARE_PREFERENCE_CUP_TEMPERATURE_MODE_INFO[0], "ÔçÉÏµÚÒ»±­Ë®ÎÂ");
 					e.putString(Utils.SHARE_PREFERENCE_CUP_TEMPERATURE_MODE_VALUE[0], "45");
-					e.putString(Utils.SHARE_PREFERENCE_CUP_TEMPERATURE_MODE_INFO[0], "ÅÝ¿§·È");
-					e.putString(Utils.SHARE_PREFERENCE_CUP_TEMPERATURE_MODE_VALUE[0], "75");
+					e.putString(Utils.SHARE_PREFERENCE_CUP_TEMPERATURE_MODE_INFO[1], "ÅÝ¿§·È");
+					e.putString(Utils.SHARE_PREFERENCE_CUP_TEMPERATURE_MODE_VALUE[1], "75");
 					e.commit();
 		}else{
 			for(int i=0;i<5;i++){

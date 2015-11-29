@@ -1,15 +1,19 @@
 package com.sf.cup.utils;
 
+import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
 import org.apache.http.HttpEntity;
@@ -19,7 +23,11 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.conn.ConnectTimeoutException;
+import org.apache.http.entity.FileEntity;
 import org.apache.http.entity.StringEntity;
+import org.apache.http.entity.mime.HttpMultipartMode;
+import org.apache.http.entity.mime.MultipartEntity;
+import org.apache.http.entity.mime.content.FileBody;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.protocol.HTTP;
 import org.apache.http.util.EntityUtils;
@@ -131,6 +139,7 @@ public class Utils {
 	public static final int GET_SUCCESS_MSG=0x8002; //get success msg
 	public static final int POST_SUCCESS_MSG=0x8003; //post success msg
 	public static final int PUT_SUCCESS_MSG=0x8004; //put success msg
+	public static final int UPLOAD_SUCCESS_MSG=0x8005; //put success msg
 	/**
 	 * running log
 	 * 
@@ -290,6 +299,114 @@ public class Utils {
 				+ (System.currentTimeMillis() - timestamp) + "ms");
 	}
 	 
+	
+	/**
+	 * httpPostFile
+	 * 
+	 * @param url
+	 * @param paramList
+	 */
+	@SuppressWarnings("deprecation")
+	public static void httpPostFile(String url, String filePath,Handler mHandler,String accountid) {
+		HttpClient httpClient = new DefaultHttpClient();
+		HttpPost httpPost = new HttpPost(url);
+		long timestamp = System.currentTimeMillis();
+		try {
+			Utils.Log(" httpPostFile filePath " + filePath);
+			// 设置参数
+			MultipartEntity me=new MultipartEntity(HttpMultipartMode.BROWSER_COMPATIBLE);
+			me.addPart("file", new FileBody(new File(filePath)));
+			
+			httpPost.setEntity(me);
+//			httpPost.addHeader("content-type","multipart/form-data" );
+			httpPost.addHeader("accountid",accountid );
+			HttpResponse httpResponse = httpClient.execute(httpPost);
+			Utils.Log(" xxxxxxxxxxxxxxxxxxxxx http httpPostFile httpPost me length:"+ me.getContentLength());
+			HttpEntity entity = httpResponse.getEntity();
+			if (entity != null) {
+				Utils.Log(" httpPostFile status " + httpResponse.getStatusLine());
+				Utils.Log(" xxxxxxxxxxxxxxxxxxxxx http httpPostFile start output ");
+				String entitySrc = EntityUtils.toString(entity, "UTF-8");
+				JSONObject jsonObject=new JSONObject(entitySrc);
+				Message msg=new Message();
+				msg.what=POST_SUCCESS_MSG;
+				msg.arg1=1;
+				msg.obj=jsonObject;
+//				mHandler.sendEmptyMessage(1);
+				mHandler.sendMessage(msg);
+				Utils.Log("entitySrc  " + entitySrc);
+				Utils.Log(" xxxxxxxxxxxxxxxxxxxxx http httpPostFile finish output ");
+			}
+		} catch (ConnectTimeoutException e) {
+			Utils.Log(TAG, "httpPostFile time out error:" + e);
+		} catch (Exception e) {
+			Utils.Log(TAG, "httpPostFile error:" + e);
+		}
+		Utils.Log("httpPostFile spend time:"
+				+ (System.currentTimeMillis() - timestamp) + "ms");
+	}
+	
+	public static void httpUpload(String url, String  fileUrlString,Handler mHandler) {
+		Map<String, String> textParams = new HashMap<String, String>();
+		Map<String, File> fileparams = new HashMap<String, File>();
+		long timestamp = System.currentTimeMillis();
+		Utils.Log("httpUpload start url:"+url+",file:"+fileUrlString);
+		try {
+			// 创建一个URL对象
+			URL u = new URL(url);
+			textParams = new HashMap<String, String>();
+			fileparams = new HashMap<String, File>();
+			// 要上传的图片文件
+			File file = new File(fileUrlString);
+			fileparams.put("image", file);
+			// 利用HttpURLConnection对象从网络中获取网页数据
+			HttpURLConnection conn = (HttpURLConnection) u.openConnection();
+			// 设置连接超时（记得设置连接超时,如果网络不好,Android系统在超过默认时间会收回资源中断操作）
+			conn.setConnectTimeout(5000);
+			// 设置允许输出（发送POST请求必须设置允许输出）
+			conn.setDoOutput(true);
+			// 设置使用POST的方式发送
+			conn.setRequestMethod("POST");
+			// 设置不使用缓存（容易出现问题）
+			conn.setUseCaches(false);
+			conn.setRequestProperty("Charset", "UTF-8");//设置编码   
+			// 在开始用HttpURLConnection对象的setRequestProperty()设置,就是生成HTML文件头
+			conn.setRequestProperty("ser-Agent", "Fiddler");
+			// 设置contentType
+			conn.setRequestProperty("Content-Type", "multipart/form-data; boundary=" + NetUtil.BOUNDARY);
+			OutputStream os = conn.getOutputStream();
+			DataOutputStream ds = new DataOutputStream(os);
+			NetUtil.writeStringParams(textParams, ds);
+			NetUtil.writeFileParams(fileparams, ds);
+			NetUtil.paramsEnd(ds);
+			// 对文件流操作完,要记得及时关闭
+			os.close();
+			// 服务器返回的响应吗
+			int code = conn.getResponseCode(); // 从Internet获取网页,发送请求,将网页以流的形式读回来
+			Utils.Log(" httpUpload status " +code);
+			// 对响应码进行判断
+			if (code == 200) {// 返回的响应码200,是成功
+				// 得到网络返回的输入流
+				InputStream is = conn.getInputStream();
+				Message msg=new Message();
+				msg.what=UPLOAD_SUCCESS_MSG;
+				msg.arg1=1;
+				msg.obj=NetUtil.readString(is);
+//				mHandler.sendEmptyMessage(1);
+				mHandler.sendMessage(msg);
+			} else {
+//				Toast.makeText(mContext, "请求URL失败！", Toast.LENGTH_SHORT).show();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			Utils.Log(TAG,"httpUpload error:"+e);
+		}
+		Utils.Log("httpUpload spend time:"
+				+ (System.currentTimeMillis() - timestamp) + "ms");
+	}
+	
+	
+	
 	
 	/**
 	 * 根据Key获取值.

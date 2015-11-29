@@ -541,7 +541,7 @@ public class FragmentHomePerson extends Fragment {
 		String birthday = p.getString(Utils.SHARE_PREFERENCE_CUP_PERSON_2[4], "");
 		
 		final String accountid = p.getString(Utils.SHARE_PREFERENCE_CUP_ACCOUNTID, "");
-		String avatar = "";
+		final String avatar = p.getString(Utils.SHARE_PREFERENCE_CUP_AVATAR, "");
 
 		if(TextUtils.isEmpty(accountid)){
 			// it must be a bug   missing the accountid
@@ -566,10 +566,14 @@ public class FragmentHomePerson extends Fragment {
 				public void run() {
 					// http://121.199.75.79:8280/user/saveme
 					Utils.httpPut(Utils.URL_PATH + "/user/saveme", result, mHandler);
+					
+					if(!TextUtils.isEmpty(avatar)){
+						Utils.httpPostFile(Utils.URL_PATH +"/user/updateProfile.do", avatar, mHandler,accountid);
+					}
 				}
 			}).start();
 		} catch (Exception e) {
-			Utils.Log("xxxxxxxxxxxxxxxxxx httpPut error:" + e);
+			Utils.Log(TAG,"xxxxxxxxxxxxxxxxxx httpPut error:" + e);
 			e.printStackTrace();
 		}
 	}

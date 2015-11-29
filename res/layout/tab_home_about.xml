@@ -17,7 +17,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
-            android:text="back" />
+            android:text="back" 
+            android:visibility="gone"
+            />
         <!-- Logo Start -->
 
         <ImageView
@@ -25,7 +27,9 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:layout_toStartOf="@+id/title"
-            android:src="@drawable/ic_launcher" />
+            android:src="@drawable/ic_launcher" 
+            android:visibility="gone"
+            />
         <!-- Logo Ends -->
 
         <TextView

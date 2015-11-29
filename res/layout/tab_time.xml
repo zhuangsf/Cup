@@ -19,7 +19,8 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:layout_toStartOf="@+id/title"
-            android:src="@drawable/ic_launcher" />
+            android:src="@drawable/ic_launcher"
+            android:visibility="gone" />
         <!-- Logo Ends -->
 
         <TextView
@@ -42,7 +43,6 @@
             android:id="@+id/time_logo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:scaleType="centerCrop"
             android:src="@drawable/time_logo_enable" />
     </LinearLayout>
 

@@ -73,7 +73,6 @@ public class Utils {
 	public static final String SHARE_PREFERENCE_CUP_PHONE="PHONE";
 	public static final String SHARE_PREFERENCE_CUP_BIRTHDAY="BIRTHDAY";
 	public static final String SHARE_PREFERENCE_CUP_NICKNAME="NICKNAME";
-	public static final String SHARE_PREFERENCE_CUP_AVATAR="AVATAR";
 	public static final String SHARE_PREFERENCE_CUP_HEIGHT="HEIGHT";
 	public static final String SHARE_PREFERENCE_CUP_CITY="CITY";
 	public static final String SHARE_PREFERENCE_CUP_ACCOUNTID="ACCOUNTID";
@@ -81,6 +80,8 @@ public class Utils {
 	public static final String SHARE_PREFERENCE_CUP_SCENE="SCENE";
 	public static final String SHARE_PREFERENCE_CUP_CONSTITUTION="CONSTITUTION";
 	public static final String SHARE_PREFERENCE_CUP_WEIGHT="WEIGHT";
+	public static final String SHARE_PREFERENCE_CUP_AVATAR="AVATAR";
+	public static final String SHARE_PREFERENCE_CUP_AVATAR_IS_MODIFY="AVATAR_IS_MODIFY"; //true:after modify and wont upload 
 	
 	//water
 	public static final String SHARE_PREFERENCE_CUP_TEMPERATURE_MODE_ENABLE="TEMPERATURE_MODE_ENABLE";
@@ -329,7 +330,7 @@ public class Utils {
 				String entitySrc = EntityUtils.toString(entity, "UTF-8");
 				JSONObject jsonObject=new JSONObject(entitySrc);
 				Message msg=new Message();
-				msg.what=POST_SUCCESS_MSG;
+				msg.what=UPLOAD_SUCCESS_MSG;
 				msg.arg1=1;
 				msg.obj=jsonObject;
 //				mHandler.sendEmptyMessage(1);

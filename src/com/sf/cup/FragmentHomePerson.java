@@ -110,6 +110,15 @@ public class FragmentHomePerson extends Fragment {
 				break;
 			case 2:
 				break;
+			case Utils.GET_SUCCESS_MSG:
+	            	JSONObject jsonObject=(JSONObject)paramAnonymousMessage.obj;
+	            	//upload pic success
+	            	String picUrl = jsonObject.optString("url","");
+	            	if(!TextUtils.isEmpty(picUrl)){
+	            		SharedPreferences.Editor e=Utils.getSharedPpreferenceEdit(getActivity());
+	            		e.putBoolean(Utils.SHARE_PREFERENCE_CUP_AVATAR_IS_MODIFY, false);
+	            		e.commit();
+	            	}
 			}
 		}
 	};
@@ -262,6 +271,7 @@ public class FragmentHomePerson extends Fragment {
 			urlpath = FileUtil.saveFile(getActivity(), "temphead.jpg", photo);
 			SharedPreferences.Editor e = Utils.getSharedPpreferenceEdit(getActivity());
 			e.putString(Utils.SHARE_PREFERENCE_CUP_AVATAR, urlpath);
+			e.putBoolean(Utils.SHARE_PREFERENCE_CUP_AVATAR_IS_MODIFY, true);
 			e.commit();
 			avatar_image.setImageDrawable(drawable);
 
@@ -542,6 +552,7 @@ public class FragmentHomePerson extends Fragment {
 		
 		final String accountid = p.getString(Utils.SHARE_PREFERENCE_CUP_ACCOUNTID, "");
 		final String avatar = p.getString(Utils.SHARE_PREFERENCE_CUP_AVATAR, "");
+		final boolean avatarIsModify = p.getBoolean(Utils.SHARE_PREFERENCE_CUP_AVATAR_IS_MODIFY, false);
 
 		if(TextUtils.isEmpty(accountid)){
 			// it must be a bug   missing the accountid
@@ -559,7 +570,7 @@ public class FragmentHomePerson extends Fragment {
 			result.put("weight", weight);
 			result.put("birthday", birthday);
 			result.put("nickname", nickname);
-			Utils.Log("xxxxxxxxxxxxxxxxxx httpPut result:" + result);
+			Utils.Log("xxxxxxxxxxxxxxxxxx httpPut result:" + result+",avatar:"+avatar+",avatarIsModify:"+avatarIsModify);
 			// send to server
 			new Thread(new Runnable() {
 				@Override
@@ -567,7 +578,7 @@ public class FragmentHomePerson extends Fragment {
 					// http://121.199.75.79:8280/user/saveme
 					Utils.httpPut(Utils.URL_PATH + "/user/saveme", result, mHandler);
 					
-					if(!TextUtils.isEmpty(avatar)){
+					if(!TextUtils.isEmpty(avatar)&&avatarIsModify){
 						Utils.httpPostFile(Utils.URL_PATH +"/user/updateProfile.do", avatar, mHandler,accountid);
 					}
 				}

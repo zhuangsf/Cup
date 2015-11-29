@@ -377,6 +377,8 @@ public class FragmentHomePerson extends Fragment {
 		}
 
 	}
+	
+	
 
 	private class MyListener2 implements OnClickListener {
 		Message msg;
@@ -423,6 +425,12 @@ public class FragmentHomePerson extends Fragment {
 				break;
 			case 0:
 			case 1:
+				if(mPosition==0){
+					person_info.setHint("公司");
+				}else if(mPosition==1)
+				{
+					person_info.setHint("健康");
+				}
 				person_info.setFilters(new InputFilter[] { new InputFilter.LengthFilter(5) });
 				ad = new AlertDialog.Builder(getActivity())
 						.setPositiveButton("确定", new DialogInterface.OnClickListener() {

@@ -123,6 +123,11 @@ public class FragmentTime extends Fragment {
 			@Override
 			public void onClick(View v) {
 				alarmEnable=!alarmEnable;
+				if(alarmEnable){
+					Toast.makeText(getActivity(), "启用闹钟功能", Toast.LENGTH_SHORT).show();
+				}else{
+					Toast.makeText(getActivity(), "禁用闹钟功能", Toast.LENGTH_SHORT).show();
+				}
 				//TODO show waiting dialog
 				
 				//1,update ui

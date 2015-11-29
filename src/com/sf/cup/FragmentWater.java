@@ -674,27 +674,39 @@ public class FragmentWater extends Fragment {
 				@Override
 				public void onClick(View v) {
 					//################ for delete must be carefull
-					temperatureList.remove(p);
-					if(temperature_mode_index==p)
-					{
-						temperature_mode_index=-1;
-						//TODO
-						//0 ,show a waiting dialog
-						
-						//1, send request to cup
-						
-					}else
-					{
-						for (int i=0;i<temperatureList.size();i++) {
-							if((boolean)temperatureList.get(i).get(VIEW_RADIO_BTN))
+					
+					new AlertDialog.Builder(getActivity())
+					.setMessage("确定删除此模式？")
+			    	.setTitle("温馨提示")
+					.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							temperatureList.remove(p);
+							if(temperature_mode_index==p)
 							{
-								temperature_mode_index=i;
+								temperature_mode_index=-1;
+								//TODO
+								//0 ,show a waiting dialog
+								
+								//1, send request to cup
+							}else
+							{
+								for (int i=0;i<temperatureList.size();i++) {
+									if((boolean)temperatureList.get(i).get(VIEW_RADIO_BTN))
+									{
+										temperature_mode_index=i;
+									}
+								}
 							}
+					       // TemperatureListViewAdapter.this.notifyDataSetChanged();
+					        doUpdate();
 						}
-					}
-			       // TemperatureListViewAdapter.this.notifyDataSetChanged();
-			        doUpdate();
-			        //better to show a confirm dialog
+					})
+					.setNegativeButton("取消", null)
+					.create()
+					.show();
+					
+				
 				}
 			});
 			

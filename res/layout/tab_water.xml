@@ -70,7 +70,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="60dp"
-                            android:text="45度"
+                            android:text="45"
                             android:textColor="@drawable/white"
                             android:textSize="25sp" />
                     </LinearLayout>
@@ -194,20 +194,20 @@
                     android:layout_marginTop="10dp"
                     android:orientation="horizontal" >
 
-                    <View
+                    <ImageView
                         android:id="@+id/temperature_value1"
-                        android:layout_width="60dp"
-                        android:layout_height="100dp"
-                        android:background="@drawable/num_disable_0" >
-                    </View>
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/num_disable_0" >
+                    </ImageView>
 
-                    <View
+                    <ImageView
                         android:id="@+id/temperature_value2"
-                        android:layout_width="60dp"
-                        android:layout_height="100dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:layout_marginLeft="10dp"
-                        android:background="@drawable/num_disable_0" >
-                    </View>
+                        android:src="@drawable/num_disable_0" >
+                    </ImageView>
 
                     <TextView
                         android:id="@+id/temperature_du"

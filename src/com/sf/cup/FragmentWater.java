@@ -535,8 +535,8 @@ public class FragmentWater extends Fragment {
 			R.drawable.num_disable_9
 	};
 	private void setTemperaturePic(View v, boolean isEnable) {
-		View v1 = (View) v.findViewById(R.id.temperature_value1);
-		View v2 = (View) v.findViewById(R.id.temperature_value2);
+		ImageView v1 = (ImageView) v.findViewById(R.id.temperature_value1);
+		ImageView v2 = (ImageView) v.findViewById(R.id.temperature_value2);
 		Resources resources = getActivity().getResources();
 		int temperatureValue1 = getSettingValue() / 10;
 		int temperatureValue2 = getSettingValue() % 10;
@@ -549,8 +549,8 @@ public class FragmentWater extends Fragment {
 			bgDrawable1 = resources.getDrawable(disableTemperaturePicId[temperatureValue1]);
 			bgDrawable2 = resources.getDrawable(disableTemperaturePicId[temperatureValue2]);
 		}
-		v1.setBackground(bgDrawable1);
-		v2.setBackground(bgDrawable2);
+		v1.setImageDrawable(bgDrawable1);
+		v2.setImageDrawable(bgDrawable2);
 
 	}
 	//get temperature which select mode define 

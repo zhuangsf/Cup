@@ -35,7 +35,14 @@
 -keep public class * extends android.app.backup.BackupAgentHelper
 -keep public class * extends android.preference.Preference
 -keep public class com.android.vending.licensing.ILicensingService
--keep public class * extends android.support.v4.** 
+-keep public class * extends android.support.v4.**
+ 
+-keep class android.net.http.SslError
+-keep class android.webkit.**{*;}
+-keep class cn.sharesdk.**{*;}
+-keep class m.framework.**{*;}
+-keep class cn.smssdk.**{*;}
+-keep class com.mob.**{*;}
 
 -keepclasseswithmembernames class * {
     native <methods>;

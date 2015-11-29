@@ -564,7 +564,7 @@ public class FragmentHomePerson extends Fragment {
 			new Thread(new Runnable() {
 				@Override
 				public void run() {
-					// http://121.199.75.79:8180/cup-0.1/user/saveme
+					// http://121.199.75.79:8280/user/saveme
 					Utils.httpPut(Utils.URL_PATH + "/user/saveme", result, mHandler);
 				}
 			}).start();

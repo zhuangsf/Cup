@@ -49,7 +49,7 @@ public class Utils {
 	public final static String SEPARATOR_DOT = ".";
 	public final static String SEPARATOR_SLASH = "/";
 	public final static String DIR_PATH = Environment.getExternalStorageDirectory().getAbsolutePath();
-	public final static String URL_PATH="http://121.199.75.79:8180/cup-0.1/";
+	public final static String URL_PATH="http://121.199.75.79:8280";
 	public static final int TARGET_ACTIVITY = 0;
 	public static final int TARGET_SERVICE = 1;
 	public static final String FROM = "extra.from";

@@ -300,7 +300,7 @@ public class FragmentHomePerson extends Fragment {
 			case 1:
 				String sexString = (String) personList1.get(mPosition).get("info");
 				int initSexCheck = "ÄÐ".equals(sexString) ? 0 : 1;
-				//TODO    display null at first time         !!!!!!!!!!!!!!!!!!!!!!
+				//TODO    display null at first time         !!!!!!!!!!!!!!!!!!!!!!   fix: init female oncreate
 				ad = new AlertDialog.Builder(getActivity()).setTitle((String) personList1.get(mPosition).get("title"))
 						.setSingleChoiceItems(new String[] { "ÄÐ", "Å®" }, initSexCheck,
 								new DialogInterface.OnClickListener() {

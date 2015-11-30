@@ -79,7 +79,7 @@
                     android:textColor="@android:color/black"
                     android:textSize="18sp" />
 
-                <sun.geoffery.uploadpic.CircleImg
+                <com.sf.cup.uploadpic.CircleImg
                     android:id="@+id/avatar_image"
                     android:layout_width="72dp"
                     android:layout_height="72dp"

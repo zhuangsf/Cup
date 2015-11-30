@@ -91,7 +91,6 @@ public class FragmentHomePerson extends Fragment {
 	Handler mHandler = new Handler() {
 		@Override
 		public void handleMessage(Message paramAnonymousMessage) {
-			Utils.Log("handle:" + paramAnonymousMessage);
 			switch (paramAnonymousMessage.what) {
 			case 1:
 				// alertdialog with edittext cant not open im.

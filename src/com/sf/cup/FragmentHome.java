@@ -55,7 +55,6 @@ public class FragmentHome extends Fragment {
 	    @Override
 		public void handleMessage(Message paramAnonymousMessage)
 	    {
-	    Utils.Log("handle:"+paramAnonymousMessage);
 	     switch (paramAnonymousMessage.what)
 	     {
 				case 1:

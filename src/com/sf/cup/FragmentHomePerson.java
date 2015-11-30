@@ -463,7 +463,7 @@ public class FragmentHomePerson extends Fragment {
 					public void onDateSet(DatePicker dp, int year, int month, int dayOfMonth) {
 						// et.setText("您选择了：" + year + "年" + (month+1) + "月" +
 						// dayOfMonth + "日");
-						String dateFormat = year + "-" + month + "-" + dayOfMonth;
+						String dateFormat = year + "-" + (month+1) + "-" + dayOfMonth;
 						personList2.get(mPosition).put("info", dateFormat);
 						SharedPreferences.Editor e = Utils.getSharedPpreferenceEdit(getActivity());
 						e.putString(Utils.SHARE_PREFERENCE_CUP_PERSON_2[mPosition], dateFormat);

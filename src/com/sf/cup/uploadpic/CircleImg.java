@@ -1,4 +1,4 @@
-package sun.geoffery.uploadpic;
+package com.sf.cup.uploadpic;
 
 import com.sf.cup.R;
 
@@ -18,16 +18,6 @@ import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.widget.ImageView;
 
-
-/**
- * All rights Reserved, Designed By GeofferySun 
- * @Title: 	CircleImg.java 
- * @Package sun.geoffery.libaray.widget 
- * @Description:‘≤–ŒImageView
- * @author:	GeofferySun   
- * @date:	2014-12-5 ‰∏ãÂçà11:38:42 
- * @version	V1.0
- */
 public class CircleImg extends ImageView {
 	
 	private static final ScaleType SCALE_TYPE = ScaleType.CENTER_CROP;

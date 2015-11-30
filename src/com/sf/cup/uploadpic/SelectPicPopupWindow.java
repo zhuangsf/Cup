@@ -1,4 +1,4 @@
-package sun.geoffery.uploadpic;
+package com.sf.cup.uploadpic;
 
 import com.sf.cup.R;
 
@@ -14,15 +14,6 @@ import android.view.ViewGroup.LayoutParams;
 import android.widget.Button;
 import android.widget.PopupWindow;
 
-/**
- * All rights Reserved, Designed By GeofferySun 
- * @Title: 	SelectPicPopupWindow.java 
- * @Package sun.geoffery.uploadpic 
- * @Description:从底部弹出或滑出选择菜单或窗口
- * @author:	GeofferySun   
- * @date:	2015年1月15日 上午1:21:01 
- * @version	V1.0
- */
 public class SelectPicPopupWindow extends PopupWindow {
 
 	private Button takePhotoBtn, pickPhotoBtn, cancelBtn;

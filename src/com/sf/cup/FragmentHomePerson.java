@@ -11,6 +11,7 @@ import java.util.Map;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.sf.cup.uploadpic.SelectPicPopupWindow;
 import com.sf.cup.utils.FileUtil;
 import com.sf.cup.utils.Utils;
 
@@ -52,7 +53,6 @@ import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
-import sun.geoffery.uploadpic.SelectPicPopupWindow;
 
 public class FragmentHomePerson extends Fragment {
 	private final static String TAG = FragmentHomePerson.class.getPackage().getName() + "."

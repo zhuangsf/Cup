@@ -128,7 +128,6 @@ public class FragmentTime extends Fragment {
 				}else{
 					Toast.makeText(getActivity(), "½ûÓÃÄÖÖÓ¹¦ÄÜ", Toast.LENGTH_SHORT).show();
 				}
-				//TODO show waiting dialog
 				
 				//1,update ui
 				updateAlarm();

@@ -337,7 +337,7 @@ public class FragmentHomePerson extends Fragment {
 				TextView person_title = (TextView) layout.findViewById(R.id.person_title);
 				person_info = (EditText) layout.findViewById(R.id.person_info);
 				person_info.setFilters(new InputFilter[] { new InputFilter.LengthFilter(5) });
-				person_info.setText((String) personList2.get(mPosition).get("info"));
+				person_info.setText((String) personList1.get(mPosition).get("info"));
 				person_title.setText(list1Title[mPosition]);
 				ad = new AlertDialog.Builder(getActivity())
 						.setPositiveButton("È·¶¨", new DialogInterface.OnClickListener() {

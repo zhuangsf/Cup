@@ -46,6 +46,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.os.PowerManager;
 import android.text.TextUtils;
+import android.util.Base64;
 import android.util.Log;
 import dalvik.system.DexClassLoader;
 
@@ -275,6 +276,7 @@ public class Utils {
 			httpPut.setEntity(new StringEntity(jsonObj.toString(), HTTP.UTF_8));
 //			httpPut.setHeader("accountid",accountid);
 			httpPut.addHeader("content-type", "application/json");
+			httpPut.addHeader("authorization","Basic "+Base64.encodeToString((jsonObj.getString("phone")+":phone").toString().getBytes(),Base64.NO_WRAP));
 			HttpResponse httpResponse = httpClient.execute(httpPut);
 			HttpEntity entity = httpResponse.getEntity();
 			if (entity != null) {
@@ -308,7 +310,7 @@ public class Utils {
 	 * @param paramList
 	 */
 	@SuppressWarnings("deprecation")
-	public static void httpPostFile(String url, String filePath,Handler mHandler,String accountid) {
+	public static void httpPostFile(String url, String filePath,Handler mHandler,String accountid,String phone) {
 		HttpClient httpClient = new DefaultHttpClient();
 		HttpPost httpPost = new HttpPost(url);
 		long timestamp = System.currentTimeMillis();
@@ -321,6 +323,7 @@ public class Utils {
 			httpPost.setEntity(me);
 //			httpPost.addHeader("content-type","multipart/form-data" );
 			httpPost.addHeader("accountid",accountid );
+			httpPost.addHeader("authorization","Basic "+Base64.encodeToString((phone+":phone").toString().getBytes(),Base64.NO_WRAP));
 			HttpResponse httpResponse = httpClient.execute(httpPost);
 			Utils.Log(" xxxxxxxxxxxxxxxxxxxxx http httpPostFile httpPost me length:"+ me.getContentLength());
 			HttpEntity entity = httpResponse.getEntity();

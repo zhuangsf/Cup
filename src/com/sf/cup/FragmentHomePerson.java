@@ -550,7 +550,7 @@ public class FragmentHomePerson extends Fragment {
 		final JSONObject result = new JSONObject();
 		String nickname = p.getString(Utils.SHARE_PREFERENCE_CUP_PERSON_1[0], "");
 		String sex = p.getString(Utils.SHARE_PREFERENCE_CUP_PERSON_1[1], "");
-		String phone = p.getString(Utils.SHARE_PREFERENCE_CUP_PERSON_1[2], "");
+		final String phone = p.getString(Utils.SHARE_PREFERENCE_CUP_PERSON_1[2], "");
 
 		String scene = p.getString(Utils.SHARE_PREFERENCE_CUP_PERSON_2[0], "");
 		String constitution = p.getString(Utils.SHARE_PREFERENCE_CUP_PERSON_2[1], "");
@@ -562,7 +562,7 @@ public class FragmentHomePerson extends Fragment {
 		final String avatar = p.getString(Utils.SHARE_PREFERENCE_CUP_AVATAR, "");
 		final boolean avatarIsModify = p.getBoolean(Utils.SHARE_PREFERENCE_CUP_AVATAR_IS_MODIFY, false);
 
-		if(TextUtils.isEmpty(accountid)){
+		if(TextUtils.isEmpty(accountid)||TextUtils.isEmpty(phone)){
 			// it must be a bug   missing the accountid
 			return ;
 		}
@@ -571,7 +571,8 @@ public class FragmentHomePerson extends Fragment {
 			
 			result.put("nickname", nickname);
 			result.put("sex", sex);
-
+			result.put("phone", phone);
+			
 			result.put("scene", scene);
 			result.put("constitution", constitution);
 			result.put("height", height);
@@ -587,7 +588,7 @@ public class FragmentHomePerson extends Fragment {
 					Utils.httpPut(Utils.URL_PATH + "/user/saveme", result, mHandler);
 					
 					if(!TextUtils.isEmpty(avatar)&&avatarIsModify){
-						Utils.httpPostFile(Utils.URL_PATH +"/user/updateProfile.do", avatar, mHandler,accountid);
+						Utils.httpPostFile(Utils.URL_PATH +"/user/updateProfile.do", avatar, mHandler,accountid,phone);
 					}
 				}
 			}).start();

@@ -207,7 +207,7 @@ public class FragmentTime extends Fragment {
 					}
 					long tmpMills = c.getTimeInMillis() - System.currentTimeMillis();
 					AlarmManager am = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
-					am.set(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), getPendingIntent(i));
+					am.setRepeating(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(),AlarmManager.INTERVAL_DAY, getPendingIntent(i));
 				}
 			}
 		}
@@ -245,7 +245,7 @@ public class FragmentTime extends Fragment {
 					long tmpMills = c.getTimeInMillis() - System.currentTimeMillis();
 					Toast.makeText(getActivity(), "闹钟"+(index+1)+" 设置:" + Utils.formatTime(tmpMills) + "后", Toast.LENGTH_LONG).show();
 					AlarmManager am = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
-					am.set(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), getPendingIntent(index));
+					am.setRepeating(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(),AlarmManager.INTERVAL_DAY,getPendingIntent(index));
 				} else {
 					AlarmManager am = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
 					am.cancel(getPendingIntent(index));
@@ -290,7 +290,7 @@ public class FragmentTime extends Fragment {
 							long tmpMills = c.getTimeInMillis() - System.currentTimeMillis();
 							Toast.makeText(getActivity(), "闹钟"+(index+1)+" 设置:" + Utils.formatTime(tmpMills) + "后",Toast.LENGTH_LONG).show();
 							AlarmManager am = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
-							am.set(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), getPendingIntent(index));
+							am.setRepeating(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(),AlarmManager.INTERVAL_DAY, getPendingIntent(index));
 						}
 					}
 				}, hour, minute, true);

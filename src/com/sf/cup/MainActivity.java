@@ -79,6 +79,8 @@ public class MainActivity extends Activity {
 	    	Intent i = new Intent(this, GuideView.class);
 	        startActivity(i);
 	        finish();
+	        onDestroy();
+	        return ;
 		}
 		//2,login first
 		String phonenum=p.getString(Utils.SHARE_PREFERENCE_CUP_PHONE, null);
@@ -86,6 +88,8 @@ public class MainActivity extends Activity {
 	    	Intent i = new Intent(this, LoginActivity.class);
 	        startActivity(i);
 	        finish();
+	        onDestroy();
+	        return ;
 		}
 		
 		

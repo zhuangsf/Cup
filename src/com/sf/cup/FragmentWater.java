@@ -184,7 +184,7 @@ public class FragmentWater extends Fragment {
 	           });  
 	       } catch (Exception e) {  
 	           e.printStackTrace();  
-	       } 
+	       }  
 		}
 		
 	  

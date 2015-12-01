@@ -249,6 +249,13 @@ public class MainActivity extends Activity {
 						// 循环播放
 						try {
 							// mp.start();
+							if(mp!=null){
+								if(mp.isPlaying())
+						            mp.stop();
+						        mp.reset();
+						        mp.release();
+						        mp=null;
+							}
 						} catch (IllegalStateException e) {
 							e.printStackTrace();
 						}
@@ -259,7 +266,13 @@ public class MainActivity extends Activity {
 					public boolean onError(MediaPlayer mp, int what, int extra) {
 						// 释放资源
 						try {
-							mp.release();
+							if(mp!=null){
+								if(mp.isPlaying())
+						            mp.stop();
+						        mp.reset();
+						        mp.release();
+						        mp=null;
+							}
 						} catch (Exception e) {
 							e.printStackTrace();
 						}
@@ -270,10 +283,7 @@ public class MainActivity extends Activity {
 				e.printStackTrace();
 			} catch (IOException e) {
 				e.printStackTrace();
-			} finally {
-				if(mp!=null)
-					mp.release();
-			}
+			} 
 		}
 	}
 	

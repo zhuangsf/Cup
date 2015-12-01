@@ -136,56 +136,69 @@ public class FragmentWater extends Fragment {
 		  } 
 //		  Utils.Log("updateCurrentTemperature temperature_mode_index:"+temperature_mode_index+" temperature_mode_enable:"+temperature_mode_enable);
 	  }
-	  private void temperatureComplete(){
-	       try {  
-	    	  if(alertDialog==null){ 
-	    		  alertDialog=
-	    			 new AlertDialog.Builder(getActivity())
-					.setMessage("亲！已到设定饮水温度咯！\n请及时享用哦")
-					.setTitle("温馨提示")
-					.setPositiveButton("确定", null)
-					.create() ;  
-	    	  }
-	       	
-	    	  alertDialog.show();
-	       	
-	           // 创建MediaPlayer对象  
-	       	MediaPlayer  mp = new MediaPlayer();  
-	           // 将音乐保存在res/raw/xingshu.mp3,R.java中自动生成{public static final int xingshu=0x7f040000;}  
-	           Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);  
-//	           mp = MediaPlayer.create(this, notification);  
-	           mp.setDataSource(getActivity(),notification);
-	           // 在MediaPlayer取得播放资源与stop()之后要准备PlayBack的状态前一定要使用MediaPlayer.prepeare()  
-	           mp.prepare();  
-	           // 开始播放音乐  
-	           mp.start();  
-	           // 音乐播放完毕的事件处理  
-	           mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {  
-	               public void onCompletion(MediaPlayer mp) {  
-	                   // 循环播放  
-	                   try {  
-//	                       mp.start();  
-	                   } catch (IllegalStateException e) {  
-	                       e.printStackTrace();  
-	                   }  
-	               }  
-	           });  
-	           // 播放音乐时发生错误的事件处理  
-	           mp.setOnErrorListener(new MediaPlayer.OnErrorListener() {  
-	               public boolean onError(MediaPlayer mp, int what, int extra) {  
-	                   // 释放资源  
-	                   try {  
-	                       mp.release();  
-	                   } catch (Exception e) {  
-	                       e.printStackTrace();  
-	                   }  
-	                   return false;  
-	               }  
-	           });  
-	       } catch (Exception e) {  
-	           e.printStackTrace();  
-	       }  
+	  
+	  private MediaPlayer mp; 
+
+	private void temperatureComplete() {
+		try {
+			if (alertDialog == null) {
+				alertDialog = new AlertDialog.Builder(getActivity()).setMessage("亲！已到设定饮水温度咯！\n请及时享用哦").setTitle("温馨提示")
+						.setPositiveButton("确定", null).create();
+			}
+
+			alertDialog.show();
+
+			// 创建MediaPlayer对象
+			mp = new MediaPlayer();
+			// 将音乐保存在res/raw/xingshu.mp3,R.java中自动生成{public static final int
+			// xingshu=0x7f040000;}
+			Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+			// mp = MediaPlayer.create(this, notification);
+			mp.setDataSource(getActivity(), notification);
+			// 在MediaPlayer取得播放资源与stop()之后要准备PlayBack的状态前一定要使用MediaPlayer.prepeare()
+			mp.prepare();
+			// 开始播放音乐
+			mp.start();
+			// 音乐播放完毕的事件处理
+			mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+				public void onCompletion(MediaPlayer mp) {
+					// 循环播放
+					try {
+						// mp.start();
+						if(mp!=null){
+							if(mp.isPlaying())
+					            mp.stop();
+					        mp.reset();
+					        mp.release();
+					        mp=null;
+						}
+					} catch (IllegalStateException e) {
+						e.printStackTrace();
+					}
+				}
+			});
+			// 播放音乐时发生错误的事件处理
+			mp.setOnErrorListener(new MediaPlayer.OnErrorListener() {
+				public boolean onError(MediaPlayer mp, int what, int extra) {
+					// 释放资源
+					try {
+						if (mp != null) {
+							if (mp.isPlaying())
+								mp.stop();
+							mp.reset();
+							mp.release();
+							mp = null;
+						}
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+					return false;
+				}
+			});
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
+	}
 		
 	  
 	@Override

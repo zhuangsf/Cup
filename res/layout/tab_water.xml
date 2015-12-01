@@ -65,7 +65,12 @@
                         android:gravity="center"
                         android:orientation="vertical" >
 
-                        <TextView
+    <!--                         <com.sf.cup.view.WaveView
+                                android:layout_width="fill_parent"
+                                android:layout_height="match_parent"
+                                android:background="#2200dd00"
+                                 /> -->
+   					  <TextView
                             android:id="@+id/current_cup_temperature"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"

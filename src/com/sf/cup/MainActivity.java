@@ -220,60 +220,60 @@ public class MainActivity extends Activity {
 		startFromAlarm(intent);
 	}
 	
-	private void startFromAlarm(Intent intent){
-		boolean isAlarm=intent.getBooleanExtra(Utils.IS_FROM_ALARM, false);
-		int index=intent.getIntExtra(Utils.FROM_ALARM_INDEX,-1);
-		Utils.Log("isAlarm:"+ isAlarm+" index:"+index);
-		if(isAlarm){
-		//如果是闹钟响起跳转来的，播个音乐
-		 // 初始化音乐资源  
-       try {  
-       	
-       	new AlertDialog.Builder(this)
-			.setMessage("亲！已到设定饮水时间咯！\n请及时享用哦")
-			.setTitle("温馨提示")
-			.setPositiveButton("确定", null)
-			.create()
-			.show();
-       	
-           // 创建MediaPlayer对象  
-           mp = new MediaPlayer();  
-           // 将音乐保存在res/raw/xingshu.mp3,R.java中自动生成{public static final int xingshu=0x7f040000;}  
-           Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);  
-//           mp = MediaPlayer.create(this, notification);  
-           mp.setDataSource(this,notification);
-           // 在MediaPlayer取得播放资源与stop()之后要准备PlayBack的状态前一定要使用MediaPlayer.prepeare()  
-           mp.prepare();  
-           // 开始播放音乐  
-           mp.start();  
-           // 音乐播放完毕的事件处理  
-           mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {  
-               public void onCompletion(MediaPlayer mp) {  
-                   // 循环播放  
-                   try {  
-//                       mp.start();  
-                   } catch (IllegalStateException e) {  
-                       e.printStackTrace();  
-                   }  
-               }  
-           });  
-           // 播放音乐时发生错误的事件处理  
-           mp.setOnErrorListener(new MediaPlayer.OnErrorListener() {  
-               public boolean onError(MediaPlayer mp, int what, int extra) {  
-                   // 释放资源  
-                   try {  
-                       mp.release();  
-                   } catch (Exception e) {  
-                       e.printStackTrace();  
-                   }  
-                   return false;  
-               }  
-           });  
-       } catch (IllegalStateException e) {  
-           e.printStackTrace();  
-       } catch (IOException e) {  
-           e.printStackTrace();  
-       }  
+	private void startFromAlarm(Intent intent) {
+		boolean isAlarm = intent.getBooleanExtra(Utils.IS_FROM_ALARM, false);
+		int index = intent.getIntExtra(Utils.FROM_ALARM_INDEX, -1);
+		Utils.Log("isAlarm:" + isAlarm + " index:" + index);
+		if (isAlarm) {
+			// 如果是闹钟响起跳转来的，播个音乐
+			// 初始化音乐资源
+			try {
+
+				new AlertDialog.Builder(this).setMessage("亲！已到设定饮水时间咯！\n请及时享用哦").setTitle("温馨提示")
+						.setPositiveButton("确定", null).create().show();
+
+				// 创建MediaPlayer对象
+				mp = new MediaPlayer();
+				// 将音乐保存在res/raw/xingshu.mp3,R.java中自动生成{public static final int
+				// xingshu=0x7f040000;}
+				Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+				// mp = MediaPlayer.create(this, notification);
+				mp.setDataSource(this, notification);
+				// 在MediaPlayer取得播放资源与stop()之后要准备PlayBack的状态前一定要使用MediaPlayer.prepeare()
+				mp.prepare();
+				// 开始播放音乐
+				mp.start();
+				// 音乐播放完毕的事件处理
+				mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+					public void onCompletion(MediaPlayer mp) {
+						// 循环播放
+						try {
+							// mp.start();
+						} catch (IllegalStateException e) {
+							e.printStackTrace();
+						}
+					}
+				});
+				// 播放音乐时发生错误的事件处理
+				mp.setOnErrorListener(new MediaPlayer.OnErrorListener() {
+					public boolean onError(MediaPlayer mp, int what, int extra) {
+						// 释放资源
+						try {
+							mp.release();
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+						return false;
+					}
+				});
+			} catch (IllegalStateException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			} finally {
+				if(mp!=null)
+					mp.release();
+			}
 		}
 	}
 	

@@ -220,6 +220,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="fill_parent"
                         android:layout_marginLeft="5dp"
+                        android:layout_marginBottom="10dp"
                         android:gravity="bottom"
                         android:text="度"
                         android:textColor="@drawable/darkgray"
@@ -287,7 +288,8 @@
                             android:layout_width="fill_parent"
                             android:layout_height="wrap_content"
                             android:divider="@null"
-                            android:dividerHeight="10dp" >
+                            android:dividerHeight="10dp" 
+                            android:scrollbars="none">
                         </ListView>
                     </LinearLayout>
                 </LinearLayout>

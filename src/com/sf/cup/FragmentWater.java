@@ -660,7 +660,7 @@ public class FragmentWater extends Fragment {
 		}
 		LayoutParams layoutParams = l.getLayoutParams();
 		layoutParams.width = LayoutParams.FILL_PARENT;
-		layoutParams.height = listViewHeight + 2;
+		layoutParams.height = listViewHeight + 4;
 		l.setLayoutParams(layoutParams);
 	}
 

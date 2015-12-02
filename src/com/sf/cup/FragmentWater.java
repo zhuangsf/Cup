@@ -111,6 +111,11 @@ public class FragmentWater extends Fragment {
 	    }
 	  };
 	  
+	  
+	  /**
+	   * update the currentTemperature and temperature status
+	   * 
+	   */
 	  private void updateCurrentTemperature(){
 		  //1,update current temperature
 		  current_cup_temperature.setText(""+temperature_current_value); 
@@ -432,6 +437,15 @@ public class FragmentWater extends Fragment {
 				
 				//3 update ui 
 				temperature_mode_enable=!temperature_mode_enable;
+				if(!temperature_mode_enable){
+					//if disable the temperature mode   unselect mode
+					temperature_setting_value=0;
+					if(temperature_mode_index!=-1){
+						temperatureList.get(temperature_mode_index).put(VIEW_RADIO_BTN, false);
+					}
+					temperature_mode_index = -1;
+					hlva.notifyDataSetChanged();
+				}
 				updateUiShow();
 				
 				//4 save value  temperature_mode_enable
@@ -505,7 +519,14 @@ public class FragmentWater extends Fragment {
 
 	}
 	
+	/**
+	 * update 
+	 * 1,disable mask
+	 * 2,setting temperture value color
+	 * 3,update the currentTemperature and temperature status
+	 */
 	private void updateUiShow(){
+		
 		//1,turn on/off the temperature mode
 		setMaskToModeSetting(temperature_mode_enable);
 		
@@ -586,7 +607,9 @@ public class FragmentWater extends Fragment {
 	
 	
 	
-	
+	/**
+	 * update the temperature select mode 
+	 */
 	private void doUpdate() {
 		if (hlva != null) {
 			int size = temperatureList.size();

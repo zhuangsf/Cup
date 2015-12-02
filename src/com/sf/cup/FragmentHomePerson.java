@@ -8,7 +8,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.sf.cup.uploadpic.SelectPicPopupWindow;
@@ -169,6 +168,7 @@ public class FragmentHomePerson extends Fragment {
 		String avatarFilePath = p.getString(Utils.SHARE_PREFERENCE_CUP_AVATAR, "");
 		if(!TextUtils.isEmpty(avatarFilePath)){
 			Drawable d = Drawable.createFromPath(avatarFilePath);
+			Utils.Log("avatar avatarFilePath:"+avatarFilePath+" ,d:"+d);
 			avatar_image.setImageDrawable(d);
 		}
 		

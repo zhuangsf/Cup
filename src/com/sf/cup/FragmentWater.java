@@ -235,7 +235,7 @@ public class FragmentWater extends Fragment {
 			m=new HashMap<String, Object>();
 			m.put(VIEW_INFO_TEXT, "泡咖啡");
 			m.put(VIEW_TEMPERATURE_TEXT, "75");
-			m.put(VIEW_RADIO_BTN, true);
+			m.put(VIEW_RADIO_BTN, false);
 			temperatureList.add(m);	
 			SharedPreferences.Editor e = Utils.getSharedPpreferenceEdit(getActivity());
 					e.putString(Utils.SHARE_PREFERENCE_CUP_TEMPERATURE_MODE_INFO[0], "早上第一杯水温");

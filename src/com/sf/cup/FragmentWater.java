@@ -585,13 +585,33 @@ public class FragmentWater extends Fragment {
 		}
 		v1.setImageDrawable(bgDrawable1);
 		v2.setImageDrawable(bgDrawable2);
+		
+		TextView water_mode=(TextView)v.findViewById(R.id.water_mode);
+		water_mode.setText(getSettingMode());
 
 	}
-	//get temperature which select mode define 
+	/**
+	 * get temperature which select mode define 
+	 * @return
+	 */
 	private int getSettingValue(){
 		
 		return temperature_setting_value;
 	}
+	/**
+	 * get temperature which select mode define 
+	 * @return
+	 */
+	private String getSettingMode(){
+		String settingMode="δ�趨";
+		if(temperature_mode_index!=-1)
+		{
+			settingMode=(String)temperatureList.get(temperature_mode_index).get(VIEW_INFO_TEXT);
+		}
+		
+		return settingMode;
+	}
+	
 	
 	private void setMaskToModeSetting(boolean isEnable){
 //		temperature_mode

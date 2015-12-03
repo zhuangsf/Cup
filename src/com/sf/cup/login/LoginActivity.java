@@ -1,5 +1,6 @@
 package com.sf.cup.login;
 
+import java.io.File;
 import java.util.HashMap;
 
 import org.json.JSONException;
@@ -14,6 +15,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.text.Editable;
@@ -238,28 +240,43 @@ public class LoginActivity extends Activity {
             	JSONObject jsonObject=(JSONObject)msg.obj;
             	//1,这里需要把这些都写入preferrence 方便后面的界面显示调用。
             	Utils.Log("login success jsonObject:"+jsonObject);
-            	saveAccountImfo(jsonObject);
-            	//2,启动应用
+            	final String avatar=saveAccountImfo(jsonObject);
+            	
+            	//2,然后需要去下载个头像
+            	SharedPreferences p=Utils.getSharedPpreference(LoginActivity.this);
+            	final String avatarPath=p.getString(Utils.SHARE_PREFERENCE_CUP_AVATAR, "");
+            	if(!TextUtils.isEmpty(avatar)&&TextUtils.isEmpty(avatarPath)){
+            		new Thread(new Runnable() {
+						public void run() {
+							File f=Utils.downLoadFile(avatar,Environment.getExternalStorageDirectory() + "/8CUP/web/","avatar.jpg");
+							SharedPreferences.Editor e=Utils.getSharedPpreferenceEdit(LoginActivity.this);
+							e.putString(Utils.SHARE_PREFERENCE_CUP_AVATAR, f.getAbsolutePath());
+							e.commit();
+						}
+					}).start();
+            	}
+            	
+            	//3,启动应用
             	Intent i = new Intent(getApplicationContext(), MainActivity.class);
                 startActivity(i);
             	
-            	//3，事情都做完了之后 把自己删了。
+            	//4，事情都做完了之后 把自己删了。
             	finish();
             }
         }  	
 	};
-	private void saveAccountImfo(JSONObject j){
+	private String saveAccountImfo(JSONObject j){
 		SharedPreferences p;
 		SharedPreferences.Editor e;
 		p = getSharedPreferences(Utils.SHARE_PREFERENCE_CUP,Context.MODE_PRIVATE);
 		e = p.edit();
-		
+		String avatar=null;
 		try {
 		JSONObject result=new JSONObject(j.toString());
 		String phone= result.optString("phone","");
 		String birthday =  result.optString("birthday","");
 		String nickname =result.optString("nickname","");
-		String avatar = result.optString("avatar","");
+		 avatar = result.optString("avatar","");
 		String height = result.optString("height","");
 		String city = result.optString("city","");
 		String accountid = result.optString("accountid","");
@@ -271,7 +288,7 @@ public class LoginActivity extends Activity {
 		e.putString(Utils.SHARE_PREFERENCE_CUP_PHONE, phone);
 		e.putString(Utils.SHARE_PREFERENCE_CUP_BIRTHDAY, birthday);
 		e.putString(Utils.SHARE_PREFERENCE_CUP_NICKNAME, nickname);
-		e.putString(Utils.SHARE_PREFERENCE_CUP_AVATAR, avatar);
+		e.putString(Utils.SHARE_PREFERENCE_CUP_AVATAR_WEB_PATH, avatar);
 		e.putString(Utils.SHARE_PREFERENCE_CUP_HEIGHT, height);
 		e.putString(Utils.SHARE_PREFERENCE_CUP_CITY, city);
 		e.putString(Utils.SHARE_PREFERENCE_CUP_ACCOUNTID, accountid);
@@ -284,6 +301,8 @@ public class LoginActivity extends Activity {
 		} catch (JSONException e1) {
 			Utils.Log(TAG,"saveAccountImfo error :"+e1);
 		}
+		
+		return avatar;
 		
 	}
 	private void countDown(long starttime,Handler h){

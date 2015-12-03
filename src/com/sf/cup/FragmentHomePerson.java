@@ -108,15 +108,16 @@ public class FragmentHomePerson extends Fragment {
 				break;
 			case 2:
 				break;
-			case Utils.GET_SUCCESS_MSG:
-	            	JSONObject jsonObject=(JSONObject)paramAnonymousMessage.obj;
-	            	//upload pic success
-	            	String picUrl = jsonObject.optString("url","");
-	            	if(!TextUtils.isEmpty(picUrl)){
-	            		SharedPreferences.Editor e=Utils.getSharedPpreferenceEdit(getActivity());
-	            		e.putBoolean(Utils.SHARE_PREFERENCE_CUP_AVATAR_IS_MODIFY, false);
-	            		e.commit();
-	            	}
+			case Utils.UPLOAD_SUCCESS_MSG:
+				JSONObject jsonObject=(JSONObject)paramAnonymousMessage.obj;
+            	//upload pic success
+            	String picUrl = jsonObject.optString("url","");
+            	if(!TextUtils.isEmpty(picUrl)){
+            		SharedPreferences.Editor e=Utils.getSharedPpreferenceEdit(getActivity());
+            		e.putString(Utils.SHARE_PREFERENCE_CUP_AVATAR_WEB_PATH, picUrl);
+            		e.commit();
+            	}
+				break;
 			}
 		}
 	};
@@ -267,13 +268,33 @@ public class FragmentHomePerson extends Fragment {
 			// 取得SDCard图片路径做显示
 			Bitmap photo = extras.getParcelable("data");
 			Drawable drawable = new BitmapDrawable(null, photo);
-			urlpath = FileUtil.saveFile(getActivity(), "temphead.jpg", photo);
+			urlpath = FileUtil.saveFile(getActivity(), "avatar.jpg", photo);
 			SharedPreferences.Editor e = Utils.getSharedPpreferenceEdit(getActivity());
 			e.putString(Utils.SHARE_PREFERENCE_CUP_AVATAR, urlpath);
-			e.putBoolean(Utils.SHARE_PREFERENCE_CUP_AVATAR_IS_MODIFY, true);
+//			e.putBoolean(Utils.SHARE_PREFERENCE_CUP_AVATAR_IS_MODIFY, true);
 			e.commit();
 			avatar_image.setImageDrawable(drawable);
 
+			
+			
+			try {
+				// send to server
+				new Thread(new Runnable() {
+					@Override
+					public void run() {
+						SharedPreferences p = Utils.getSharedPpreference(getActivity());
+						final String phone = p.getString(Utils.SHARE_PREFERENCE_CUP_PHONE, "");
+						final String accountid = p.getString(Utils.SHARE_PREFERENCE_CUP_ACCOUNTID, "");			
+						// http://121.199.75.79:8280//user/updateProfile.do
+						if(!TextUtils.isEmpty(urlpath)){
+							Utils.httpPostFile(Utils.URL_PATH +"/user/updateProfile.do", urlpath, mHandler,accountid,phone);
+						}
+					}
+				}).start();
+			} catch (Exception ee) {
+				Utils.Log(TAG,"xxxxxxxxxxxxxxxxxx httpPut error:" + ee);
+				ee.printStackTrace();
+			}
 			// 新线程后台上传服务端
 			// pd = ProgressDialog.show(mContext, null, "正在上传图片，请稍候...");
 			// new Thread(uploadImageRunnable).start();
@@ -558,7 +579,10 @@ public class FragmentHomePerson extends Fragment {
 		String birthday = p.getString(Utils.SHARE_PREFERENCE_CUP_PERSON_2[4], "");
 		
 		final String accountid = p.getString(Utils.SHARE_PREFERENCE_CUP_ACCOUNTID, "");
+		final String avatarwebpath = p.getString(Utils.SHARE_PREFERENCE_CUP_AVATAR_WEB_PATH, "");
+		
 		final String avatar = p.getString(Utils.SHARE_PREFERENCE_CUP_AVATAR, "");
+		
 		final boolean avatarIsModify = p.getBoolean(Utils.SHARE_PREFERENCE_CUP_AVATAR_IS_MODIFY, false);
 
 		if(TextUtils.isEmpty(accountid)||TextUtils.isEmpty(phone)){
@@ -567,6 +591,8 @@ public class FragmentHomePerson extends Fragment {
 		}
 		try {
 			result.put("accountid", accountid);
+			
+			result.put("avatar", avatarwebpath);// it must be upload this text  every time
 			
 			result.put("nickname", nickname);
 			result.put("sex", sex);
@@ -587,7 +613,7 @@ public class FragmentHomePerson extends Fragment {
 					Utils.httpPut(Utils.URL_PATH + "/user/saveme", result, mHandler);
 					
 					if(!TextUtils.isEmpty(avatar)&&avatarIsModify){
-						Utils.httpPostFile(Utils.URL_PATH +"/user/updateProfile.do", avatar, mHandler,accountid,phone);
+//						Utils.httpPostFile(Utils.URL_PATH +"/user/updateProfile.do", avatar, mHandler,accountid,phone);
 					}
 				}
 			}).start();

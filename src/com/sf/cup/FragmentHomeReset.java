@@ -72,7 +72,7 @@ public class FragmentHomeReset extends Fragment {
 		
 		
 		new AlertDialog.Builder(getActivity())
-		.setMessage("恢复出厂后，请从新登陆")
+		.setMessage("恢复出厂后，请重新登陆")
     	.setTitle("温馨提示")
 		.setPositiveButton("确定", new DialogInterface.OnClickListener() {
 			@Override

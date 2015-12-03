@@ -82,7 +82,12 @@ public class Utils {
 	public static final String SHARE_PREFERENCE_CUP_CONSTITUTION="CONSTITUTION";
 	public static final String SHARE_PREFERENCE_CUP_WEIGHT="WEIGHT";
 	public static final String SHARE_PREFERENCE_CUP_AVATAR="AVATAR";
+	/**
+	 * upload to server  when avatar modify
+	 * @deprecated
+	 */
 	public static final String SHARE_PREFERENCE_CUP_AVATAR_IS_MODIFY="AVATAR_IS_MODIFY"; //true:after modify and wont upload 
+	public static final String SHARE_PREFERENCE_CUP_AVATAR_WEB_PATH="AVATAR_WEB_PATH";//for web    fix the server  
 	
 	//water
 	public static final String SHARE_PREFERENCE_CUP_TEMPERATURE_MODE_ENABLE="TEMPERATURE_MODE_ENABLE";

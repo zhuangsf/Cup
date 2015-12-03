@@ -121,20 +121,26 @@ public class FragmentWater extends Fragment {
 		  current_cup_temperature.setText(""+temperature_current_value); 
 		  //2,update status
 		  water_status_text1.setTextColor(getActivity().getResources().getColor(R.drawable.darkgray));
+		  water_status_text1.setTextSize(12);
 		  water_status_text2.setTextColor(getActivity().getResources().getColor(R.drawable.darkgray));
+		  water_status_text2.setTextSize(12);
 		  water_status_text3.setTextColor(getActivity().getResources().getColor(R.drawable.darkgray));
+		  water_status_text3.setTextSize(12);
 		  water_status_pic1.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.water_status_point_disable));
 		  water_status_pic2.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.water_status_point_disable));
 		  water_status_pic3.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.water_status_point_disable));
 		  if(temperature_mode_index==-1||!temperature_mode_enable){
 			  water_status_text1.setTextColor(getActivity().getResources().getColor(R.drawable.cup_pink));
+			  water_status_text1.setTextSize(15);
 			  water_status_pic1.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.water_status_point_focus));
 		  } else if(temperature_mode_index!=-1){
 			  if(temperature_current_value!=temperature_setting_value){
 				  water_status_text2.setTextColor(getActivity().getResources().getColor(R.drawable.cup_pink));
+				  water_status_text2.setTextSize(15);
 				  water_status_pic2.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.water_status_point_focus));
 			  }else{
 				  water_status_text3.setTextColor(getActivity().getResources().getColor(R.drawable.cup_pink));
+				  water_status_text3.setTextSize(15);
 				  water_status_pic3.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.water_status_point_focus));
 				  temperatureComplete();
 			  }

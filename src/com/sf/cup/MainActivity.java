@@ -13,13 +13,14 @@ import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
-import android.content.Context;
+import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.media.MediaPlayer;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.TextUtils;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -62,10 +63,15 @@ public class MainActivity extends Activity {
 			TAG_HOME, 
 			};
 
-
-	
-	
 	private MediaPlayer mp;  
+	
+//	private LeDeviceListAdapter mLeDeviceListAdapter;
+	private BluetoothAdapter mBluetoothAdapter;
+	private boolean mScanning;
+	private Handler mHandler;
+    private static final int REQUEST_ENABLE_BT = 1;
+    // Stops scanning after 10 seconds.
+    private static final long SCAN_PERIOD = 20000;
 	
 	
 	@Override
@@ -94,7 +100,13 @@ public class MainActivity extends Activity {
 		
 		
 		//TODO 3,must connect bt
-		
+		if(true){
+			Intent i = new Intent(this, DeviceScanActivity.class);
+	        startActivity(i);
+	        finish();
+	        onDestroy();
+	        return ;
+		}
 		
 		
 		

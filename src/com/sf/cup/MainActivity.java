@@ -3,6 +3,7 @@ package com.sf.cup;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import com.sf.cup.guide.GuideView;
 import com.sf.cup.login.LoginActivity;
@@ -14,20 +15,36 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothGattCharacteristic;
+import android.bluetooth.BluetoothGattService;
+import android.content.BroadcastReceiver;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.media.MediaPlayer;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.IBinder;
 import android.text.TextUtils;
+import android.util.Log;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.ExpandableListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.Toast;
 
 public class MainActivity extends Activity {
+	private final static String TAG = MainActivity.class.getPackage() + "."
+			+ MainActivity.class.getSimpleName();
 	long lastTime = 0L;
 	RadioGroup myTabRg;
 	RadioButton myTabRadioButton;
@@ -73,76 +90,266 @@ public class MainActivity extends Activity {
     // Stops scanning after 10 seconds.
     private static final long SCAN_PERIOD = 20000;
 	
+    
+    
+
+    //BT
+    public static final String EXTRAS_DEVICE_NAME = "DEVICE_NAME";
+    public static final String EXTRAS_DEVICE_ADDRESS = "DEVICE_ADDRESS";
+    private String mDeviceName;
+    private String mDeviceAddress;
+    private ExpandableListView mGattServicesList;
+    private BluetoothLeService mBluetoothLeService;
+    private boolean mConnected = false;
+    private BluetoothGattCharacteristic mNotifyCharacteristic;
+    private final String LIST_NAME = "NAME";
+    private final String LIST_UUID = "UUID";
+    //byte[] WriteBytes = null;
+    byte[] WriteBytes = new byte[20];
+    // Code to manage Service lifecycle.
+    private final ServiceConnection mServiceConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName componentName, IBinder service) {
+            mBluetoothLeService = ((BluetoothLeService.LocalBinder) service).getService();
+            if (!mBluetoothLeService.initialize()) {
+                Utils.Log("Unable to initialize Bluetooth");
+                finish();
+            }
+            // Automatically connects to the device upon successful start-up initialization.
+            mBluetoothLeService.connect(mDeviceAddress);
+        }
+        @Override
+        public void onServiceDisconnected(ComponentName componentName) {
+            mBluetoothLeService = null;
+        }
+    };
+
+    // Handles various events fired by the Service.
+    // ACTION_GATT_CONNECTED: connected to a GATT server.
+    // ACTION_GATT_DISCONNECTED: disconnected from a GATT server.
+    // ACTION_GATT_SERVICES_DISCOVERED: discovered GATT services.
+    // ACTION_DATA_AVAILABLE: received data from the device.  This can be a result of read
+    //                        or notification operations.
+    private final BroadcastReceiver mGattUpdateReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            final String action = intent.getAction();
+            if (BluetoothLeService.ACTION_GATT_CONNECTED.equals(action)) {
+                mConnected = true;
+            } else if (BluetoothLeService.ACTION_GATT_DISCONNECTED.equals(action)) {
+                mConnected = false;
+            } else if (BluetoothLeService.ACTION_GATT_SERVICES_DISCOVERED.equals(action)) {
+                // Show all the supported services and characteristics on the user interface.
+//                displayGattServices(mBluetoothLeService.getSupportedGattServices());
+                // after discovered  set
+                //service 0000ffe0-0000-1000-8000-00805f9b34fb
+                //characteristic 0000ffe4-0000-1000-8000-00805f9b34fb
+                BluetoothGattService gattService=mBluetoothLeService.getGattService(UUID.fromString(Utils.BT_GET_SERVICE_UUID));
+				BluetoothGattCharacteristic characteristic =gattService.getCharacteristic(UUID.fromString(Utils.BT_GET_CHARACTERISTIC_UUID));
+                mBluetoothLeService.setCharacteristicNotification(characteristic, true);
+            } else if (BluetoothLeService.ACTION_DATA_AVAILABLE.equals(action)) {
+//                displayData(intent.getStringExtra(BluetoothLeService.EXTRA_DATA));
+                Utils.Log("xxxxxxxxxxxxxxxxxx this is respone what i need:"+intent.getStringExtra(BluetoothLeService.EXTRA_DATA_NEED));
+                fWater.setCurrentTemperatureFromBT(Utils.irand(20,60));
+            }
+        }
+    };
+
+    public static String bin2hex(String bin) {
+        char[] digital = "0123456789ABCDEF".toCharArray();
+        StringBuffer sb = new StringBuffer("");
+        byte[] bs = bin.getBytes();
+        int bit;
+        for (int i = 0; i < bs.length; i++) {
+            bit = (bs[i] & 0x0f0) >> 4;
+            sb.append(digital[bit]);
+            bit = bs[i] & 0x0f;
+            sb.append(digital[bit]);
+        }
+        return sb.toString();
+    }
+    public static byte[] hex2byte(byte[] b) {
+        if ((b.length % 2) != 0) {
+            throw new IllegalArgumentException("长度不是偶数");
+        }
+        byte[] b2 = new byte[b.length / 2];
+        for (int n = 0; n < b.length; n += 2) {
+            String item = new String(b, n, 2);
+            // 两位一组，表示一个字节,把这样表示的16进制字符串，还原成一个进制字节
+            b2[n / 2] = (byte) Integer.parseInt(item, 16);
+        }
+        b = null;
+        return b2;
+    }
 	
+    public void sentSetTemperature(int temperature){
+    	int t=temperature*10;
+    	String tHex=Integer.toHexString(t);
+    	if(tHex.length()==1){
+    		tHex="000"+tHex;	
+    	}else if(tHex.length()==2){
+    		tHex="00"+tHex;	
+    	}else if(tHex.length()==3){
+    		tHex="0"+tHex;	
+    	}
+    	sentMsgToBt("01",tHex.substring(2, 4),tHex.substring(0, 2));
+    }
+    public void sentAskTemperature(){
+    	sentMsgToBt("02","00","00");
+    }
+    public void sentSetTime(int time){
+    	String tHex=Integer.toHexString(time);
+    	if(tHex.length()==1){
+    		tHex="000"+tHex;	
+    	}else if(tHex.length()==2){
+    		tHex="00"+tHex;	
+    	}else if(tHex.length()==3){
+    		tHex="0"+tHex;	
+    	}
+    	sentMsgToBt("03",tHex.substring(2, 4),tHex.substring(0, 2));
+    }
+    
+	private void sentMsgToBt(String action, String arg1, String arg2) {
+		try {
+			StringBuffer sb = new StringBuffer("");
+			String sum = Integer.toHexString(Integer.parseInt(action, 16) + Integer.parseInt(arg1, 16)
+					+ Integer.parseInt(arg2, 16) + Integer.parseInt("00", 16) + Integer.parseInt("00", 16));
+			if(sum.length()==1){
+				sum="0"+sum;	
+	    	}
+			sb.append("3a") // head
+			  .append(action) // action 01:set temp , 02:ask temp ,03 :set time
+			  .append(arg1)
+			  .append(arg2)
+			  .append("00")
+			  .append("00")
+			  .append(sum)
+			  .append("0a");
+			Utils.Log("xxxxxxxxxxxxxxxxxx sentMsgToBt:" + sb);
+			BluetoothGattService gattService = mBluetoothLeService
+					.getGattService(UUID.fromString(Utils.BT_SEND_SERVICE_UUID));
+			BluetoothGattCharacteristic characteristic = gattService
+					.getCharacteristic(UUID.fromString(Utils.BT_SEND_CHARACTERISTIC_UUID));
+			byte[] value = new byte[20];
+			value[0] = (byte) 0x00;
+			characteristic.setValue(value[0], BluetoothGattCharacteristic.FORMAT_UINT8, 0);
+			characteristic.setValue(hex2byte(sb.toString().getBytes())); 
+			mBluetoothLeService.writeCharacteristic(characteristic);
+		} catch (Exception e) {
+			Utils.Log("xxxxxxxxxxxxxxxxxx sentMsgToBt error:" + e);
+		}
+	}
+    
+    
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		
-		//1,is first open app  start guide
-		SharedPreferences p=Utils.getSharedPpreference(this);
+		// 1,is first open app start guide
+		SharedPreferences p = Utils.getSharedPpreference(this);
 		SharedPreferences.Editor e = Utils.getSharedPpreferenceEdit(this);
-		int isFirst=p.getInt(Utils.SHARE_PREFERENCE_CUP_OPEN_COUNTS, 0);
-		if(isFirst==0){
-	    	Intent i = new Intent(this, GuideView.class);
-	        startActivity(i);
-	        finish();
-	        onDestroy();
-	        return ;
+		int isFirst = p.getInt(Utils.SHARE_PREFERENCE_CUP_OPEN_COUNTS, 0);
+		if (isFirst == 0) {
+			Intent i = new Intent(this, GuideView.class);
+			startActivity(i);
+			finish();
+			onDestroy();
+			return;
 		}
-		//2,login first
-		String phonenum=p.getString(Utils.SHARE_PREFERENCE_CUP_PHONE, null);
-		if(TextUtils.isEmpty(phonenum)){
-	    	Intent i = new Intent(this, LoginActivity.class);
-	        startActivity(i);
-	        finish();
-	        onDestroy();
-	        return ;
+		// 2,login first
+		String phonenum = p.getString(Utils.SHARE_PREFERENCE_CUP_PHONE, null);
+		if (TextUtils.isEmpty(phonenum)) {
+			Intent i = new Intent(this, LoginActivity.class);
+			startActivity(i);
+			finish();
+			onDestroy();
+			return;
 		}
-		
-		
-		//TODO 3,must connect bt
-		if(true){
+		// TODO 3,must connect bt
+		if (true) {
 			Intent i = new Intent(this, DeviceScanActivity.class);
-	        startActivity(i);
-	        finish();
-	        onDestroy();
-	        return ;
+			startActivityForResult(i, DeviceScanActivity.REQUEST_SELECT_BT);
+//			finish();
+//			onDestroy();
+//			return;
 		}
-		
-		
-		
-		
-		
-		
-		if(isFirst>0){
-			e.putInt(Utils.SHARE_PREFERENCE_CUP_OPEN_COUNTS,isFirst+1);
+
+		if (isFirst > 0) {
+			e.putInt(Utils.SHARE_PREFERENCE_CUP_OPEN_COUNTS, isFirst + 1);
 			e.commit();
 		}
-		
-		
+
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-
 		createFragment();
-		
 		initView();
-		
-		//!!!!!!! 处理屏幕旋转生成多个fragment问题。
-		//!!!!!!! 如果用replace是要加这个，判断是否是activity重建。这里是由于在RadioGroup 的状态改变，默认为第一个页签时没进onCheckedChanged，不为第一个页签 都会进onCheckedChanged切换下页签
-//		if (savedInstanceState == null)
+		// !!!!!!! 处理屏幕旋转生成多个fragment问题。
+		// !!!!!!! 如果用replace是要加这个，判断是否是activity重建。这里是由于在RadioGroup
+		// 的状态改变，默认为第一个页签时没进onCheckedChanged，不为第一个页签 都会进onCheckedChanged切换下页签
+		// if (savedInstanceState == null)
 		{
 
-			Utils.Log("xxxxxxxxxxxxxxxxxx onCreate home:"+fWater);
+			Utils.Log("xxxxxxxxxxxxxxxxxx onCreate home:" + fWater);
 			getFragmentManager().beginTransaction().show(fWater).commit();
 		}
-		
-		
+
 		// if from alarm show the dialog
 		startFromAlarm(getIntent());
-		
-		
+
 	
 	}
 
+	@Override
+	protected void onResume() {
+		super.onResume();
+		registerReceiver(mGattUpdateReceiver, makeGattUpdateIntentFilter());
+		if (mBluetoothLeService != null) {
+			final boolean result = mBluetoothLeService.connect(mDeviceAddress);
+			Utils.Log("onResume Connect request result=" + result);
+		}
+	}
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // User chose not to enable Bluetooth.
+        if (requestCode == DeviceScanActivity.REQUEST_SELECT_BT && resultCode == Activity.RESULT_OK) {
+    		mDeviceName = data.getStringExtra(EXTRAS_DEVICE_NAME);
+    		mDeviceAddress = data.getStringExtra(EXTRAS_DEVICE_ADDRESS);
+    		//TODO it must be save  every time open activity try to connect bt auto.after it can not connect  it must rescan the bt
+
+    		Intent gattServiceIntent = new Intent(this, BluetoothLeService.class);
+    		bindService(gattServiceIntent, mServiceConnection, BIND_AUTO_CREATE);
+    		
+    		if (mBluetoothLeService != null) {
+    			final boolean result = mBluetoothLeService.connect(mDeviceAddress);
+    			Utils.Log("onActivityResult Connect request result=" + result);
+    		}
+    		//TODO it may show a wait dialog
+        }else if(requestCode == DeviceScanActivity.REQUEST_SELECT_BT && resultCode == Activity.RESULT_CANCELED){
+        	Toast.makeText(this, "未能找到对应蓝牙设备", Toast.LENGTH_SHORT).show();
+        	//TODO restart the scan or close app
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+    @Override
+    protected void onPause() {
+        super.onPause();
+        unregisterReceiver(mGattUpdateReceiver);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unbindService(mServiceConnection);
+        mBluetoothLeService = null;
+    }
+	private static IntentFilter makeGattUpdateIntentFilter() {
+		final IntentFilter intentFilter = new IntentFilter();
+		intentFilter.addAction(BluetoothLeService.ACTION_GATT_CONNECTED);
+		intentFilter.addAction(BluetoothLeService.ACTION_GATT_DISCONNECTED);
+		intentFilter.addAction(BluetoothLeService.ACTION_GATT_SERVICES_DISCOVERED);
+		intentFilter.addAction(BluetoothLeService.ACTION_DATA_AVAILABLE);
+		return intentFilter;
+	}
+	
+	
 	private void createFragment() {
 		FragmentManager fm=getFragmentManager();
 		FragmentTransaction ft= fm.beginTransaction();

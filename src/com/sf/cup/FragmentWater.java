@@ -7,11 +7,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.UUID;
 
 import com.sf.cup.utils.Utils;
 
 import android.app.AlertDialog;
 import android.app.Fragment;
+import android.bluetooth.BluetoothGattCharacteristic;
+import android.bluetooth.BluetoothGattService;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -485,44 +488,34 @@ public class FragmentWater extends Fragment {
 		
 		current_cup_temperature=(TextView)v.findViewById(R.id.current_cup_temperature); 
 		//create a thread to get cup temperature period
-		getTemperatureFromBT();
+		askTemperatureFromBT();
 		
 		updateUiShow();// create first time
 		return v;
 	}
 	
 	private Timer timer = new Timer(true);
-	private void getTemperatureFromBT(){
-		 
+	public void askTemperatureFromBT(){
 		//任务
 		TimerTask task = new TimerTask() {
 		  public void run() {
-			//TODO
-				int temp=Utils.irand(20,60);
-				Message msg=new Message();
-				msg.what=2;
-				msg.arg1=temp;
-				mHandler.sendMessage(msg);
-		  }
+//				int temp=Utils.irand(20,60);
+//				Message msg=new Message();
+//				msg.what=2;
+//				msg.arg1=temp;
+//				mHandler.sendMessage(msg);
+			  
+			  //TODO ask temp  not need to send msg  when bt return temp msg it will user setCurrentTemperatureFromBT
+			  ((MainActivity)getActivity()).sentAskTemperature();
+			  }
 		};
 		 
 		//启动定时器
-		timer.schedule(task, 5000, 3000);
-		/*
-		mHandler.postDelayed(new Runnable() {  
-            public void run() {  
-            	//周期执行！3min来一次
-				//TODO
-				int temp=Utils.irand(20,80);
-				Message msg=new Message();
-				msg.what=2;
-				msg.arg1=temp;
-				Utils.Log("xxxxxxxxxxxxxxxxxx getTemperatureFromBT:" + temp);
-				mHandler.sendMessage(msg);
-            }  
-        }, 1000);  
-		*/
-
+		timer.schedule(task, 60000, 60000);
+	}
+	public void setCurrentTemperatureFromBT(int t){
+		temperature_current_value=t;
+		updateCurrentTemperature();
 	}
 	
 	/**
@@ -780,6 +773,10 @@ public class FragmentWater extends Fragment {
 						temperatureList.get(p).put(VIEW_RADIO_BTN, false);
 						temperature_mode_index = -1;
 					} else {
+						//TODO 先尝试发送蓝牙，若ok再去更新界面显示数据
+						int setTemperature=Integer.parseInt((String)temperatureList.get(p).get(VIEW_TEMPERATURE_TEXT));
+						  ((MainActivity)getActivity()).sentSetTemperature(setTemperature);
+						
 						temperature_mode_index = p;
 						// 重置，确保最多只有一项被选中
 //						for (String key : states.keySet()) {

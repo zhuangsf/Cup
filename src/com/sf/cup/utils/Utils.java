@@ -139,7 +139,11 @@ public class Utils {
 	public static final String SHARE_PREFERENCE_CUP_ALARM_TIME="ALARMTIME";
 	public static final String SHARE_PREFERENCE_CUP_ALARM_ENABLE="ALARM_ENABLE";
 	
-	
+	//bluetooth
+	public static final String BT_GET_SERVICE_UUID="0000ffe0-0000-1000-8000-00805f9b34fb";
+	public static final String BT_GET_CHARACTERISTIC_UUID="0000ffe4-0000-1000-8000-00805f9b34fb";
+	public static final String BT_SEND_SERVICE_UUID="0000ffe5-0000-1000-8000-00805f9b34fb";
+	public static final String BT_SEND_CHARACTERISTIC_UUID="0000ffe9-0000-1000-8000-00805f9b34fb";
 	
 	//msg define
 	public static final int COUNT_DOWN_MSG=0x8001; //login count down msg

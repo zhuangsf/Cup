@@ -104,6 +104,7 @@ public class MainActivity extends Activity {
     private BluetoothGattCharacteristic mNotifyCharacteristic;
     private final String LIST_NAME = "NAME";
     private final String LIST_UUID = "UUID";
+    private boolean iServiceBind=true;
     //byte[] WriteBytes = null;
     byte[] WriteBytes = new byte[20];
     // Code to manage Service lifecycle.
@@ -211,6 +212,9 @@ public class MainActivity extends Activity {
     
 	private void sentMsgToBt(String action, String arg1, String arg2) {
 		try {
+			if (mBluetoothLeService == null) {
+				return ;
+			}
 			StringBuffer sb = new StringBuffer("");
 			String sum = Integer.toHexString(Integer.parseInt(action, 16) + Integer.parseInt(arg1, 16)
 					+ Integer.parseInt(arg2, 16) + Integer.parseInt("00", 16) + Integer.parseInt("00", 16));
@@ -315,7 +319,7 @@ public class MainActivity extends Activity {
     		//TODO it must be save  every time open activity try to connect bt auto.after it can not connect  it must rescan the bt
 
     		Intent gattServiceIntent = new Intent(this, BluetoothLeService.class);
-    		bindService(gattServiceIntent, mServiceConnection, BIND_AUTO_CREATE);
+    		iServiceBind=bindService(gattServiceIntent, mServiceConnection, BIND_AUTO_CREATE);
     		
     		if (mBluetoothLeService != null) {
     			final boolean result = mBluetoothLeService.connect(mDeviceAddress);
@@ -324,6 +328,7 @@ public class MainActivity extends Activity {
     		//TODO it may show a wait dialog
         }else if(requestCode == DeviceScanActivity.REQUEST_SELECT_BT && resultCode == Activity.RESULT_CANCELED){
         	Toast.makeText(this, "未能找到对应蓝牙设备", Toast.LENGTH_SHORT).show();
+        	finish();
         	//TODO restart the scan or close app
         }
         super.onActivityResult(requestCode, resultCode, data);
@@ -337,7 +342,14 @@ public class MainActivity extends Activity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        unbindService(mServiceConnection);
+        try{
+        if(iServiceBind){
+        	unbindService(mServiceConnection);
+        }
+        }catch (Exception e)
+        {
+        	// if there is no bind this service  close this activity it will show error:service not registered.use iServiceBind to avoid this error
+        }
         mBluetoothLeService = null;
     }
 	private static IntentFilter makeGattUpdateIntentFilter() {

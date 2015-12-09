@@ -51,6 +51,7 @@ public class DeviceScanActivity extends Activity {
     private LeDeviceListAdapter mLeDeviceListAdapter;
     private BluetoothAdapter mBluetoothAdapter;
     private boolean mScanning;
+    private boolean isFindBtDevices=false;
     private Handler mHandler;
 
     private static final int REQUEST_ENABLE_BT = 1;
@@ -97,7 +98,9 @@ public class DeviceScanActivity extends Activity {
 								}).create();
 					}
 					try {
-						alertDialog.show();
+						if(!isFindBtDevices){
+							alertDialog.show();
+						}
 					} catch (Exception e) {
 						alertDialog=null;
 					}
@@ -173,7 +176,6 @@ public class DeviceScanActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
-
         // Ensures Bluetooth is enabled on the device.  If Bluetooth is not currently enabled,
         // fire an intent to display a dialog asking the user to grant permission to enable it.
         if (!mBluetoothAdapter.isEnabled()) {
@@ -219,7 +221,7 @@ public class DeviceScanActivity extends Activity {
                     mHandler.sendEmptyMessage(1);
                 }
             }, SCAN_PERIOD);
-
+            isFindBtDevices=false;
             mScanning = true;
             mBluetoothAdapter.startLeScan(mLeScanCallback);
         } else {
@@ -304,6 +306,7 @@ public class DeviceScanActivity extends Activity {
 			super.notifyDataSetChanged();
 			device_status_text.setText("…Ë±∏£∫");
 			device_circle_wave_view.setVisibility(View.GONE);
+			isFindBtDevices=true;
 		}
     }
     protected void onListItemClick(int position) {

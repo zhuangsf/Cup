@@ -137,8 +137,10 @@ public class MainActivity extends Activity {
             final String action = intent.getAction();
             if (BluetoothLeService.ACTION_GATT_CONNECTED.equals(action)) {
                 mConnected = true;
+                Utils.Log("xxxxxxxxxxxxxxxxxx BroadcastReceiver ACTION_GATT_CONNECTED mConnected:"+mConnected);
             } else if (BluetoothLeService.ACTION_GATT_DISCONNECTED.equals(action)) {
                 mConnected = false;
+                Utils.Log("xxxxxxxxxxxxxxxxxx BroadcastReceiver ACTION_GATT_DISCONNECTED mConnected:"+mConnected);
             } else if (BluetoothLeService.ACTION_GATT_SERVICES_DISCOVERED.equals(action)) {
                 // Show all the supported services and characteristics on the user interface.
 //                displayGattServices(mBluetoothLeService.getSupportedGattServices());
@@ -148,6 +150,8 @@ public class MainActivity extends Activity {
                 BluetoothGattService gattService=mBluetoothLeService.getGattService(UUID.fromString(Utils.BT_GET_SERVICE_UUID));
 				BluetoothGattCharacteristic characteristic =gattService.getCharacteristic(UUID.fromString(Utils.BT_GET_CHARACTERISTIC_UUID));
                 mBluetoothLeService.setCharacteristicNotification(characteristic, true);
+                Utils.Log("xxxxxxxxxxxxxxxxxx BroadcastReceiver ACTION_GATT_SERVICES_DISCOVERED");
+                sentAskTemperature();//ask the temperature after bt discovered        may before notification?????
             } else if (BluetoothLeService.ACTION_DATA_AVAILABLE.equals(action)) {
 //                displayData(intent.getStringExtra(BluetoothLeService.EXTRA_DATA));
             	try {
@@ -155,7 +159,9 @@ public class MainActivity extends Activity {
 	                String responeString=intent.getStringExtra(BluetoothLeService.EXTRA_DATA_NEED);
 	                String[] responeStringArray=responeString.split(" ");
 	                if("02".equals(responeStringArray[1])){
-	                	fWater.setCurrentTemperatureFromBT(Integer.parseInt(responeStringArray[3]+responeStringArray[2], 16)/10);
+	                	int temp=Integer.parseInt(responeStringArray[3]+responeStringArray[2], 16);
+	                	
+	                	fWater.setCurrentTemperatureFromBT(temp/10+(temp%10>=5?1:0));
 	                }
             	} catch (Exception e) {
             	}

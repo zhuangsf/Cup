@@ -511,7 +511,7 @@ public class FragmentWater extends Fragment {
 		};
 		 
 		//Æô¶¯¶¨Ê±Æ÷
-		timer.schedule(task, 100, 60000);
+		timer.schedule(task, 60000, 60000);
 	}
 	public void setCurrentTemperatureFromBT(int t){
 		temperature_current_value=t;

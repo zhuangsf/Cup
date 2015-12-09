@@ -150,8 +150,15 @@ public class MainActivity extends Activity {
                 mBluetoothLeService.setCharacteristicNotification(characteristic, true);
             } else if (BluetoothLeService.ACTION_DATA_AVAILABLE.equals(action)) {
 //                displayData(intent.getStringExtra(BluetoothLeService.EXTRA_DATA));
-                Utils.Log("xxxxxxxxxxxxxxxxxx this is respone what i need:"+intent.getStringExtra(BluetoothLeService.EXTRA_DATA_NEED));
-                fWater.setCurrentTemperatureFromBT(Utils.irand(20,60));
+            	try {
+	                Utils.Log("xxxxxxxxxxxxxxxxxx this is respone what i need:"+intent.getStringExtra(BluetoothLeService.EXTRA_DATA_NEED));
+	                String responeString=intent.getStringExtra(BluetoothLeService.EXTRA_DATA_NEED);
+	                String[] responeStringArray=responeString.split(" ");
+	                if("02".equals(responeStringArray[1])){
+	                	fWater.setCurrentTemperatureFromBT(Integer.parseInt(responeStringArray[3]+responeStringArray[2], 16)/10);
+	                }
+            	} catch (Exception e) {
+            	}
             }
         }
     };
@@ -267,7 +274,7 @@ public class MainActivity extends Activity {
 			onDestroy();
 			return;
 		}
-		// TODO 3,must connect bt
+		// TODO 3,must connect bt                     get info from preference   try to connect bt direct. if can not connect bt  try to scan  #########################################
 		if (true) {
 			Intent i = new Intent(this, DeviceScanActivity.class);
 			startActivityForResult(i, DeviceScanActivity.REQUEST_SELECT_BT);

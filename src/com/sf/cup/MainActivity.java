@@ -140,7 +140,7 @@ public class MainActivity extends Activity {
                 Utils.Log("xxxxxxxxxxxxxxxxxx BroadcastReceiver ACTION_GATT_CONNECTED mConnected:"+mConnected);
             } else if (BluetoothLeService.ACTION_GATT_DISCONNECTED.equals(action)) {
                 mConnected = false;
-                Utils.Log("xxxxxxxxxxxxxxxxxx BroadcastReceiver ACTION_GATT_DISCONNECTED mConnected:"+mConnected);
+                Utils.Log("xxxxxxxxxxxxxxxxxx BroadcastReceiver ACTION_GATT_CONNECTED mConnected:"+mConnected);
             } else if (BluetoothLeService.ACTION_GATT_SERVICES_DISCOVERED.equals(action)) {
                 // Show all the supported services and characteristics on the user interface.
 //                displayGattServices(mBluetoothLeService.getSupportedGattServices());

@@ -77,7 +77,7 @@ public class DeviceScanActivity extends Activity {
     	     {
 				case 1:
 					if (alertDialog == null) {
-						new AlertDialog.Builder(DeviceScanActivity.this).setTitle("温馨提示").setMessage("找不到蓝牙设备")
+						alertDialog=new AlertDialog.Builder(DeviceScanActivity.this).setTitle("温馨提示").setMessage("找不到蓝牙设备")
 								.setPositiveButton("重试", new DialogInterface.OnClickListener() {
 							@Override
 							public void onClick(DialogInterface dialog, int which) {
@@ -92,7 +92,12 @@ public class DeviceScanActivity extends Activity {
 							}
 						}).create();
 					}
-					alertDialog.show();
+					try {
+						alertDialog.show();
+					} catch (Exception e) {
+						alertDialog=null;
+					}
+					// TODO  there is a bug  that  the dialog cant dismiss  unless click the button 
 					break;
 				}
     	    }

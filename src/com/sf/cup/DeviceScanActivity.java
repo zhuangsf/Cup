@@ -77,27 +77,31 @@ public class DeviceScanActivity extends Activity {
     	     {
 				case 1:
 					if (alertDialog == null) {
-						alertDialog=new AlertDialog.Builder(DeviceScanActivity.this).setTitle("温馨提示").setMessage("找不到蓝牙设备")
+						alertDialog=new AlertDialog.Builder(DeviceScanActivity.this)
+								.setTitle("温馨提示")
+								.setMessage("找不到蓝牙设备")
+								.setCancelable(false)
 								.setPositiveButton("重试", new DialogInterface.OnClickListener() {
-							@Override
-							public void onClick(DialogInterface dialog, int which) {
-								scanLeDevice(true);
-							}
-						}).setNegativeButton("退出", new DialogInterface.OnClickListener() {
-							@Override
-							public void onClick(DialogInterface dialog, int which) {
-								Intent intent = new Intent();
-								setResult(RESULT_CANCELED, intent);
-								finish();
-							}
-						}).create();
+									@Override
+									public void onClick(DialogInterface dialog, int which) {
+										scanLeDevice(true);
+									}
+								})
+								.setNegativeButton("退出", new DialogInterface.OnClickListener() {
+									@Override
+									public void onClick(DialogInterface dialog, int which) {
+										Intent intent = new Intent();
+										setResult(RESULT_CANCELED, intent);
+										finish();
+									}
+								}).create();
 					}
 					try {
 						alertDialog.show();
 					} catch (Exception e) {
 						alertDialog=null;
 					}
-					// TODO  there is a bug  that  the dialog cant dismiss  unless click the button 
+					//there is a bug  that  the dialog cant dismiss  unless click the button  >>>> fix it  setCancelable(false)
 					break;
 				}
     	    }

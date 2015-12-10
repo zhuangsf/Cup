@@ -7,17 +7,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.UUID;
 
 import com.sf.cup.utils.Utils;
 
 import android.app.AlertDialog;
 import android.app.Fragment;
-import android.bluetooth.BluetoothGattCharacteristic;
-import android.bluetooth.BluetoothGattService;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
+import android.content.DialogInterface.OnKeyListener;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
@@ -31,6 +29,7 @@ import android.os.SystemClock;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -48,6 +47,7 @@ import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class FragmentWater extends Fragment {
 
@@ -83,7 +83,15 @@ public class FragmentWater extends Fragment {
 	EditText tempString; 
 	AlertDialog alertDialog;
 	
+	private static final int MSG_SHOW_IM=1;
+	private static final int MSG_STOP_SEND=2;
 	
+    // Stops sending after 3 seconds.
+    private static final long SEND_PERIOD = 3000;
+    private static ProgressDialog pd;// 等待进度圈
+    private int temp_index=-1; //this is a important  int.   if it !=-1  means send a msg to bt   the msg is this value.
+    AlertDialog sendFailAlertDialog;
+    
 	Handler mHandler = new Handler()
 	  {
 	    @Override
@@ -92,7 +100,7 @@ public class FragmentWater extends Fragment {
 //	    Utils.Log("handle:"+paramAnonymousMessage);
 	     switch (paramAnonymousMessage.what)
 	     {
-				case 1:
+				case MSG_SHOW_IM:
 					//alertdialog with edittext cant not open im.  
 					try {
 						Thread.sleep(200);
@@ -103,11 +111,37 @@ public class FragmentWater extends Fragment {
 					}
 					
 					break;
-				case 2:
-					//get cup temperature from bt
-					temperature_current_value=paramAnonymousMessage.arg1;
-					updateCurrentTemperature();
-						
+				case MSG_STOP_SEND:
+					if(pd!=null){
+						pd.dismiss();
+					}
+					if(temp_index!=-1){
+						Utils.Log("xxxxxxxxxxxxxxxxxx water mHandler stop send some error may happen");
+						temp_index=-1;
+						if (sendFailAlertDialog == null) {
+							sendFailAlertDialog=new AlertDialog.Builder(getActivity())
+									.setTitle("温馨提示")
+									.setMessage("蓝牙可能已断开")
+//									.setCancelable(false)
+									.setPositiveButton("重连", new DialogInterface.OnClickListener() {
+										@Override
+										public void onClick(DialogInterface dialog, int which) {
+											 boolean result= ((MainActivity)getActivity()).reConnect();
+											 if(!result){
+												 Toast.makeText(getActivity(), "无法连接到蓝牙设备", Toast.LENGTH_SHORT).show();
+											 }
+										}
+									})
+									.setNegativeButton("取消",null).create();
+						}
+						try {
+								sendFailAlertDialog.show();
+						} catch (Exception e) {
+							sendFailAlertDialog=null;
+						}
+					}
+					
+					
 					
 					break;
 			}
@@ -342,7 +376,7 @@ public class FragmentWater extends Fragment {
 				adPosiButton.setEnabled(false);
 				
 				Message msg=new Message();
-				msg.what=1;
+				msg.what=MSG_SHOW_IM;
 				msg.arg1=1;
 				mHandler.sendMessage(msg);
 				/*adPosiButton.setBackground(getActivity().getResources().getDrawable(R.drawable.long_button_selector));
@@ -402,7 +436,6 @@ public class FragmentWater extends Fragment {
 						if(s!=null&&!"".equals(s.toString())){
 							try {
 							String temp_text=tempString.getText().toString();
-							Utils.Log("xxxxxxxxxxxxxxxxxx afterTextChanged temp_text:" + temp_text);
 							int a=Integer.parseInt(temp_text.toString());
 							if(a<=80&&a>=20&&!TextUtils.isEmpty(s)){
 								ad.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);
@@ -499,12 +532,6 @@ public class FragmentWater extends Fragment {
 		//任务
 		TimerTask task = new TimerTask() {
 		  public void run() {
-//				int temp=Utils.irand(20,60);
-//				Message msg=new Message();
-//				msg.what=2;
-//				msg.arg1=temp;
-//				mHandler.sendMessage(msg);
-			  
 			  //ask temp  not need to send msg  when bt return temp msg it will user setCurrentTemperatureFromBT
 			  ((MainActivity)getActivity()).sentAskTemperature();
 			  }
@@ -514,6 +541,7 @@ public class FragmentWater extends Fragment {
 		timer.schedule(task, 60000, 60000);
 	}
 	public void setCurrentTemperatureFromBT(int t){
+		//TODO  first time try to connect bt get the temperature.  have better show a waiting dialog    onstop to reset the bianliang
 		temperature_current_value=t;
 		updateCurrentTemperature();
 	}
@@ -831,28 +859,73 @@ public class FragmentWater extends Fragment {
 			if(temperature_mode_index==mPosition){
 				temperatureList.get(mPosition).put(VIEW_RADIO_BTN, false);
 				temperature_mode_index = -1;
+				// update temperaturemode
+				hlva.notifyDataSetChanged();
 			} else {
-				//set the select temperature
-				int setTemperature=Integer.parseInt((String)temperatureList.get(mPosition).get(VIEW_TEMPERATURE_TEXT));
-				  ((MainActivity)getActivity()).sentSetTemperature(setTemperature);
-				  
-				temperature_mode_index = mPosition;
-				// 重置，确保最多只有一项被选中
-//				for (String key : states.keySet()) {
-//					states.put(key, false);
-//				}
-//				states.put(String.valueOf(p), radio.isChecked());
-				for (Map<String, Object> m : temperatureList) {
-					m.put(VIEW_RADIO_BTN, false);
+				// set the select temperature
+				int setTemperature = Integer
+						.parseInt((String) temperatureList.get(mPosition).get(VIEW_TEMPERATURE_TEXT));
+				((MainActivity) getActivity()).sentSetTemperature(setTemperature);
+				temp_index = mPosition;
+				if(pd==null||!pd.isShowing()){
+					pd = ProgressDialog.show(getActivity(), null, "正在下达指令，请稍候...");
+					pd.setOnKeyListener(new OnKeyListener() {
+						@Override
+						public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
+							if (keyCode == KeyEvent.KEYCODE_BACK) {
+								if(pd!=null){
+									pd.dismiss();
+								}
+							}
+							return false;
+						}
+					});
+					// Stops sending after a pre-defined period.
+					Message msg = new Message();
+					msg.what = MSG_STOP_SEND;
+					msg.arg1 = temp_index;
+					mHandler.sendMessageDelayed(msg, SEND_PERIOD);
 				}
-				temperatureList.get(mPosition).put(VIEW_RADIO_BTN, true);
 			}
-			// update temperaturemode
-			hlva.notifyDataSetChanged();
 		}
-	
-
 	}
+	
+	
+	public void setSelectTemperatureFromBT(){
+		if(pd!=null){
+			pd.dismiss();
+		}
+		if(temp_index!=-1){
+			mHandler.removeMessages(MSG_STOP_SEND);
+			temperature_mode_index = temp_index;
+			// 重置，确保最多只有一项被选中
+			for (Map<String, Object> m : temperatureList) {
+				m.put(VIEW_RADIO_BTN, false);
+			}
+			temperatureList.get(temp_index).put(VIEW_RADIO_BTN, true);
+			
+			hlva.notifyDataSetChanged();
+			
+			temp_index=-1;
+		}
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 
 	private List<Map<String, Object>> getData() {
 		return temperatureList;
@@ -876,7 +949,6 @@ public class FragmentWater extends Fragment {
 		timer.cancel();  
 
 	}
-	
 	
 	
 	

@@ -162,6 +162,9 @@ public class MainActivity extends Activity {
 	                	int temp=Integer.parseInt(responeStringArray[3]+responeStringArray[2], 16);
 	                	
 	                	fWater.setCurrentTemperatureFromBT(temp/10+(temp%10>=5?1:0));
+	                }else if("88".equals(responeStringArray[1])){
+	                	
+	                	fWater.setSelectTemperatureFromBT();
 	                }
             	} catch (Exception e) {
             	}
@@ -346,6 +349,27 @@ public class MainActivity extends Activity {
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
+    
+    
+    
+    public boolean reConnect(){
+    	boolean result=false;
+    	if (mBluetoothLeService != null) {
+    		result = mBluetoothLeService.connect(mDeviceAddress);
+			Utils.Log("reConnect result=" + result);
+		}
+    	return result;
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     @Override
     protected void onPause() {
         super.onPause();

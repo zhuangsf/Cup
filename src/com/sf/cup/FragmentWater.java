@@ -505,7 +505,7 @@ public class FragmentWater extends Fragment {
 //				msg.arg1=temp;
 //				mHandler.sendMessage(msg);
 			  
-			  //TODO ask temp  not need to send msg  when bt return temp msg it will user setCurrentTemperatureFromBT
+			  //ask temp  not need to send msg  when bt return temp msg it will user setCurrentTemperatureFromBT
 			  ((MainActivity)getActivity()).sentAskTemperature();
 			  }
 		};
@@ -683,7 +683,7 @@ public class FragmentWater extends Fragment {
 		l.setLayoutParams(layoutParams);
 	}
 
-	private class TemperatureListViewAdapter extends SimpleAdapter {
+	protected class TemperatureListViewAdapter extends SimpleAdapter {
 		float downX=0f;
 		float upX=0f;
 		// 用于记录每个RadioButton的状态，并保证只可选一个
@@ -697,32 +697,14 @@ public class FragmentWater extends Fragment {
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
 			View view = super.getView(position, convertView, parent);
-			view.setOnClickListener(new MyListener(position));
+//			view.setOnClickListener(new MyListener(position));
 			
 			final int p=position;
 			final RadioButton radio=(RadioButton) view.findViewById(R.id.radio_btn);  
-			radio.setOnClickListener(new OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					if(temperature_mode_index==p){
-						temperatureList.get(p).put(VIEW_RADIO_BTN, false);
-						temperature_mode_index = -1;
-					} else {
-						temperature_mode_index = p;
-						// 重置，确保最多只有一项被选中
-//						for (String key : states.keySet()) {
-//							states.put(key, false);
-//						}
-//						states.put(String.valueOf(p), radio.isChecked());
-						for (Map<String, Object> m : temperatureList) {
-							m.put(VIEW_RADIO_BTN, false);
-						}
-						temperatureList.get(p).put(VIEW_RADIO_BTN, true);
-					}
-					// update temperaturemode
-					TemperatureListViewAdapter.this.notifyDataSetChanged();
-				}
-			});
+			radio.setOnClickListener(new MyListener(position));
+			
+			RelativeLayout temperature_mode=(RelativeLayout) view.findViewById(R.id.temperature_mode);  
+			temperature_mode.setOnClickListener(new MyListener(position));
 			
 			ImageView delete_model=(ImageView)view.findViewById(R.id.delete_model);
 			delete_model.setOnClickListener(new OnClickListener() {
@@ -764,34 +746,7 @@ public class FragmentWater extends Fragment {
 				
 				}
 			});
-			
-			RelativeLayout temperature_mode=(RelativeLayout) view.findViewById(R.id.temperature_mode);  
-			temperature_mode.setOnClickListener(new OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					if(temperature_mode_index==p){
-						temperatureList.get(p).put(VIEW_RADIO_BTN, false);
-						temperature_mode_index = -1;
-					} else {
-						//TODO 先尝试发送蓝牙，若ok再去更新界面显示数据
-						int setTemperature=Integer.parseInt((String)temperatureList.get(p).get(VIEW_TEMPERATURE_TEXT));
-						  ((MainActivity)getActivity()).sentSetTemperature(setTemperature);
-						
-						temperature_mode_index = p;
-						// 重置，确保最多只有一项被选中
-//						for (String key : states.keySet()) {
-//							states.put(key, false);
-//						}
-//						states.put(String.valueOf(p), radio.isChecked());
-						for (Map<String, Object> m : temperatureList) {
-							m.put(VIEW_RADIO_BTN, false);
-						}
-						temperatureList.get(p).put(VIEW_RADIO_BTN, true);
-					}
-					// update temperaturemode
-					TemperatureListViewAdapter.this.notifyDataSetChanged();
-				}
-			});
+
 			
 			
 			/*
@@ -870,10 +825,32 @@ public class FragmentWater extends Fragment {
 			mPosition = inPosition;
 		}
 
+
 		@Override
 		public void onClick(View v) {
-
+			if(temperature_mode_index==mPosition){
+				temperatureList.get(mPosition).put(VIEW_RADIO_BTN, false);
+				temperature_mode_index = -1;
+			} else {
+				//set the select temperature
+				int setTemperature=Integer.parseInt((String)temperatureList.get(mPosition).get(VIEW_TEMPERATURE_TEXT));
+				  ((MainActivity)getActivity()).sentSetTemperature(setTemperature);
+				  
+				temperature_mode_index = mPosition;
+				// 重置，确保最多只有一项被选中
+//				for (String key : states.keySet()) {
+//					states.put(key, false);
+//				}
+//				states.put(String.valueOf(p), radio.isChecked());
+				for (Map<String, Object> m : temperatureList) {
+					m.put(VIEW_RADIO_BTN, false);
+				}
+				temperatureList.get(mPosition).put(VIEW_RADIO_BTN, true);
+			}
+			// update temperaturemode
+			hlva.notifyDataSetChanged();
 		}
+	
 
 	}
 

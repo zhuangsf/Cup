@@ -114,7 +114,6 @@ public class FragmentWater extends Fragment {
 				case MSG_STOP_SEND:
 					if(pd!=null){
 						pd.dismiss();
-						pd=null;
 					}
 					if(temp_index!=-1){
 						Utils.Log("xxxxxxxxxxxxxxxxxx water mHandler stop send some error may happen");
@@ -868,28 +867,31 @@ public class FragmentWater extends Fragment {
 						.parseInt((String) temperatureList.get(mPosition).get(VIEW_TEMPERATURE_TEXT));
 				((MainActivity) getActivity()).sentSetTemperature(setTemperature);
 				temp_index = mPosition;
-				if(pd==null||!pd.isShowing()){
-					Utils.Log("xxxxxxxxxxxxxxxxxxxxxxaaaaaaaaaaaaaaaaaaaaaaaa######################################################################### pd:"+pd);
-					//TODO there is a bug   some time the progressdialog wont show!!!!
-					pd = null;
-					pd = ProgressDialog.show(getActivity(), null, "正在下达指令，请稍候...");
+				if(pd==null){
+					// there is a bug   some time the progressdialog wont show!!!!   fix it   onDestroy set pd=null  i dont know why,but it work
+					pd = new ProgressDialog(getActivity());
+					pd.setMessage("正在下达指令，请稍候...");
 					pd.setOnKeyListener(new OnKeyListener() {
 						@Override
 						public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
 							if (keyCode == KeyEvent.KEYCODE_BACK) {
 								if(pd!=null){
 									pd.dismiss();
-									pd=null;
 								}
 							}
 							return false;
 						}
 					});
+				}
+				if(!pd.isShowing())
+				{
+					pd.show();
 					// Stops sending after a pre-defined period.
 					Message msg = new Message();
 					msg.what = MSG_STOP_SEND;
 					msg.arg1 = temp_index;
 					mHandler.sendMessageDelayed(msg, SEND_PERIOD);
+					
 				}
 			}
 		}
@@ -899,7 +901,6 @@ public class FragmentWater extends Fragment {
 	public void setSelectTemperatureFromBT(){
 		if(pd!=null){
 			pd.dismiss();
-			pd=null;
 		}
 		if(temp_index!=-1){
 			mHandler.removeMessages(MSG_STOP_SEND);
@@ -953,7 +954,7 @@ public class FragmentWater extends Fragment {
 	public void onDestroy() {
 		super.onDestroy();
 		timer.cancel();  
-
+		pd=null;
 	}
 	
 	

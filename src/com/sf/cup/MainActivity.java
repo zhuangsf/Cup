@@ -482,6 +482,7 @@ public class MainActivity extends Activity {
         	// if there is no bind this service  close this activity it will show error:service not registered.use iServiceBind to avoid this error
         }
         mBluetoothLeService = null;
+        progressDialog=null;
     }
 	private static IntentFilter makeGattUpdateIntentFilter() {
 		final IntentFilter intentFilter = new IntentFilter();

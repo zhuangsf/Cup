@@ -732,6 +732,9 @@ public class FragmentWater extends Fragment {
 			
 			RelativeLayout temperature_mode_info=(RelativeLayout) view.findViewById(R.id.temperature_mode_info);  
 			temperature_mode_info.setOnClickListener(new MyListener(position));
+			if(position==temperature_mode_index){
+				temperature_mode_info.setBackground(getResources().getDrawable(R.drawable.list_item_shape_select));
+			}
 			
 			ImageView delete_model=(ImageView)view.findViewById(R.id.delete_model);
 			delete_model.setOnClickListener(new OnClickListener() {
@@ -825,6 +828,16 @@ public class FragmentWater extends Fragment {
 				temperature_setting_value=00;
 			}else{
 				temperature_setting_value=Integer.parseInt((String)temperatureList.get(temperature_mode_index).get(VIEW_TEMPERATURE_TEXT));
+				//3.5  update the select mode bg color
+				if(temperatureListView!=null){
+					for(int i=0;i<temperatureListView.getChildCount();i++){
+						if(i==temperature_mode_index){
+							temperatureListView.getChildAt(i).findViewById(R.id.temperature_mode_info).setBackground(getResources().getDrawable(R.drawable.list_item_shape_select));
+						}else{
+							temperatureListView.getChildAt(i).findViewById(R.id.temperature_mode_info).setBackground(getResources().getDrawable(R.drawable.list_item_shape));
+						}
+					}
+				}
 			}
 	        setTemperaturePic(temperature_setting,temperature_mode_enable);
 	        

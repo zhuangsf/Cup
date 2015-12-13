@@ -236,6 +236,7 @@ public class MainActivity extends Activity {
 	                	
 	                	fWater.setSelectTemperatureFromBT();
 	                }
+	                //TODO  if receiver FF means the cup is out of power. but i dont want to handle it now.
             	} catch (Exception e) {
             	}
             }

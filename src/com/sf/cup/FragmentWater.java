@@ -474,7 +474,7 @@ public class FragmentWater extends Fragment {
 				//1,show confirm dialog
 				
 				
-				//2 TODO send message to bluetooth
+				//2 send message to bluetooth              not need
 				//show waiting dialog
 				
 				//3 update ui 
@@ -541,7 +541,6 @@ public class FragmentWater extends Fragment {
 		timer.schedule(task, 60000, 60000);
 	}
 	public void setCurrentTemperatureFromBT(int t){
-		//TODO  first time try to connect bt get the temperature.  have better show a waiting dialog    onstop to reset the bianliang
 		temperature_current_value=t;
 		updateCurrentTemperature();
 	}
@@ -750,10 +749,9 @@ public class FragmentWater extends Fragment {
 							if(temperature_mode_index==p)
 							{
 								temperature_mode_index=-1;
-								//TODO
 								//0 ,show a waiting dialog
 								
-								//1, send request to cup
+								//1, send request to cup                not need
 							}else
 							{
 								for (int i=0;i<temperatureList.size();i++) {
@@ -816,7 +814,6 @@ public class FragmentWater extends Fragment {
 		
 		@Override
 		public void notifyDataSetChanged() {
-			//TODO
 			//0 ,show a waiting dialog
 			
 			//1, send request to cup

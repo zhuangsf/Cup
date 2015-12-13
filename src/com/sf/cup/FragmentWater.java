@@ -730,8 +730,8 @@ public class FragmentWater extends Fragment {
 			final RadioButton radio=(RadioButton) view.findViewById(R.id.radio_btn);  
 			radio.setOnClickListener(new MyListener(position));
 			
-			RelativeLayout temperature_mode=(RelativeLayout) view.findViewById(R.id.temperature_mode);  
-			temperature_mode.setOnClickListener(new MyListener(position));
+			RelativeLayout temperature_mode_info=(RelativeLayout) view.findViewById(R.id.temperature_mode_info);  
+			temperature_mode_info.setOnClickListener(new MyListener(position));
 			
 			ImageView delete_model=(ImageView)view.findViewById(R.id.delete_model);
 			delete_model.setOnClickListener(new OnClickListener() {

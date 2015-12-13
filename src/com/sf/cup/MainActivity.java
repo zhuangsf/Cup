@@ -199,6 +199,10 @@ public class MainActivity extends Activity {
                 if(pd!=null){
            					pd.dismiss();
            		}
+                boolean result= MainActivity.this.reConnect();
+				 if(!result){
+					 Toast.makeText(MainActivity.this, "无法连接到蓝牙设备", Toast.LENGTH_SHORT).show();
+				 }
             } else if (BluetoothLeService.ACTION_GATT_SERVICES_DISCOVERED.equals(action)) {
                 // Show all the supported services and characteristics on the user interface.
 //                displayGattServices(mBluetoothLeService.getSupportedGattServices());

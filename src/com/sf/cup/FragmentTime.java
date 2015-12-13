@@ -13,6 +13,7 @@ import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.app.TimePickerDialog.OnTimeSetListener;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -262,6 +263,7 @@ public class FragmentTime extends Fragment {
 		});
 	}
 	
+	private boolean isTimePickerOk=false;
 	private void setAlarmTextClickListener(final int index){
 		alarmList.get(index).setOnClickListener(new OnClickListener() {
 			@Override
@@ -281,8 +283,11 @@ public class FragmentTime extends Fragment {
 				TimePickerDialog tpd = new TimePickerDialog(getActivity(), new OnTimeSetListener() {
 					@Override
 					public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+						if(!isTimePickerOk){
+							return ;
+						}
 						c = timePicker(index,hourOfDay, minute);
-						// TODO  there is a bug that  cant cancel or return 
+						// TODO  there is a bug that  cant cancel or return    fix it 
 						if (!swtichList.get(index).isChecked()) {
 							swtichList.get(index).setChecked(true);
 						} else {
@@ -293,6 +298,18 @@ public class FragmentTime extends Fragment {
 						}
 					}
 				}, hour, minute, true);
+				tpd.setButton(DialogInterface.BUTTON_POSITIVE, "确认", new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						isTimePickerOk=true;
+					}
+				});
+				tpd.setButton(DialogInterface.BUTTON_NEGATIVE, "取消", new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						isTimePickerOk=false;
+					}
+				});
 				tpd.show();
 			}
 		});

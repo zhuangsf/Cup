@@ -114,6 +114,7 @@ public class FragmentWater extends Fragment {
 				case MSG_STOP_SEND:
 					if(pd!=null){
 						pd.dismiss();
+						pd=null;
 					}
 					if(temp_index!=-1){
 						Utils.Log("xxxxxxxxxxxxxxxxxx water mHandler stop send some error may happen");
@@ -868,6 +869,9 @@ public class FragmentWater extends Fragment {
 				((MainActivity) getActivity()).sentSetTemperature(setTemperature);
 				temp_index = mPosition;
 				if(pd==null||!pd.isShowing()){
+					Utils.Log("xxxxxxxxxxxxxxxxxxxxxxaaaaaaaaaaaaaaaaaaaaaaaa######################################################################### pd:"+pd);
+					//TODO there is a bug   some time the progressdialog wont show!!!!
+					pd = null;
 					pd = ProgressDialog.show(getActivity(), null, "正在下达指令，请稍候...");
 					pd.setOnKeyListener(new OnKeyListener() {
 						@Override
@@ -875,6 +879,7 @@ public class FragmentWater extends Fragment {
 							if (keyCode == KeyEvent.KEYCODE_BACK) {
 								if(pd!=null){
 									pd.dismiss();
+									pd=null;
 								}
 							}
 							return false;
@@ -894,6 +899,7 @@ public class FragmentWater extends Fragment {
 	public void setSelectTemperatureFromBT(){
 		if(pd!=null){
 			pd.dismiss();
+			pd=null;
 		}
 		if(temp_index!=-1){
 			mHandler.removeMessages(MSG_STOP_SEND);

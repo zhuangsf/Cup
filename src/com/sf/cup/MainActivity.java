@@ -97,8 +97,8 @@ public class MainActivity extends Activity {
 		public void handleMessage(Message msg) {
 			switch (msg.what) {
 			case MSG_STOP_WAIT_BT:
-				if (pd != null) {
-					pd.dismiss();
+				if (progressDialog != null) {
+					progressDialog.dismiss();
 				}
 				if (connectFailAlertDialog == null) {
 					connectFailAlertDialog=new AlertDialog.Builder(MainActivity.this)
@@ -144,7 +144,7 @@ public class MainActivity extends Activity {
     private final String LIST_NAME = "NAME";
     private final String LIST_UUID = "UUID";
     private boolean iServiceBind=true;
-    private static ProgressDialog pd;// 等待进度圈
+    private static ProgressDialog progressDialog;// 等待进度圈
     private static final int MSG_STOP_WAIT_BT=2;
  // Stops waiting after 6 seconds.
     private static final long WAIT_PERIOD = 6000;
@@ -163,8 +163,8 @@ public class MainActivity extends Activity {
             // Automatically connects to the device upon successful start-up initialization.
            boolean result =  mBluetoothLeService.connect(mDeviceAddress);
             
-            if(result==true&&(pd==null||!pd.isShowing())){
-				pd = ProgressDialog.show(MainActivity.this, null, "等待蓝牙连接，请稍候...");
+            if(result==true&&(progressDialog==null||!progressDialog.isShowing())){
+				progressDialog = ProgressDialog.show(MainActivity.this, null, "等待蓝牙连接，请稍候...");
 				// Stops sending after a pre-defined period.
 				Message msg = new Message();
 				msg.what = MSG_STOP_WAIT_BT;
@@ -196,8 +196,8 @@ public class MainActivity extends Activity {
                 mConnected = false;
                 Utils.Log("xxxxxxxxxxxxxxxxxx BroadcastReceiver ACTION_GATT_CONNECTED mConnected:"+mConnected);
                 Toast.makeText(MainActivity.this, "蓝牙水杯已断开", Toast.LENGTH_SHORT).show();
-                if(pd!=null){
-           					pd.dismiss();
+                if(progressDialog!=null){
+           					progressDialog.dismiss();
            		}
                 boolean result= MainActivity.this.reConnect();
 				 if(!result){
@@ -214,8 +214,8 @@ public class MainActivity extends Activity {
                 mBluetoothLeService.setCharacteristicNotification(characteristic, true);
                 Utils.Log("xxxxxxxxxxxxxxxxxx BroadcastReceiver ACTION_GATT_SERVICES_DISCOVERED");
                 sentAskTemperature();//ask the temperature after bt discovered        may before notification?????
-                if(pd!=null){
-  					pd.dismiss();
+                if(progressDialog!=null){
+  					progressDialog.dismiss();
   					Utils.Log(" mHandler.removeMessages="+mHandler.hasMessages(MSG_STOP_WAIT_BT));
   					mHandler.removeMessages(MSG_STOP_WAIT_BT);//connect success remove the hint
   				}
@@ -228,8 +228,8 @@ public class MainActivity extends Activity {
 	                if("02".equals(responeStringArray[1])){
 	                	int temp=Integer.parseInt(responeStringArray[3]+responeStringArray[2], 16);
 	                	fWater.setCurrentTemperatureFromBT(temp/10+(temp%10>=5?1:0));
-	                    if(pd!=null){
-	    					pd.dismiss();
+	                    if(progressDialog!=null){
+	    					progressDialog.dismiss();
 	    				}
 	                }else if("88".equals(responeStringArray[1])){
 	                	Thread.sleep(1000);
@@ -394,8 +394,8 @@ public class MainActivity extends Activity {
 		if (mBluetoothLeService != null) {
 			final boolean result = mBluetoothLeService.connect(mDeviceAddress);
 			Utils.Log("onResume Connect request result=" + result);
-			if(result==true&&(pd==null||!pd.isShowing())){
-				pd = ProgressDialog.show(this, null, "等待蓝牙连接，请稍候...");
+			if(result==true&&(progressDialog==null||!progressDialog.isShowing())){
+				progressDialog = ProgressDialog.show(this, null, "等待蓝牙连接，请稍候...");
 				// Stops sending after a pre-defined period.
 				Message msg = new Message();
 				msg.what = MSG_STOP_WAIT_BT;
@@ -420,8 +420,8 @@ public class MainActivity extends Activity {
     		if (mBluetoothLeService != null) {
     			final boolean result = mBluetoothLeService.connect(mDeviceAddress);
     			Utils.Log("onActivityResult Connect request result=" + result);
-    			if(result==true&&(pd==null||!pd.isShowing())){
-    				pd = ProgressDialog.show(this, null, "等待蓝牙连接，请稍候...");
+    			if(result==true&&(progressDialog==null||!progressDialog.isShowing())){
+    				progressDialog = ProgressDialog.show(this, null, "等待蓝牙连接，请稍候...");
     				// Stops sending after a pre-defined period.
     				Message msg = new Message();
     				msg.what = MSG_STOP_WAIT_BT;
@@ -443,8 +443,8 @@ public class MainActivity extends Activity {
     	if (mBluetoothLeService != null) {
     		result = mBluetoothLeService.connect(mDeviceAddress);
 			Utils.Log("reConnect result=" + result);
-			  if(result==true&&(pd==null||!pd.isShowing())){
-					pd = ProgressDialog.show(MainActivity.this, null, "等待蓝牙连接，请稍候...");
+			  if(result==true&&(progressDialog==null||!progressDialog.isShowing())){
+					progressDialog = ProgressDialog.show(MainActivity.this, null, "等待蓝牙连接，请稍候...");
 					// Stops sending after a pre-defined period.
 					Message msg = new Message();
 					msg.what = MSG_STOP_WAIT_BT;

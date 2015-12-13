@@ -14,12 +14,14 @@ import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothGattCharacteristic;
 import android.bluetooth.BluetoothGattService;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
@@ -30,8 +32,11 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
+import android.os.Message;
+import android.os.SystemClock;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -85,7 +90,41 @@ public class MainActivity extends Activity {
 //	private LeDeviceListAdapter mLeDeviceListAdapter;
 	private BluetoothAdapter mBluetoothAdapter;
 	private boolean mScanning;
-	private Handler mHandler;
+	AlertDialog connectFailAlertDialog;
+	private Handler mHandler= new Handler()
+ {
+		@Override
+		public void handleMessage(Message msg) {
+			switch (msg.what) {
+			case MSG_STOP_WAIT_BT:
+				if (pd != null) {
+					pd.dismiss();
+				}
+				if (connectFailAlertDialog == null) {
+					connectFailAlertDialog=new AlertDialog.Builder(MainActivity.this)
+							.setTitle("温馨提示")
+							.setMessage("蓝牙连接失败")
+//							.setCancelable(false)
+							.setPositiveButton("重连", new DialogInterface.OnClickListener() {
+								@Override
+								public void onClick(DialogInterface dialog, int which) {
+									 boolean result= MainActivity.this.reConnect();
+									 if(!result){
+										 Toast.makeText(MainActivity.this, "无法连接到蓝牙设备", Toast.LENGTH_SHORT).show();
+									 }
+								}
+							})
+							.setNegativeButton("取消",null).create();
+				}
+				try {
+					connectFailAlertDialog.show();
+				} catch (Exception e) {
+					connectFailAlertDialog=null;
+				}
+				break;
+			}
+		}
+	};
     private static final int REQUEST_ENABLE_BT = 1;
     // Stops scanning after 10 seconds.
     private static final long SCAN_PERIOD = 20000;
@@ -105,6 +144,11 @@ public class MainActivity extends Activity {
     private final String LIST_NAME = "NAME";
     private final String LIST_UUID = "UUID";
     private boolean iServiceBind=true;
+    private static ProgressDialog pd;// 等待进度圈
+    private static final int MSG_STOP_WAIT_BT=2;
+ // Stops waiting after 6 seconds.
+    private static final long WAIT_PERIOD = 6000;
+    
     //byte[] WriteBytes = null;
     byte[] WriteBytes = new byte[20];
     // Code to manage Service lifecycle.
@@ -117,7 +161,16 @@ public class MainActivity extends Activity {
                 finish();
             }
             // Automatically connects to the device upon successful start-up initialization.
-            mBluetoothLeService.connect(mDeviceAddress);
+           boolean result =  mBluetoothLeService.connect(mDeviceAddress);
+            
+            if(result==true&&(pd==null||!pd.isShowing())){
+				pd = ProgressDialog.show(MainActivity.this, null, "等待蓝牙连接，请稍候...");
+				// Stops sending after a pre-defined period.
+				Message msg = new Message();
+				msg.what = MSG_STOP_WAIT_BT;
+				mHandler.sendMessageDelayed(msg, WAIT_PERIOD);
+				Utils.Log(" mHandler.sendMessageDelayed="+mHandler.toString());
+			}
         }
         @Override
         public void onServiceDisconnected(ComponentName componentName) {
@@ -138,9 +191,14 @@ public class MainActivity extends Activity {
             if (BluetoothLeService.ACTION_GATT_CONNECTED.equals(action)) {
                 mConnected = true;
                 Utils.Log("xxxxxxxxxxxxxxxxxx BroadcastReceiver ACTION_GATT_CONNECTED mConnected:"+mConnected);
+//                Toast.makeText(MainActivity.this, "蓝牙水杯已连接", Toast.LENGTH_SHORT).show();
             } else if (BluetoothLeService.ACTION_GATT_DISCONNECTED.equals(action)) {
                 mConnected = false;
                 Utils.Log("xxxxxxxxxxxxxxxxxx BroadcastReceiver ACTION_GATT_CONNECTED mConnected:"+mConnected);
+                Toast.makeText(MainActivity.this, "蓝牙水杯已断开", Toast.LENGTH_SHORT).show();
+                if(pd!=null){
+           					pd.dismiss();
+           		}
             } else if (BluetoothLeService.ACTION_GATT_SERVICES_DISCOVERED.equals(action)) {
                 // Show all the supported services and characteristics on the user interface.
 //                displayGattServices(mBluetoothLeService.getSupportedGattServices());
@@ -152,6 +210,11 @@ public class MainActivity extends Activity {
                 mBluetoothLeService.setCharacteristicNotification(characteristic, true);
                 Utils.Log("xxxxxxxxxxxxxxxxxx BroadcastReceiver ACTION_GATT_SERVICES_DISCOVERED");
                 sentAskTemperature();//ask the temperature after bt discovered        may before notification?????
+                if(pd!=null){
+  					pd.dismiss();
+  					Utils.Log(" mHandler.removeMessages="+mHandler.hasMessages(MSG_STOP_WAIT_BT));
+  					mHandler.removeMessages(MSG_STOP_WAIT_BT);//connect success remove the hint
+  				}
             } else if (BluetoothLeService.ACTION_DATA_AVAILABLE.equals(action)) {
 //                displayData(intent.getStringExtra(BluetoothLeService.EXTRA_DATA));
             	try {
@@ -160,9 +223,12 @@ public class MainActivity extends Activity {
 	                String[] responeStringArray=responeString.split(" ");
 	                if("02".equals(responeStringArray[1])){
 	                	int temp=Integer.parseInt(responeStringArray[3]+responeStringArray[2], 16);
-	                	
 	                	fWater.setCurrentTemperatureFromBT(temp/10+(temp%10>=5?1:0));
+	                    if(pd!=null){
+	    					pd.dismiss();
+	    				}
 	                }else if("88".equals(responeStringArray[1])){
+	                	Thread.sleep(1000);
 	                	
 	                	fWater.setSelectTemperatureFromBT();
 	                }
@@ -324,7 +390,17 @@ public class MainActivity extends Activity {
 		if (mBluetoothLeService != null) {
 			final boolean result = mBluetoothLeService.connect(mDeviceAddress);
 			Utils.Log("onResume Connect request result=" + result);
+			if(result==true&&(pd==null||!pd.isShowing())){
+				pd = ProgressDialog.show(this, null, "等待蓝牙连接，请稍候...");
+				// Stops sending after a pre-defined period.
+				Message msg = new Message();
+				msg.what = MSG_STOP_WAIT_BT;
+				mHandler.sendMessageDelayed(msg, WAIT_PERIOD);
+				Utils.Log(" mHandler.sendMessageDelayed="+mHandler.toString());
+			}
 		}
+		
+		
 	}
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -340,12 +416,18 @@ public class MainActivity extends Activity {
     		if (mBluetoothLeService != null) {
     			final boolean result = mBluetoothLeService.connect(mDeviceAddress);
     			Utils.Log("onActivityResult Connect request result=" + result);
+    			if(result==true&&(pd==null||!pd.isShowing())){
+    				pd = ProgressDialog.show(this, null, "等待蓝牙连接，请稍候...");
+    				// Stops sending after a pre-defined period.
+    				Message msg = new Message();
+    				msg.what = MSG_STOP_WAIT_BT;
+    				mHandler.sendMessageDelayed(msg, WAIT_PERIOD);
+    				Utils.Log(" mHandler.sendMessageDelayed="+mHandler.toString());
+    			}
     		}
-    		//TODO it may show a wait dialog
         }else if(requestCode == DeviceScanActivity.REQUEST_SELECT_BT && resultCode == Activity.RESULT_CANCELED){
         	Toast.makeText(this, "未能找到对应蓝牙设备", Toast.LENGTH_SHORT).show();
         	finish();
-        	//TODO restart the scan or close app
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
@@ -357,6 +439,14 @@ public class MainActivity extends Activity {
     	if (mBluetoothLeService != null) {
     		result = mBluetoothLeService.connect(mDeviceAddress);
 			Utils.Log("reConnect result=" + result);
+			  if(result==true&&(pd==null||!pd.isShowing())){
+					pd = ProgressDialog.show(MainActivity.this, null, "等待蓝牙连接，请稍候...");
+					// Stops sending after a pre-defined period.
+					Message msg = new Message();
+					msg.what = MSG_STOP_WAIT_BT;
+					mHandler.sendMessageDelayed(msg, WAIT_PERIOD);
+					Utils.Log(" mHandler.sendMessageDelayed="+mHandler.toString());
+				}
 		}
     	return result;
     }

@@ -183,12 +183,12 @@ public class DeviceScanActivity extends Activity {
                 Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
                 startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
             }
+        }else{
+	        scanLeDevice(true);
         }
-
         // Initializes list view adapter.
         mLeDeviceListAdapter = new LeDeviceListAdapter();
         device_list.setAdapter(mLeDeviceListAdapter);
-        scanLeDevice(true);
     }
 
     @Override
@@ -198,6 +198,7 @@ public class DeviceScanActivity extends Activity {
             finish();
             return;
         }
+        scanLeDevice(true);
         super.onActivityResult(requestCode, resultCode, data);
     }
 

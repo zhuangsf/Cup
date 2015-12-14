@@ -114,6 +114,7 @@ public class FragmentWater extends Fragment {
 				case MSG_STOP_SEND:
 					if(pd!=null){
 						pd.dismiss();
+						Utils.Log(" MSG_STOP_SEND dismiss:");
 					}
 					if(temp_index!=-1){
 						Utils.Log("xxxxxxxxxxxxxxxxxx water mHandler stop send some error may happen");
@@ -877,24 +878,17 @@ public class FragmentWater extends Fragment {
 						.parseInt((String) temperatureList.get(mPosition).get(VIEW_TEMPERATURE_TEXT));
 				((MainActivity) getActivity()).sentSetTemperature(setTemperature);
 				temp_index = mPosition;
+				Utils.Log(" onclick 1:"+temp_index);
 				if(pd==null){
-					// there is a bug   some time the progressdialog wont show!!!!   fix it   onDestroy set pd=null  i dont know why,but it work
+					// there is a bug   some time the progressdialog wont show!!!!   fix it   onDestroy set pd=null  i dont know why,but it work     12:14 it doesnot work
+					//TODO  idon know why and how fuck!
+					Utils.Log(" onclick 2:");
 					pd = new ProgressDialog(getActivity());
 					pd.setMessage("正在下达指令，请稍候...");
-					pd.setOnKeyListener(new OnKeyListener() {
-						@Override
-						public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
-							if (keyCode == KeyEvent.KEYCODE_BACK) {
-								if(pd!=null){
-									pd.dismiss();
-								}
-							}
-							return false;
-						}
-					});
 				}
 				if(!pd.isShowing())
 				{
+					Utils.Log(" onclick 3:");
 					pd.show();
 					// Stops sending after a pre-defined period.
 					Message msg = new Message();
@@ -910,6 +904,7 @@ public class FragmentWater extends Fragment {
 	
 	public void setSelectTemperatureFromBT(){
 		if(pd!=null){
+			Utils.Log(" setSelectTemperatureFromBT dismiss:");
 			pd.dismiss();
 		}
 		if(temp_index!=-1){

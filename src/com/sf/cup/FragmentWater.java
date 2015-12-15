@@ -8,6 +8,8 @@ import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import org.json.JSONObject;
+
 import com.sf.cup.utils.Utils;
 
 import android.app.AlertDialog;
@@ -50,7 +52,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class FragmentWater extends Fragment {
-
+	private final static String TAG = FragmentWater.class.getPackage().getName() + "."
+			+ FragmentWater.class.getSimpleName();
 	ListView temperatureListView; 
 	ImageView add_temperature_button;
 	Button cancel_temperature_button;
@@ -876,7 +879,11 @@ public class FragmentWater extends Fragment {
 				// set the select temperature
 				int setTemperature = Integer
 						.parseInt((String) temperatureList.get(mPosition).get(VIEW_TEMPERATURE_TEXT));
+				String temperatureInfo=(String) temperatureList.get(mPosition).get(VIEW_INFO_TEXT);
+				//1,send to BT
 				((MainActivity) getActivity()).sentSetTemperature(setTemperature);
+				//2,send to Server
+				saveTemperatureAction(setTemperature,temperatureInfo);
 				temp_index = mPosition;
 				Utils.Log(" onclick 1:"+temp_index);
 				if(pd==null){
@@ -922,7 +929,33 @@ public class FragmentWater extends Fragment {
 		}
 	}
 	
-	
+	private void saveTemperatureAction(int temperature,String info){
+		try {
+		SharedPreferences p = Utils.getSharedPpreference(getActivity());
+		final JSONObject result = new JSONObject();
+		final String accountid = p.getString(Utils.SHARE_PREFERENCE_CUP_ACCOUNTID, "");
+		final String phone = p.getString(Utils.SHARE_PREFERENCE_CUP_PHONE, "");
+		if(TextUtils.isEmpty(accountid)||TextUtils.isEmpty(phone)){
+			// it must be a bug   missing the accountid
+			return ;
+		}
+			result.put("accountid", accountid);
+			result.put("phone", phone);
+			result.put("temperature", temperature+"");
+			result.put("explanation", info);
+			// send to server
+			new Thread(new Runnable() {
+				@Override
+				public void run() {
+					// http://121.199.75.79:8280/behaviour
+					Utils.httpPost(Utils.URL_PATH + "/behaviour", result, mHandler);
+				}
+			}).start();
+		} catch (Exception e) {
+			Utils.Log(TAG,"xxxxxxxxxxxxxxxxxx httpPut error:" + e);
+			e.printStackTrace();
+		}
+	}
 	
 	
 	

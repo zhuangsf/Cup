@@ -215,12 +215,14 @@ public class Utils {
 					// 生成 JSON 对象
 //					JSONArray jsonArray= new JSONArray(result);
 					JSONObject jsonObject=new JSONObject(result);
+					if (mHandler != null) {
 					Message msg=new Message();
 					msg.what=GET_SUCCESS_MSG;
 					msg.arg1=1;
 					msg.obj=jsonObject;
 //					mHandler.sendEmptyMessage(1);
 					mHandler.sendMessage(msg);
+					}
 					Utils.Log(" xxxxxxxxxxxxxxxxxxxxx http httpGet finish output 2"+jsonObject);
 				}
 			} catch (Exception e) {
@@ -243,6 +245,8 @@ public class Utils {
 			// 设置参数
 //			httpPost.setEntity(new StringEntity(DesEncrypt.encrypt(jsonObj.toString(), DesEncrypt.KEY), HTTP.UTF_8));
 			httpPost.setEntity(new StringEntity(jsonObj.toString(), HTTP.UTF_8));
+			httpPost.addHeader("content-type", "application/json");
+			httpPost.addHeader("authorization","Basic "+Base64.encodeToString((jsonObj.getString("phone")+":phone").toString().getBytes(),Base64.NO_WRAP));
 			HttpResponse httpResponse = httpClient.execute(httpPost);
 			HttpEntity entity = httpResponse.getEntity();
 			if (entity != null) {
@@ -250,12 +254,14 @@ public class Utils {
 				Utils.Log(" xxxxxxxxxxxxxxxxxxxxx http httpPost start output ");
 				String entitySrc = EntityUtils.toString(entity, "UTF-8");
 				JSONObject jsonObject=new JSONObject(entitySrc);
+				if (mHandler != null) {
 				Message msg=new Message();
 				msg.what=POST_SUCCESS_MSG;
 				msg.arg1=1;
 				msg.obj=jsonObject;
 //				mHandler.sendEmptyMessage(1);
 				mHandler.sendMessage(msg);
+				}
 				Utils.Log("entitySrc  " + entitySrc);
 				Utils.Log(" xxxxxxxxxxxxxxxxxxxxx http httpPost finish output ");
 			}
@@ -293,12 +299,14 @@ public class Utils {
 				Utils.Log(" xxxxxxxxxxxxxxxxxxxxx http httpPut start output ");
 				String entitySrc = EntityUtils.toString(entity, "UTF-8");
 				JSONObject jsonObject=new JSONObject(entitySrc);
+				if (mHandler != null) {
 				Message msg=new Message();
 				msg.what=PUT_SUCCESS_MSG;
 				msg.arg1=1;
 				msg.obj=jsonObject;
 //				mHandler.sendEmptyMessage(1);
 				mHandler.sendMessage(msg);
+				}
 				Utils.Log("entitySrc  " + entitySrc);
 				Utils.Log(" xxxxxxxxxxxxxxxxxxxxx http httpPut finish output ");
 			}
@@ -341,12 +349,14 @@ public class Utils {
 				Utils.Log(" xxxxxxxxxxxxxxxxxxxxx http httpPostFile start output ");
 				String entitySrc = EntityUtils.toString(entity, "UTF-8");
 				JSONObject jsonObject=new JSONObject(entitySrc);
+				if (mHandler != null) {
 				Message msg=new Message();
 				msg.what=UPLOAD_SUCCESS_MSG;
 				msg.arg1=1;
 				msg.obj=jsonObject;
 //				mHandler.sendEmptyMessage(1);
 				mHandler.sendMessage(msg);
+				}
 				Utils.Log("entitySrc  " + entitySrc);
 				Utils.Log(" xxxxxxxxxxxxxxxxxxxxx http httpPostFile finish output ");
 			}
@@ -401,12 +411,14 @@ public class Utils {
 			if (code == 200) {// 返回的响应码200,是成功
 				// 得到网络返回的输入流
 				InputStream is = conn.getInputStream();
+				if (mHandler != null) {
 				Message msg=new Message();
 				msg.what=UPLOAD_SUCCESS_MSG;
 				msg.arg1=1;
 				msg.obj=NetUtil.readString(is);
 //				mHandler.sendEmptyMessage(1);
 				mHandler.sendMessage(msg);
+				}
 			} else {
 //				Toast.makeText(mContext, "请求URL失败！", Toast.LENGTH_SHORT).show();
 			}

@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import org.json.JSONObject;
+
 import com.sf.cup.utils.Utils;
 
 import android.app.AlarmManager;
@@ -17,6 +19,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -31,6 +35,9 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 public class FragmentTime extends Fragment {
+	private final static String TAG = FragmentTime.class.getPackage().getName() + "."
+			+ FragmentTime.class.getSimpleName();
+	
 	TextView alarm1;
 	TextView alarm2;
 	TextView alarm3;
@@ -342,10 +349,41 @@ public class FragmentTime extends Fragment {
 		e.putString(Utils.SHARE_PREFERENCE_CUP_ALARM_TIME+i, timeString);
 		e.commit();
 		
+		//send to server
+		saveTimeAction(timeString);
 		return c;
 	}
 
-	
+	/**
+	 * 
+	 * @param time  length=5   "12:34"
+	 */
+	private void saveTimeAction(String time){
+		try {
+		SharedPreferences p = Utils.getSharedPpreference(getActivity());
+		final JSONObject result = new JSONObject();
+		final String accountid = p.getString(Utils.SHARE_PREFERENCE_CUP_ACCOUNTID, "");
+		final String phone = p.getString(Utils.SHARE_PREFERENCE_CUP_PHONE, "");
+		if(TextUtils.isEmpty(accountid)||TextUtils.isEmpty(phone)){
+			// it must be a bug   missing the accountid
+			return ;
+		}
+			result.put("accountid", accountid);
+			result.put("phone", phone);
+			result.put("clock", time);
+			// send to server
+			new Thread(new Runnable() {
+				@Override
+				public void run() {
+					// http://121.199.75.79:8280/behaviour
+					Utils.httpPost(Utils.URL_PATH + "/behaviour", result, null);
+				}
+			}).start();
+		} catch (Exception e) {
+			Utils.Log(TAG,"xxxxxxxxxxxxxxxxxx httpPut error:" + e);
+			e.printStackTrace();
+		}
+	}
 	
 	
 	

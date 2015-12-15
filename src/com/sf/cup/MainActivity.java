@@ -191,6 +191,9 @@ public class MainActivity extends Activity {
             if (BluetoothLeService.ACTION_GATT_CONNECTED.equals(action)) {
                 mConnected = true;
                 Utils.Log("xxxxxxxxxxxxxxxxxx BroadcastReceiver ACTION_GATT_CONNECTED mConnected:"+mConnected);
+                if(connectFailAlertDialog!=null&&connectFailAlertDialog.isShowing()){
+                	connectFailAlertDialog.dismiss();
+                }
 //                Toast.makeText(MainActivity.this, "蓝牙水杯已连接", Toast.LENGTH_SHORT).show();
             } else if (BluetoothLeService.ACTION_GATT_DISCONNECTED.equals(action)) {
                 mConnected = false;
@@ -484,6 +487,7 @@ public class MainActivity extends Activity {
         }
         mBluetoothLeService = null;
         progressDialog=null;
+        connectFailAlertDialog=null;
     }
 	private static IntentFilter makeGattUpdateIntentFilter() {
 		final IntentFilter intentFilter = new IntentFilter();

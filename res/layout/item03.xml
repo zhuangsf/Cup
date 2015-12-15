@@ -5,32 +5,17 @@
     android:orientation="vertical" >
 
     <LinearLayout
-        android:id="@+id/linearLayout01"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical" >
-        
-    </LinearLayout>	
-    
-    <LinearLayout
-        android:id="@+id/linearLayout02"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical" 
-        android:background="@drawable/divider_horizontal_line">
-    	
-    </LinearLayout>
-    
-    <LinearLayout
         android:id="@+id/linearLayout1"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
         android:orientation="vertical" >
 
         <ImageView
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/feature_guide_2" >
+            android:layout_height="fill_parent"
+            android:src="@drawable/feature_guide_2"
+			android:scaleType="centerCrop"
+		>
         </ImageView>
     </LinearLayout>
 
@@ -38,10 +23,11 @@
         android:id="@+id/linearLayout2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical" >
+        android:orientation="vertical"
+        android:visibility="gone"
+         >
         
         <LinearLayout
-	        android:id="@+id/linearLayout2"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
 	        android:orientation="vertical"

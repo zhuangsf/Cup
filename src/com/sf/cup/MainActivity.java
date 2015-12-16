@@ -416,6 +416,10 @@ public class MainActivity extends Activity {
         if (requestCode == DeviceScanActivity.REQUEST_SELECT_BT && resultCode == Activity.RESULT_OK) {
     		mDeviceName = data.getStringExtra(EXTRAS_DEVICE_NAME);
     		mDeviceAddress = data.getStringExtra(EXTRAS_DEVICE_ADDRESS);
+    		if(TextUtils.isEmpty(mDeviceName)||TextUtils.isEmpty(mDeviceAddress)){
+    			Toast.makeText(this, "未能找到对应蓝牙设备", Toast.LENGTH_SHORT).show();
+    			return ;
+    		}
     		//TODO it must be save  every time open activity try to connect bt auto.after it can not connect  it must rescan the bt
 
     		Intent gattServiceIntent = new Intent(this, BluetoothLeService.class);

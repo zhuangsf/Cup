@@ -37,6 +37,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.LinearLayout;
@@ -100,6 +101,18 @@ public class DeviceScanActivity extends Activity {
 					try {
 						if(!isFindBtDevices){
 							alertDialog.show();
+							
+							alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setOnLongClickListener(new OnLongClickListener() {
+								@Override
+								public boolean onLongClick(View v) {
+									  Intent intent=new Intent();  
+								        intent.putExtra(MainActivity.EXTRAS_DEVICE_NAME, "");
+								        intent.putExtra(MainActivity.EXTRAS_DEVICE_ADDRESS, "");
+								        setResult(RESULT_OK, intent);  
+								        finish();
+									return false;
+								}
+							});
 						}
 					} catch (Exception e) {
 						alertDialog=null;

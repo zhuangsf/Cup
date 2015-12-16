@@ -992,7 +992,18 @@ public class FragmentWater extends Fragment {
 	public void onDestroy() {
 		super.onDestroy();
 		timer.cancel();  
+		if(pd!=null){
+			pd.dismiss();
+		}
 		pd=null;
+		if(sendFailAlertDialog!=null){
+			sendFailAlertDialog.dismiss();
+		}
+		sendFailAlertDialog=null;
+		if(alertDialog!=null){
+			alertDialog.dismiss();
+		}
+		alertDialog=null;
 	}
 	
 	

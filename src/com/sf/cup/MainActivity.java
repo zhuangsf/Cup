@@ -494,7 +494,13 @@ public class MainActivity extends Activity {
         	// if there is no bind this service  close this activity it will show error:service not registered.use iServiceBind to avoid this error
         }
         mBluetoothLeService = null;
+        if(progressDialog!=null){
+        	progressDialog.dismiss();
+    	}
         progressDialog=null;
+        if(connectFailAlertDialog!=null){
+        	connectFailAlertDialog.dismiss();
+    	}
         connectFailAlertDialog=null;
       //to avoid  android.view.WindowLeaked
     	if(timeUpAlertDialog!=null){

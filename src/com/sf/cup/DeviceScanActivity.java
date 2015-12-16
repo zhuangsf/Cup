@@ -221,6 +221,16 @@ public class DeviceScanActivity extends Activity {
         scanLeDevice(false);
         mLeDeviceListAdapter.clear();
     }
+    @Override
+    protected void onDestroy() {
+    	super.onDestroy();
+    	
+    	//to avoid  android.view.WindowLeaked
+    	if(alertDialog!=null){
+    		alertDialog.dismiss();
+    	}
+    	alertDialog=null;
+    }
 
    
 

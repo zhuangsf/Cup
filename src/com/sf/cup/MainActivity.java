@@ -14,6 +14,9 @@ import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothGattCharacteristic;
@@ -91,6 +94,7 @@ public class MainActivity extends Activity {
 	private BluetoothAdapter mBluetoothAdapter;
 	private boolean mScanning;
 	AlertDialog connectFailAlertDialog;
+	AlertDialog timeUpAlertDialog;
 	private Handler mHandler= new Handler()
  {
 		@Override
@@ -492,6 +496,11 @@ public class MainActivity extends Activity {
         mBluetoothLeService = null;
         progressDialog=null;
         connectFailAlertDialog=null;
+      //to avoid  android.view.WindowLeaked
+    	if(timeUpAlertDialog!=null){
+    		timeUpAlertDialog.dismiss();
+    	}
+    	timeUpAlertDialog=null;
     }
 	private static IntentFilter makeGattUpdateIntentFilter() {
 		final IntentFilter intentFilter = new IntentFilter();
@@ -588,22 +597,46 @@ public class MainActivity extends Activity {
 	@Override
 	protected void onNewIntent(Intent intent) {
 		super.onNewIntent(intent);
+		Utils.Log("xxxxxxxxx onNewIntent"+"intent:"+intent+",getIntent:"+getIntent());
 		setIntent(intent);
 		startFromAlarm(intent);
 	}
-	
+	private void showNotification(Context context, String title,String content, int notifyId) {
+		Intent intent = new Intent(this, MainActivity.class);
+		intent.setAction("android.intent.action.MAIN");
+		intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+		intent.putExtra(Utils.IS_FROM_ALARM, false);
+		intent.putExtra(Utils.FROM_ALARM_INDEX, -1);
+		PendingIntent pi = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+		Notification notify = new Notification();
+		long vibrate[] = { 500, 500 };
+		Notification.Builder builder = new Notification.Builder(context);
+		notify = builder.setContentIntent(pi).setContentTitle(title)
+				.setContentText(content).setTicker(content)
+				.setSmallIcon(R.drawable.ic_launcher)
+				.setWhen(System.currentTimeMillis())
+				.setDefaults(Notification.DEFAULT_ALL)
+				.setLights(0xffffffff, 300, 600).setVibrate(vibrate).build();
+		notify.flags |= Notification.FLAG_SHOW_LIGHTS
+				| Notification.FLAG_AUTO_CANCEL;
+		NotificationManager notificationManager = (NotificationManager) context
+				.getSystemService(Context.NOTIFICATION_SERVICE);
+		notificationManager.notify(notifyId, notify);
+	}
 	private void startFromAlarm(Intent intent) {
 		boolean isAlarm = intent.getBooleanExtra(Utils.IS_FROM_ALARM, false);
 		int index = intent.getIntExtra(Utils.FROM_ALARM_INDEX, -1);
-		Utils.Log("isAlarm:" + isAlarm + " index:" + index);
+		Utils.Log("isAlarm:" + isAlarm + " index:" + index+",intent:"+intent);
 		if (isAlarm) {
+			setIntent(null);//it must set intent null. single mainactivity's IS_FROM_ALARM always true.i dont know why
 			// 如果是闹钟响起跳转来的，播个音乐
 			// 初始化音乐资源
 			try {
-
-				new AlertDialog.Builder(this).setMessage("亲！已到设定饮水时间咯！\n请及时享用哦").setTitle("温馨提示")
-						.setPositiveButton("确定", null).create().show();
-
+				showNotification(this,"喝水提醒","喝水时间到啦",3344);
+				timeUpAlertDialog=new AlertDialog.Builder(this).setMessage("亲！已到设定饮水时间咯！\n请及时享用哦").setTitle("温馨提示")
+						.setPositiveButton("确定", null).create();
+				timeUpAlertDialog.show();
+/*
 				// 创建MediaPlayer对象
 				mp = new MediaPlayer();
 				// 将音乐保存在res/raw/xingshu.mp3,R.java中自动生成{public static final int
@@ -614,7 +647,7 @@ public class MainActivity extends Activity {
 				// 在MediaPlayer取得播放资源与stop()之后要准备PlayBack的状态前一定要使用MediaPlayer.prepeare()
 				mp.prepare();
 				// 开始播放音乐
-				mp.start();
+//				mp.start();
 				// 音乐播放完毕的事件处理
 				mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
 					public void onCompletion(MediaPlayer mp) {
@@ -651,9 +684,8 @@ public class MainActivity extends Activity {
 						return false;
 					}
 				});
-			} catch (IllegalStateException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
+				*/
+			} catch (Exception e) {
 				e.printStackTrace();
 			} 
 		}

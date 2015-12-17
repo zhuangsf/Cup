@@ -892,6 +892,7 @@ public class FragmentWater extends Fragment {
 					Utils.Log(" onclick 2:");
 					pd = new ProgressDialog(getActivity());
 					pd.setMessage("正在下达指令，请稍候...");
+					pd.setCancelable(false);
 				}
 				if(!pd.isShowing())
 				{

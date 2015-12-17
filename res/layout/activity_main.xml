@@ -38,7 +38,7 @@
             android:drawableTop="@drawable/tab_selector_time"
             android:gravity="center_horizontal|bottom"
             android:paddingTop="2dp"
-            android:text="时时"
+            android:text="提醒"
             android:textColor="@color/tab_selector_font_color" />
  
         <RadioButton
@@ -52,7 +52,7 @@
             android:drawableTop="@drawable/tab_selector_water"
             android:gravity="center_horizontal|bottom"
             android:paddingTop="2dp"
-            android:text="水温"
+            android:text="恒温"
             android:checked="true"
             android:textColor="@color/tab_selector_font_color" />
  

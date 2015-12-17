@@ -236,7 +236,6 @@ public class FragmentTime extends Fragment {
 	}
 	
 	private void setSwitchListener(final int index){
-		Utils.Log("xxxxxxxxxxxxxxxx index:"+index+" swtich:"+swtichList.get(index));
 		swtichList.get(index).setOnCheckedChangeListener(new OnCheckedChangeListener() {
 			@Override
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {

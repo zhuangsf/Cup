@@ -18,8 +18,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -305,18 +305,24 @@ public class FragmentTime extends Fragment {
 						}
 					}
 				}, hour, minute, true);
-				tpd.setButton(DialogInterface.BUTTON_POSITIVE, "确认", new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						isTimePickerOk=true;
-					}
-				});
-				tpd.setButton(DialogInterface.BUTTON_NEGATIVE, "取消", new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						isTimePickerOk=false;
-					}
-				});
+				if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.LOLLIPOP){
+					Utils.Log("android version newer than L");
+					isTimePickerOk=true;
+				}else{
+					Utils.Log("android version older than KK");
+					tpd.setButton(DialogInterface.BUTTON_POSITIVE, "确认", new DialogInterface.OnClickListener() {
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							isTimePickerOk=true;
+						}
+					});
+					tpd.setButton(DialogInterface.BUTTON_NEGATIVE, "取消", new DialogInterface.OnClickListener() {
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							isTimePickerOk=false;
+						}
+					});
+				}
 				tpd.show();
 			}
 		});

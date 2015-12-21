@@ -876,6 +876,12 @@ public class FragmentWater extends Fragment {
 				// update temperaturemode
 				hlva.notifyDataSetChanged();
 			} else {
+				//in order to prevent the radio button multi select when BT is disconnect
+				if(v instanceof RadioButton){
+					Utils.Log(" yeah , i am Radio Button");
+					RadioButton rb=(RadioButton)v;
+					rb.setChecked(false);
+				}
 				// set the select temperature
 				int setTemperature = Integer
 						.parseInt((String) temperatureList.get(mPosition).get(VIEW_TEMPERATURE_TEXT));

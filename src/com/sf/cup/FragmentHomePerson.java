@@ -492,7 +492,7 @@ public class FragmentHomePerson extends Fragment {
 						doUpdate2();
 					}
 				}, Integer.parseInt(dateSpilt[0]), // 传入年份
-						Integer.parseInt(dateSpilt[1]), // 传入月份
+						Integer.parseInt(dateSpilt[1])-1, // 传入月份
 						Integer.parseInt(dateSpilt[2]) // 传入天数
 				);
 				dialog.show();

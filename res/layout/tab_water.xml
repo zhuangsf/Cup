@@ -175,14 +175,14 @@
                 android:id="@+id/temperature_setting"
                 android:layout_width="0dp"
                 android:layout_height="fill_parent"
-                android:layout_marginLeft="0dp"
+                android:layout_marginLeft="10dp"
                 android:layout_weight="1"
                 android:orientation="vertical" >
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="15dp"
+                    android:layout_marginTop="25dp"
                     android:text="恒温设定"
                     android:textColor="@drawable/darkgray"
                     android:textSize="15sp" />
@@ -191,6 +191,7 @@
                     android:id="@+id/water_mode"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
                     android:text="未设定"
                     android:textColor="@drawable/black"
                     android:textSize="20sp" />
@@ -199,7 +200,6 @@
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent"
                     android:gravity="center"
-                    android:layout_marginTop="10dp"
                     android:orientation="horizontal" >
 
                     <ImageView

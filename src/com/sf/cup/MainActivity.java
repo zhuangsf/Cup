@@ -151,7 +151,7 @@ public class MainActivity extends Activity {
     private static ProgressDialog progressDialog;// 等待进度圈
     private static final int MSG_STOP_WAIT_BT=2;
  // Stops waiting after 6 seconds.
-    private static final long WAIT_PERIOD = 6000;
+    private static final long WAIT_PERIOD = 10000;//6000; //too short too connect
     
     //byte[] WriteBytes = null;
     byte[] WriteBytes = new byte[20];
@@ -201,7 +201,7 @@ public class MainActivity extends Activity {
 //                Toast.makeText(MainActivity.this, "蓝牙水杯已连接", Toast.LENGTH_SHORT).show();
             } else if (BluetoothLeService.ACTION_GATT_DISCONNECTED.equals(action)) {
                 mConnected = false;
-                Utils.Log("xxxxxxxxxxxxxxxxxx BroadcastReceiver ACTION_GATT_CONNECTED mConnected:"+mConnected);
+                Utils.Log("xxxxxxxxxxxxxxxxxx BroadcastReceiver ACTION_GATT_DISCONNECTED mConnected:"+mConnected);
                 Toast.makeText(MainActivity.this, "蓝牙水杯已断开", Toast.LENGTH_SHORT).show();
                 if(progressDialog!=null){
            					progressDialog.dismiss();
@@ -420,7 +420,8 @@ public class MainActivity extends Activity {
         if (requestCode == DeviceScanActivity.REQUEST_SELECT_BT && resultCode == Activity.RESULT_OK) {
     		mDeviceName = data.getStringExtra(EXTRAS_DEVICE_NAME);
     		mDeviceAddress = data.getStringExtra(EXTRAS_DEVICE_ADDRESS);
-    		if(TextUtils.isEmpty(mDeviceName)||TextUtils.isEmpty(mDeviceAddress)){
+    		//one of this can be used
+    		if(TextUtils.isEmpty(mDeviceName)&&TextUtils.isEmpty(mDeviceAddress)){
     			Toast.makeText(this, "未能找到对应蓝牙设备", Toast.LENGTH_SHORT).show();
     			return ;
     		}

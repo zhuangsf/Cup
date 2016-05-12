@@ -164,8 +164,11 @@ public class MainActivity extends Activity {
                 Utils.Log("Unable to initialize Bluetooth");
                 finish();
             }
+            
+            boolean result=reConnect();
+    		Utils.Log("onServiceConnected reConnect result=" + result);
             // Automatically connects to the device upon successful start-up initialization.
-           boolean result =  mBluetoothLeService.connect(mDeviceAddress);
+          /* boolean result =  mBluetoothLeService.connect(mDeviceAddress);
             
             if(result==true&&(progressDialog==null||!progressDialog.isShowing())){
 				progressDialog = ProgressDialog.show(MainActivity.this, null, "等待蓝牙连接，请稍候...");
@@ -175,6 +178,7 @@ public class MainActivity extends Activity {
 				mHandler.sendMessageDelayed(msg, WAIT_PERIOD);
 				Utils.Log(" mHandler.sendMessageDelayed="+mHandler.toString());
 			}
+			*/
         }
         @Override
         public void onServiceDisconnected(ComponentName componentName) {
@@ -399,6 +403,10 @@ public class MainActivity extends Activity {
 	protected void onResume() {
 		super.onResume();
 		registerReceiver(mGattUpdateReceiver, makeGattUpdateIntentFilter());
+		
+		 boolean result=reConnect();
+ 		Utils.Log("onResume reConnect result=" + result);
+		/*
 		if (mBluetoothLeService != null) {
 			final boolean result = mBluetoothLeService.connect(mDeviceAddress);
 			Utils.Log("onResume Connect request result=" + result);
@@ -410,7 +418,7 @@ public class MainActivity extends Activity {
 				mHandler.sendMessageDelayed(msg, WAIT_PERIOD);
 				Utils.Log(" mHandler.sendMessageDelayed="+mHandler.toString());
 			}
-		}
+		}*/
 		
 		
 	}
@@ -430,7 +438,10 @@ public class MainActivity extends Activity {
     		Intent gattServiceIntent = new Intent(this, BluetoothLeService.class);
     		iServiceBind=bindService(gattServiceIntent, mServiceConnection, BIND_AUTO_CREATE);
     		
-    		if (mBluetoothLeService != null) {
+    		
+    		boolean result=reConnect();
+    		Utils.Log("onActivityResult reConnect request result=" + result);
+    		/*if (mBluetoothLeService != null) {
     			final boolean result = mBluetoothLeService.connect(mDeviceAddress);
     			Utils.Log("onActivityResult Connect request result=" + result);
     			if(result==true&&(progressDialog==null||!progressDialog.isShowing())){
@@ -441,7 +452,7 @@ public class MainActivity extends Activity {
     				mHandler.sendMessageDelayed(msg, WAIT_PERIOD);
     				Utils.Log(" mHandler.sendMessageDelayed="+mHandler.toString());
     			}
-    		}
+    		}*/
         }else if(requestCode == DeviceScanActivity.REQUEST_SELECT_BT && resultCode == Activity.RESULT_CANCELED){
         	Toast.makeText(this, "未能找到对应蓝牙设备", Toast.LENGTH_SHORT).show();
         	finish();

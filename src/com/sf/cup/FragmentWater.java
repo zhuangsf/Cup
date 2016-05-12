@@ -58,7 +58,7 @@ public class FragmentWater extends Fragment {
 	ListView temperatureListView; 
 	ImageView add_temperature_button;
 	Button cancel_temperature_button;
-	List<Map<String, Object>> temperatureList = new ArrayList<Map<String, Object>>(); //list view ¾ÍÊÇÒ»Ö±ÍæÅªÕâ¸ö
+	List<Map<String, Object>> temperatureList = new ArrayList<Map<String, Object>>(); //list view å°±æ˜¯ä¸€ç›´ç©å¼„è¿™ä¸ª
 	TemperatureListViewAdapter hlva;
 	
 	FrameLayout temperature_mode;
@@ -92,7 +92,7 @@ public class FragmentWater extends Fragment {
 	
     // Stops sending after 3 seconds.
     private static final long SEND_PERIOD = 3000;
-    private static ProgressDialog pd;// µÈ´ı½ø¶ÈÈ¦
+    private static ProgressDialog pd;// ç­‰å¾…è¿›åº¦åœˆ
     private int temp_index=-1; //this is a important  int.   if it !=-1  means send a msg to bt   the msg is this value.
     AlertDialog sendFailAlertDialog;
     
@@ -125,19 +125,19 @@ public class FragmentWater extends Fragment {
 						temp_index=-1;
 						if (sendFailAlertDialog == null) {
 							sendFailAlertDialog=new AlertDialog.Builder(getActivity())
-									.setTitle("ÎÂÜ°ÌáÊ¾")
-									.setMessage("À¶ÑÀ¿ÉÄÜÒÑ¶Ï¿ª")
+									.setTitle("æ¸©é¦¨æç¤º")
+									.setMessage("è“ç‰™å¯èƒ½å·²æ–­å¼€")
 //									.setCancelable(false)
-									.setPositiveButton("ÖØÁ¬", new DialogInterface.OnClickListener() {
+									.setPositiveButton("é‡è¿", new DialogInterface.OnClickListener() {
 										@Override
 										public void onClick(DialogInterface dialog, int which) {
 											 boolean result= ((MainActivity)getActivity()).reConnect();
 											 if(!result){
-												 Toast.makeText(getActivity(), "ÎŞ·¨Á¬½Óµ½À¶ÑÀÉè±¸", Toast.LENGTH_SHORT).show();
+												 Toast.makeText(getActivity(), "æ— æ³•è¿æ¥åˆ°è“ç‰™è®¾å¤‡", Toast.LENGTH_SHORT).show();
 											 }
 										}
 									})
-									.setNegativeButton("È¡Ïû",null).create();
+									.setNegativeButton("å–æ¶ˆ",null).create();
 						}
 						try {
 								sendFailAlertDialog.show();
@@ -195,27 +195,27 @@ public class FragmentWater extends Fragment {
 	private void temperatureComplete() {
 		try {
 			if (alertDialog == null) {
-				alertDialog = new AlertDialog.Builder(getActivity()).setMessage("Ç×£¡ÒÑµ½Éè¶¨ÒûË®ÎÂ¶È¿©£¡\nÇë¼°Ê±ÏíÓÃÅ¶").setTitle("ÎÂÜ°ÌáÊ¾")
-						.setPositiveButton("È·¶¨", null).create();
+				alertDialog = new AlertDialog.Builder(getActivity()).setMessage("äº²ï¼å·²åˆ°è®¾å®šé¥®æ°´æ¸©åº¦å’¯ï¼\nè¯·åŠæ—¶äº«ç”¨å“¦").setTitle("æ¸©é¦¨æç¤º")
+						.setPositiveButton("ç¡®å®š", null).create();
 			}
 
 			alertDialog.show();
 
-			// ´´½¨MediaPlayer¶ÔÏó
+			// åˆ›å»ºMediaPlayerå¯¹è±¡
 			mp = new MediaPlayer();
-			// ½«ÒôÀÖ±£´æÔÚres/raw/xingshu.mp3,R.javaÖĞ×Ô¶¯Éú³É{public static final int
+			// å°†éŸ³ä¹ä¿å­˜åœ¨res/raw/xingshu.mp3,R.javaä¸­è‡ªåŠ¨ç”Ÿæˆ{public static final int
 			// xingshu=0x7f040000;}
 			Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
 			// mp = MediaPlayer.create(this, notification);
 			mp.setDataSource(getActivity(), notification);
-			// ÔÚMediaPlayerÈ¡µÃ²¥·Å×ÊÔ´Óëstop()Ö®ºóÒª×¼±¸PlayBackµÄ×´Ì¬Ç°Ò»¶¨ÒªÊ¹ÓÃMediaPlayer.prepeare()
+			// åœ¨MediaPlayerå–å¾—æ’­æ”¾èµ„æºä¸stop()ä¹‹åè¦å‡†å¤‡PlayBackçš„çŠ¶æ€å‰ä¸€å®šè¦ä½¿ç”¨MediaPlayer.prepeare()
 			mp.prepare();
-			// ¿ªÊ¼²¥·ÅÒôÀÖ
+			// å¼€å§‹æ’­æ”¾éŸ³ä¹
 			mp.start();
-			// ÒôÀÖ²¥·ÅÍê±ÏµÄÊÂ¼ş´¦Àí
+			// éŸ³ä¹æ’­æ”¾å®Œæ¯•çš„äº‹ä»¶å¤„ç†
 			mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
 				public void onCompletion(MediaPlayer mp) {
-					// Ñ­»·²¥·Å
+					// å¾ªç¯æ’­æ”¾
 					try {
 						// mp.start();
 						if(mp!=null){
@@ -230,10 +230,10 @@ public class FragmentWater extends Fragment {
 					}
 				}
 			});
-			// ²¥·ÅÒôÀÖÊ±·¢Éú´íÎóµÄÊÂ¼ş´¦Àí
+			// æ’­æ”¾éŸ³ä¹æ—¶å‘ç”Ÿé”™è¯¯çš„äº‹ä»¶å¤„ç†
 			mp.setOnErrorListener(new MediaPlayer.OnErrorListener() {
 				public boolean onError(MediaPlayer mp, int what, int extra) {
-					// ÊÍ·Å×ÊÔ´
+					// é‡Šæ”¾èµ„æº
 					try {
 						if (mp != null) {
 							if (mp.isPlaying())
@@ -276,19 +276,19 @@ public class FragmentWater extends Fragment {
 		//isFirst must be bigger than 2 or there must be a bug 
 		Map<String, Object> m=new HashMap<String, Object>();
 		if(isFirst==2){
-			m.put(VIEW_INFO_TEXT, "ÔçÉÏµÚÒ»±­Ë®ÎÂ");
+			m.put(VIEW_INFO_TEXT, "æ—©ä¸Šç¬¬ä¸€æ¯æ°´æ¸©");
 			m.put(VIEW_TEMPERATURE_TEXT, "45");
 			m.put(VIEW_RADIO_BTN, false);
 			temperatureList.add(m);
 			m=new HashMap<String, Object>();
-			m.put(VIEW_INFO_TEXT, "Åİ¿§·È");
+			m.put(VIEW_INFO_TEXT, "æ³¡å’–å•¡");
 			m.put(VIEW_TEMPERATURE_TEXT, "75");
 			m.put(VIEW_RADIO_BTN, false);
 			temperatureList.add(m);	
 			SharedPreferences.Editor e = Utils.getSharedPpreferenceEdit(getActivity());
-					e.putString(Utils.SHARE_PREFERENCE_CUP_TEMPERATURE_MODE_INFO[0], "ÔçÉÏµÚÒ»±­Ë®ÎÂ");
+					e.putString(Utils.SHARE_PREFERENCE_CUP_TEMPERATURE_MODE_INFO[0], "æ—©ä¸Šç¬¬ä¸€æ¯æ°´æ¸©");
 					e.putString(Utils.SHARE_PREFERENCE_CUP_TEMPERATURE_MODE_VALUE[0], "45");
-					e.putString(Utils.SHARE_PREFERENCE_CUP_TEMPERATURE_MODE_INFO[1], "Åİ¿§·È");
+					e.putString(Utils.SHARE_PREFERENCE_CUP_TEMPERATURE_MODE_INFO[1], "æ³¡å’–å•¡");
 					e.putString(Utils.SHARE_PREFERENCE_CUP_TEMPERATURE_MODE_VALUE[1], "75");
 					e.commit();
 		}else{
@@ -339,7 +339,7 @@ public class FragmentWater extends Fragment {
 				tempString = (EditText) layout.findViewById(R.id.temp_input);
 				
 				final AlertDialog ad = new AlertDialog.Builder(getActivity())
-						.setPositiveButton("È·¶¨", new DialogInterface.OnClickListener() {
+						.setPositiveButton("ç¡®å®š", new DialogInterface.OnClickListener() {
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
 						
@@ -351,9 +351,9 @@ public class FragmentWater extends Fragment {
 						doUpdate();
 					}
 
-				}).setNegativeButton("È¡Ïû", null).create();
+				}).setNegativeButton("å–æ¶ˆ", null).create();
 				
-				ad.setTitle("ÎÂ¶ÈÄ£Ê½Éè¶¨");
+				ad.setTitle("æ¸©åº¦æ¨¡å¼è®¾å®š");
 				ad.setView(layout);
 				ad.show();
 				ad.getCurrentFocus();
@@ -534,7 +534,7 @@ public class FragmentWater extends Fragment {
 	
 	private Timer timer = new Timer(true);
 	public void askTemperatureFromBT(){
-		//ÈÎÎñ
+		//ä»»åŠ¡
 		TimerTask task = new TimerTask() {
 		  public void run() {
 			  //ask temp  not need to send msg  when bt return temp msg it will user setCurrentTemperatureFromBT
@@ -542,7 +542,7 @@ public class FragmentWater extends Fragment {
 			  }
 		};
 		 
-		//Æô¶¯¶¨Ê±Æ÷
+		//å¯åŠ¨å®šæ—¶å™¨
 		timer.schedule(task, 60000, 60000);
 	}
 	public void setCurrentTemperatureFromBT(int t){
@@ -634,7 +634,7 @@ public class FragmentWater extends Fragment {
 	 * @return
 	 */
 	private String getSettingMode(){
-		String settingMode="Î´Éè¶¨";
+		String settingMode="æœªè®¾å®š";
 		if(temperature_mode_index!=-1)
 		{
 			settingMode=(String)temperatureList.get(temperature_mode_index).get(VIEW_INFO_TEXT);
@@ -718,7 +718,7 @@ public class FragmentWater extends Fragment {
 	protected class TemperatureListViewAdapter extends SimpleAdapter {
 		float downX=0f;
 		float upX=0f;
-		// ÓÃÓÚ¼ÇÂ¼Ã¿¸öRadioButtonµÄ×´Ì¬£¬²¢±£Ö¤Ö»¿ÉÑ¡Ò»¸ö
+		// ç”¨äºè®°å½•æ¯ä¸ªRadioButtonçš„çŠ¶æ€ï¼Œå¹¶ä¿è¯åªå¯é€‰ä¸€ä¸ª
 		 HashMap<String, Boolean> states = new HashMap<String, Boolean>();
 		  
 		public TemperatureListViewAdapter(Context context, List<Map<String, Object>> data, int resource, String[] from,
@@ -750,9 +750,9 @@ public class FragmentWater extends Fragment {
 					//################ for delete must be carefull
 					
 					new AlertDialog.Builder(getActivity())
-					.setMessage("È·¶¨É¾³ı´ËÄ£Ê½£¿")
-			    	.setTitle("ÎÂÜ°ÌáÊ¾")
-					.setPositiveButton("È·¶¨", new DialogInterface.OnClickListener() {
+					.setMessage("ç¡®å®šåˆ é™¤æ­¤æ¨¡å¼ï¼Ÿ")
+			    	.setTitle("æ¸©é¦¨æç¤º")
+					.setPositiveButton("ç¡®å®š", new DialogInterface.OnClickListener() {
 						@Override
 						public void onClick(DialogInterface dialog, int which) {
 							temperatureList.remove(p);
@@ -775,7 +775,7 @@ public class FragmentWater extends Fragment {
 					        doUpdate();
 						}
 					})
-					.setNegativeButton("È¡Ïû", null)
+					.setNegativeButton("å–æ¶ˆ", null)
 					.create()
 					.show();
 					
@@ -789,9 +789,9 @@ public class FragmentWater extends Fragment {
 			view.setOnTouchListener(new OnTouchListener() {
 				@Override
 				public boolean onTouch(View v, MotionEvent event) {
-					switch(event.getAction())//¸ù¾İ¶¯×÷À´Ö´ĞĞ´úÂë     
+					switch(event.getAction())//æ ¹æ®åŠ¨ä½œæ¥æ‰§è¡Œä»£ç      
                     {    
-                    case MotionEvent.ACTION_MOVE://»¬¶¯     
+                    case MotionEvent.ACTION_MOVE://æ»‘åŠ¨     
                     	int moveX = (int) event.getX(); 
                     	int deltaX=(int)(downX-moveX);
                     	if(deltaX<40&&deltaX>0){
@@ -799,10 +799,10 @@ public class FragmentWater extends Fragment {
                     		v.scrollBy(deltaX, 0);
                     	}
                         break;    
-                    case MotionEvent.ACTION_DOWN://°´ÏÂ     
+                    case MotionEvent.ACTION_DOWN://æŒ‰ä¸‹     
                         downX = event.getX();  
                         break;    
-                    case MotionEvent.ACTION_UP://ËÉ¿ª     
+                    case MotionEvent.ACTION_UP://æ¾å¼€     
                         upX = event.getX();  
 //                        Toast.makeText(context, "up..." + Math.abs(UpX-DownX), Toast.LENGTH_SHORT).show();  
                         Utils.Log("xxxxxxxxxxxxxxxxxx downX-upX:" + (downX-upX));
@@ -916,7 +916,7 @@ public class FragmentWater extends Fragment {
 					tempString.setText(setTemperature+"");
 					
 					final AlertDialog ad = new AlertDialog.Builder(getActivity())
-							.setPositiveButton("È·¶¨", new DialogInterface.OnClickListener() {
+							.setPositiveButton("ç¡®å®š", new DialogInterface.OnClickListener() {
 						@Override
 						public void onClick(DialogInterface dialog, int which) {
 							
@@ -939,9 +939,9 @@ public class FragmentWater extends Fragment {
 							}
 						}
 
-					}).setNegativeButton("È¡Ïû", null).create();
+					}).setNegativeButton("å–æ¶ˆ", null).create();
 					
-					ad.setTitle("ÎÂ¶ÈÄ£Ê½Éè¶¨");
+					ad.setTitle("æ¸©åº¦æ¨¡å¼è®¾å®š");
 					ad.setView(layout);
 					ad.show();
 					ad.getCurrentFocus();
@@ -1056,7 +1056,7 @@ public class FragmentWater extends Fragment {
 			// there is a bug   some time the progressdialog wont show!!!!   fix it   onDestroy set pd=null  i dont know why,but it work     12:14 it doesnot work
 			//TODO  idon know why and how fuck!
 			pd = new ProgressDialog(getActivity());
-			pd.setMessage("ÕıÔÚÏÂ´ïÖ¸Áî£¬ÇëÉÔºò...");
+			pd.setMessage("æ­£åœ¨ä¸‹è¾¾æŒ‡ä»¤ï¼Œè¯·ç¨å€™...");
 			pd.setCancelable(false);
 		}
 		if(!pd.isShowing())
@@ -1080,7 +1080,7 @@ public class FragmentWater extends Fragment {
 		if(temp_index!=-1){
 			mHandler.removeMessages(MSG_STOP_SEND);
 			temperature_mode_index = temp_index;
-			// ÖØÖÃ£¬È·±£×î¶àÖ»ÓĞÒ»Ïî±»Ñ¡ÖĞ
+			// é‡ç½®ï¼Œç¡®ä¿æœ€å¤šåªæœ‰ä¸€é¡¹è¢«é€‰ä¸­
 			for (Map<String, Object> m : temperatureList) {
 				m.put(VIEW_RADIO_BTN, false);
 			}

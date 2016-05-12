@@ -36,6 +36,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.BaseAdapter;
@@ -729,13 +730,15 @@ public class FragmentWater extends Fragment {
 		public View getView(int position, View convertView, ViewGroup parent) {
 			View view = super.getView(position, convertView, parent);
 //			view.setOnClickListener(new MyListener(position));
+			MyListener ml=new MyListener(position);
 			
 			final int p=position;
 			final RadioButton radio=(RadioButton) view.findViewById(R.id.radio_btn);  
-			radio.setOnClickListener(new MyListener(position));
+			radio.setOnClickListener(ml);
 			
 			RelativeLayout temperature_mode_info=(RelativeLayout) view.findViewById(R.id.temperature_mode_info);  
-			temperature_mode_info.setOnClickListener(new MyListener(position));
+			temperature_mode_info.setOnClickListener(ml);
+			temperature_mode_info.setOnLongClickListener(ml);
 			if(position==temperature_mode_index){
 				temperature_mode_info.setBackground(getResources().getDrawable(R.drawable.list_item_shape_select));
 			}
@@ -822,7 +825,7 @@ public class FragmentWater extends Fragment {
 		@Override
 		public void notifyDataSetChanged() {
 			//0 ,show a waiting dialog
-			
+
 			//1, send request to cup
 			
 			//2  update the mode select
@@ -860,7 +863,7 @@ public class FragmentWater extends Fragment {
 
 	}
 
-	private class MyListener implements OnClickListener {
+	private class MyListener implements OnClickListener,OnLongClickListener {
 		int mPosition;
 
 		public MyListener(int inPosition) {
@@ -882,36 +885,189 @@ public class FragmentWater extends Fragment {
 					RadioButton rb=(RadioButton)v;
 					rb.setChecked(false);
 				}
-				// set the select temperature
+				//1 get the select temperature and info
 				int setTemperature = Integer
 						.parseInt((String) temperatureList.get(mPosition).get(VIEW_TEMPERATURE_TEXT));
 				String temperatureInfo=(String) temperatureList.get(mPosition).get(VIEW_INFO_TEXT);
-				//1,send to BT
-				((MainActivity) getActivity()).sentSetTemperature(setTemperature);
-				//2,send to Server
-				saveTemperatureAction(setTemperature,temperatureInfo);
+				//2 send the select temperature to bt and server   and  show waiting dialog
+				setSelectTemperatureFromMode(setTemperature,temperatureInfo);
+				//3 set select
 				temp_index = mPosition;
-				Utils.Log(" onclick 1:"+temp_index);
-				if(pd==null){
-					// there is a bug   some time the progressdialog wont show!!!!   fix it   onDestroy set pd=null  i dont know why,but it work     12:14 it doesnot work
-					//TODO  idon know why and how fuck!
-					Utils.Log(" onclick 2:");
-					pd = new ProgressDialog(getActivity());
-					pd.setMessage("正在下达指令，请稍候...");
-					pd.setCancelable(false);
-				}
-				if(!pd.isShowing())
-				{
-					Utils.Log(" onclick 3:");
-					pd.show();
-					// Stops sending after a pre-defined period.
-					Message msg = new Message();
-					msg.what = MSG_STOP_SEND;
-					msg.arg1 = temp_index;
-					mHandler.sendMessageDelayed(msg, SEND_PERIOD);
-					
-				}
+				
 			}
+		}
+
+
+		@Override
+		public boolean onLongClick(View v) {
+			Utils.Log(" onLongClick  edit the temperature ");
+			//1 edit name and temperature
+			int setTemperature = Integer
+					.parseInt((String) temperatureList.get(mPosition).get(VIEW_TEMPERATURE_TEXT));
+			String temperatureInfo=(String) temperatureList.get(mPosition).get(VIEW_INFO_TEXT);
+			Utils.Log(" onLongClick   temperature="+setTemperature+",temperatureInfo"+temperatureInfo);
+
+					LayoutInflater inflater = getActivity().getLayoutInflater();
+					final View layout = inflater.inflate(R.layout.tab_water_select_dialog,
+							(ViewGroup) v.findViewById(R.id.dialog));
+					infoString = (EditText) layout.findViewById(R.id.info_input);
+					tempString = (EditText) layout.findViewById(R.id.temp_input);
+					infoString.setText(temperatureInfo);
+					tempString.setText(setTemperature+"");
+					
+					final AlertDialog ad = new AlertDialog.Builder(getActivity())
+							.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							
+							Map<String, Object> m=new HashMap<String, Object>();
+							m.put(VIEW_INFO_TEXT, infoString.getText().toString());
+							m.put(VIEW_TEMPERATURE_TEXT, tempString.getText().toString());
+							m.put(VIEW_RADIO_BTN, false);
+							//temperatureList.add(m);
+							//replace
+							temperatureList.set(mPosition, m);
+							doUpdate();
+							
+							//current select  resent to set temp          same as onclick
+							if(temperature_mode_index==mPosition){
+								int editedTemperature = Integer.parseInt(tempString.getText().toString());
+								//2 send the select temperature to bt and server   and  show waiting dialog
+								setSelectTemperatureFromMode(editedTemperature,tempString.getText().toString());
+								//3 set select
+								temp_index = mPosition;
+							}
+						}
+
+					}).setNegativeButton("取消", null).create();
+					
+					ad.setTitle("温度模式设定");
+					ad.setView(layout);
+					ad.show();
+					ad.getCurrentFocus();
+					
+					try {  
+					    Field mAlert = AlertDialog.class.getDeclaredField("mAlert");  
+					    mAlert.setAccessible(true);  
+					    Object alertController = mAlert.get(ad);  
+					  
+					    Field mTitleView = alertController.getClass().getDeclaredField("mTitleView");  
+					    mTitleView.setAccessible(true);  
+					  
+					    TextView title = (TextView) mTitleView.get(alertController);  
+//					    title.setTextColor(0xffff0022);   
+//					    title.setGravity(Gravity.CENTER);
+					} catch (NoSuchFieldException e) {  
+					    e.printStackTrace();  
+					} catch (IllegalArgumentException e) {  
+					    e.printStackTrace();  
+					} catch (IllegalAccessException e) {  
+					    e.printStackTrace();  
+					}  
+					
+					Button adPosiButton=ad.getButton(AlertDialog.BUTTON_POSITIVE);
+					//adPosiButton.setEnabled(false);
+					
+					Message msg=new Message();
+					msg.what=MSG_SHOW_IM;
+					msg.arg1=1;
+					mHandler.sendMessage(msg);
+					/*adPosiButton.setBackground(getActivity().getResources().getDrawable(R.drawable.long_button_selector));
+					 LinearLayout.LayoutParams lp1=new LinearLayout.LayoutParams(
+								LinearLayout.LayoutParams.WRAP_CONTENT,
+								LinearLayout.LayoutParams.WRAP_CONTENT);
+					 lp1.setMargins(50, 0, 0, 0);
+					adPosiButton.setLayoutParams(lp1);
+					
+					LinearLayout l=	(LinearLayout) adPosiButton.getParent();
+					l.setGravity(Gravity.CENTER);
+					l.setBackground(null);
+					l.setDividerDrawable(null);
+					
+					Button adNegaButton=ad.getButton(AlertDialog.BUTTON_NEGATIVE);
+					adNegaButton.setEnabled(false);
+					adNegaButton.setBackground(getActivity().getResources().getDrawable(R.drawable.long_button_selector));
+					 LinearLayout.LayoutParams lp2=new LinearLayout.LayoutParams(
+								LinearLayout.LayoutParams.WRAP_CONTENT,
+								LinearLayout.LayoutParams.WRAP_CONTENT);
+					 lp2.setMargins(0, 0, 50, 0);
+					adNegaButton.setLayoutParams(lp2);*/
+					
+					tempString.addTextChangedListener(new TextWatcher() {
+						@Override
+						public void onTextChanged(CharSequence s, int start, int before, int count) {
+						}
+						@Override
+						public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+						}
+						@Override
+						public void afterTextChanged(Editable s) {
+							ad.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
+							if(s!=null&&!"".equals(s.toString())){
+								try {
+								int a=Integer.parseInt(s.toString());
+								String info_text=infoString.getText().toString();
+								if(a<=80&&a>=20&&!TextUtils.isEmpty(info_text)){
+									ad.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);
+								}
+								} catch (Exception e) {
+									// i dont care this error
+								}							
+							}
+						}
+					});
+					infoString.addTextChangedListener(new TextWatcher() {
+						@Override
+						public void onTextChanged(CharSequence s, int start, int before, int count) {
+						}
+						@Override
+						public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+						}
+						@Override
+						public void afterTextChanged(Editable s) {
+							ad.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
+							if(s!=null&&!"".equals(s.toString())){
+								try {
+								String temp_text=tempString.getText().toString();
+								int a=Integer.parseInt(temp_text.toString());
+								if(a<=80&&a>=20&&!TextUtils.isEmpty(s)){
+									ad.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);
+								}
+								} catch (Exception e) {
+									// i dont care this error
+								}							
+							}
+						}
+					});
+			
+			return true;
+		}
+	}
+	
+	private void setSelectTemperatureFromMode(int temp,String info){
+		//1 send to BT
+		((MainActivity) getActivity()).sentSetTemperature(temp);
+		
+		//2 send to Server
+		saveTemperatureAction(temp,info);
+		
+		//3,show waiting dialog
+		if(pd==null){
+			// there is a bug   some time the progressdialog wont show!!!!   fix it   onDestroy set pd=null  i dont know why,but it work     12:14 it doesnot work
+			//TODO  idon know why and how fuck!
+			pd = new ProgressDialog(getActivity());
+			pd.setMessage("正在下达指令，请稍候...");
+			pd.setCancelable(false);
+		}
+		if(!pd.isShowing())
+		{
+			pd.show();
+			// Stops sending after a pre-defined period.
+			Message msg2 = new Message();
+			msg2.what = MSG_STOP_SEND;
+			msg2.arg1 = temp_index;
+			mHandler.sendMessageDelayed(msg2, SEND_PERIOD);
+			
 		}
 	}
 	

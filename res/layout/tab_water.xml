@@ -40,7 +40,7 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         ptr:ptrAnimationStyle="flip"
-        ptr:ptrMode="both" >
+        ptr:ptrMode="pullFromStart" >
 
     <LinearLayout
         android:layout_width="fill_parent"

@@ -33,6 +33,15 @@
             android:textSize="20sp" />
     </RelativeLayout>
 
+         
+    <com.handmark.pulltorefresh.library.PullToRefreshScrollView
+        xmlns:ptr="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/pull_refresh_scrollview"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        ptr:ptrAnimationStyle="flip"
+        ptr:ptrMode="both" >
+
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
@@ -298,5 +307,6 @@
             </ScrollView>
         </FrameLayout>
     </LinearLayout>
-
+    
+    </com.handmark.pulltorefresh.library.PullToRefreshScrollView>
 </LinearLayout>

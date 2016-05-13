@@ -28,7 +28,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="水温"
+            android:text="恒温提醒"
             android:textColor="@android:color/white"
             android:textSize="20sp" />
     </RelativeLayout>

@@ -51,7 +51,7 @@
             android:inputType="number"
             android:maxLength="2"
             android:minWidth="100dip"
-            android:hint="20-80"
+            android:hint="20-70"
              android:labelFor="@id/temp_input" />
          <TextView
             android:layout_width="wrap_content"

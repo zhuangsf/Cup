@@ -419,7 +419,7 @@ public class FragmentWater extends Fragment {
 							try {
 							int a=Integer.parseInt(s.toString());
 							String info_text=infoString.getText().toString();
-							if(a<=80&&a>=20&&!TextUtils.isEmpty(info_text)){
+							if(a<=70&&a>=20&&!TextUtils.isEmpty(info_text)){
 								ad.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);
 							}
 							} catch (Exception e) {
@@ -442,7 +442,7 @@ public class FragmentWater extends Fragment {
 							try {
 							String temp_text=tempString.getText().toString();
 							int a=Integer.parseInt(temp_text.toString());
-							if(a<=80&&a>=20&&!TextUtils.isEmpty(s)){
+							if(a<=70&&a>=20&&!TextUtils.isEmpty(s)){
 								ad.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);
 							}
 							} catch (Exception e) {
@@ -1007,7 +1007,7 @@ public class FragmentWater extends Fragment {
 								try {
 								int a=Integer.parseInt(s.toString());
 								String info_text=infoString.getText().toString();
-								if(a<=80&&a>=20&&!TextUtils.isEmpty(info_text)){
+								if(a<=70&&a>=20&&!TextUtils.isEmpty(info_text)){
 									ad.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);
 								}
 								} catch (Exception e) {
@@ -1030,7 +1030,7 @@ public class FragmentWater extends Fragment {
 								try {
 								String temp_text=tempString.getText().toString();
 								int a=Integer.parseInt(temp_text.toString());
-								if(a<=80&&a>=20&&!TextUtils.isEmpty(s)){
+								if(a<=70&&a>=20&&!TextUtils.isEmpty(s)){
 									ad.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);
 								}
 								} catch (Exception e) {

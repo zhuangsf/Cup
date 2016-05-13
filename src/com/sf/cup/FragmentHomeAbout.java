@@ -74,11 +74,11 @@ public class FragmentHomeAbout extends Fragment {
 		@Override
 		public void onClick(View v) {
 			if (GO_WEB_INDEX == mPosition) {
-				Uri uri = Uri.parse("http://www.baidu.com");
+				Uri uri = Uri.parse("http://www.8amcup.com");
 				Intent it = new Intent(Intent.ACTION_VIEW, uri);
 				startActivity(it);
 			} else if (GO_BUY_INDEX == mPosition) {
-				Uri uri = Uri.parse("http://www.taobao.com");
+				Uri uri = Uri.parse("https://shop152288103.taobao.com");
 				Intent it = new Intent(Intent.ACTION_VIEW, uri);
 				startActivity(it);
 			}

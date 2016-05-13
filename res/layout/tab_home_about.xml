@@ -100,7 +100,7 @@
                 android:layout_height="60dp"
                 android:background="@drawable/cup_light_gray"
                 android:gravity="center"
-                android:text="杭州未蓝智能科技有限公司\n杭州市萧山区兴五路237号\n400-666-7566"
+                android:text="杭州市萧山区北干科创园\n电话：0571-87703609"
                 android:textSize="7pt" >
             </TextView>
         </LinearLayout>

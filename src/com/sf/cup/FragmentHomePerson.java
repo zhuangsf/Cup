@@ -36,6 +36,7 @@ import android.provider.MediaStore;
 import android.text.InputFilter;
 import android.text.InputType;
 import android.text.TextUtils;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -44,6 +45,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -445,11 +447,21 @@ public class FragmentHomePerson extends Fragment {
 				break;
 			case 0:
 			case 1:
-				if(mPosition==0){
+				if (mPosition == 0) {
 					person_info.setHint("公司");
+					LinearLayout pd = (LinearLayout) layout.findViewById(R.id.pre_define);
+					pd.addView(addPredefineButton("办公室"));
+					pd.addView(addPredefineButton("家里"));
+					pd.addView(addPredefineButton("户外"));
+					pd.addView(addPredefineButton("车载"));
+
 				}else if(mPosition==1)
 				{
 					person_info.setHint("健康");
+					LinearLayout pd = (LinearLayout) layout.findViewById(R.id.pre_define);
+					pd.addView(addPredefineButton("易出汗"));
+					pd.addView(addPredefineButton("少出汗"));
+					pd.addView(addPredefineButton("正常"));
 				}
 				person_info.setFilters(new InputFilter[] { new InputFilter.LengthFilter(5) });
 				ad = new AlertDialog.Builder(getActivity())
@@ -500,6 +512,27 @@ public class FragmentHomePerson extends Fragment {
 			}
 		}
 
+	}
+	
+	
+	private TextView addPredefineButton(String text){
+		final TextView btn = new TextView(getActivity());
+		LinearLayout.LayoutParams layoutParams =new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        layoutParams.setMargins(0, 5, 0, 5);
+        btn.setLayoutParams(layoutParams);
+        btn.setGravity(Gravity.CENTER);
+        btn.setMinWidth(100);
+        btn.setTextSize(TypedValue.COMPLEX_UNIT_PX,25);
+		btn.setText(text);
+		btn.setTextColor(0xFFFFFFFF);
+		btn.setBackground(getResources().getDrawable(R.drawable.predefine_shape));
+		btn.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				person_info.setText(btn.getText());
+			}
+		});
+		return btn;
 	}
 
 	public void setHeight(BaseAdapter comAdapter, ListView l) {

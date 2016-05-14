@@ -8,7 +8,7 @@
 
      <LinearLayout
             android:layout_width="fill_parent"
-            android:layout_height="10dp"
+            android:layout_height="30dp"
             android:background="@null" >
         </LinearLayout>
 
@@ -39,5 +39,16 @@
             android:layout_height="wrap_content"
             android:text="" />
     </LinearLayout>
+    
+    
+     <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="15dp"
+        android:id="@+id/pre_define"
+        android:gravity="center"
+        android:orientation="vertical" >
+         </LinearLayout>
 
 </LinearLayout>

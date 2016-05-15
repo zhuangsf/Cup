@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.tencent.bugly.crashreport.CrashReport;
+
 import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;

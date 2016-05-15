@@ -8,6 +8,7 @@ import java.util.UUID;
 import com.sf.cup.guide.GuideView;
 import com.sf.cup.login.LoginActivity;
 import com.sf.cup.utils.Utils;
+import com.tencent.bugly.crashreport.CrashReport;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -397,6 +398,8 @@ public class MainActivity extends Activity {
 		startFromAlarm(getIntent());
 
 	
+		//add bugly
+		CrashReport.initCrashReport(getApplicationContext(), "900029797", false);
 	}
 
 	@Override

@@ -24,6 +24,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -45,7 +46,6 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -188,6 +188,14 @@ public class FragmentHomePerson extends Fragment {
 
 		return view;
 	}
+	
+	//save and edit  pic uri can not be same  or it will 0byte
+	private Uri getTakePicSaveUri(){
+		return Uri.fromFile(new File(Environment.getExternalStorageDirectory(), IMAGE_FILE_NAME));
+	}
+	private Uri getCropPicSaveUri(){
+		return Uri.fromFile(new File(Environment.getExternalStorageDirectory()+"/8CUP", IMAGE_FILE_NAME));
+	}
 
 	// 为弹出窗口实现监听类
 	private OnClickListener itemsOnClick = new OnClickListener() {
@@ -199,8 +207,7 @@ public class FragmentHomePerson extends Fragment {
 			case R.id.takePhotoBtn:
 				Intent takeIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 				// 下面这句指定调用相机拍照后的照片存储的路径
-				takeIntent.putExtra(MediaStore.EXTRA_OUTPUT,
-						Uri.fromFile(new File(Environment.getExternalStorageDirectory(), IMAGE_FILE_NAME)));
+				takeIntent.putExtra(MediaStore.EXTRA_OUTPUT,getTakePicSaveUri());
 				startActivityForResult(takeIntent, REQUESTCODE_TAKE);
 				break;
 			// 相册选择图片
@@ -227,8 +234,7 @@ public class FragmentHomePerson extends Fragment {
 			}
 			break;
 		case REQUESTCODE_TAKE:// 调用相机拍照
-			File temp = new File(Environment.getExternalStorageDirectory() + "/" + IMAGE_FILE_NAME);
-			startPhotoZoom(Uri.fromFile(temp));
+			startPhotoZoom(getTakePicSaveUri());
 			break;
 		case REQUESTCODE_CUTTING:// 取得裁剪后的图片
 			if (data != null) {
@@ -249,13 +255,18 @@ public class FragmentHomePerson extends Fragment {
 		intent.setDataAndType(uri, "image/*");
 		// crop=true是设置在开启的Intent中设置显示的VIEW可裁剪
 		intent.putExtra("crop", "true");
+		intent.putExtra("scale", true);// 去黑边
 		// aspectX aspectY 是宽高的比例
 		intent.putExtra("aspectX", 1);
 		intent.putExtra("aspectY", 1);
 		// outputX outputY 是裁剪图片宽高
 		intent.putExtra("outputX", 300);
 		intent.putExtra("outputY", 300);
-		intent.putExtra("return-data", true);
+		// the return data  true   may waste logs of mem
+		intent.putExtra("return-data", false);
+		intent.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString());
+		intent.putExtra("noFaceDetection", true);
+		intent.putExtra(MediaStore.EXTRA_OUTPUT, getCropPicSaveUri());
 		startActivityForResult(intent, REQUESTCODE_CUTTING);
 	}
 
@@ -268,7 +279,8 @@ public class FragmentHomePerson extends Fragment {
 		Bundle extras = picdata.getExtras();
 		if (extras != null) {
 			// 取得SDCard图片路径做显示
-			Bitmap photo = extras.getParcelable("data");
+			//Bitmap photo = extras.getParcelable("data");
+			Bitmap photo =getBitmapFromUri(getCropPicSaveUri(),getActivity());
 			Drawable drawable = new BitmapDrawable(null, photo);
 			urlpath = FileUtil.saveFile(getActivity(), "avatar.jpg", photo);
 			SharedPreferences.Editor e = Utils.getSharedPpreferenceEdit(getActivity());
@@ -286,7 +298,8 @@ public class FragmentHomePerson extends Fragment {
 					public void run() {
 						SharedPreferences p = Utils.getSharedPpreference(getActivity());
 						final String phone = p.getString(Utils.SHARE_PREFERENCE_CUP_PHONE, "");
-						final String accountid = p.getString(Utils.SHARE_PREFERENCE_CUP_ACCOUNTID, "");			
+						final String accountid = p.getString(Utils.SHARE_PREFERENCE_CUP_ACCOUNTID, "");		
+						
 						// http://121.199.75.79:8280//user/updateProfile.do
 						if(!TextUtils.isEmpty(urlpath)){
 							Utils.httpPostFile(Utils.URL_PATH +"/user/updateProfile.do", urlpath, mHandler,accountid,phone);
@@ -302,6 +315,23 @@ public class FragmentHomePerson extends Fragment {
 			// new Thread(uploadImageRunnable).start();
 		}
 	}
+	
+	
+	public static Bitmap getBitmapFromUri(Uri uri,Context mContext)
+	 {
+	  try
+	  {
+	   // 读取uri所在的图片
+	   Bitmap bitmap = BitmapFactory.decodeStream(mContext.getContentResolver().openInputStream(uri));
+	   bitmap = MediaStore.Images.Media.getBitmap(mContext.getContentResolver(), uri);
+	   return bitmap;
+	  }
+	  catch (Exception e)
+	  {
+	   e.printStackTrace();
+	   return null;
+	  }
+	 }
 
 	private class PersonListViewAdapter1 extends SimpleAdapter {
 		public PersonListViewAdapter1(Context context, List<Map<String, Object>> data, int resource, String[] from,

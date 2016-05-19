@@ -10,13 +10,21 @@
         android:layout_height="fill_parent"
         android:orientation="vertical" >
 
-        <ImageView
+        <!-- <ImageView
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:src="@drawable/feature_guide_2"
 			android:scaleType="centerCrop"
 		>
         </ImageView>
+         -->
+         
+         <pl.droidsonroids.gif.GifImageView
+	    android:layout_width="match_parent"
+	    android:layout_height="match_parent"
+	    android:src="@drawable/guide3"
+	    android:background="@drawable/guide3"
+	    />
     </LinearLayout>
 
     <LinearLayout

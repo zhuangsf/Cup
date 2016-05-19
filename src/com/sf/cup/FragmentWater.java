@@ -38,7 +38,6 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.View.MeasureSpec;
 import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
@@ -219,6 +218,7 @@ public class FragmentWater extends Fragment {
 			mp.start();
 			// 音乐播放完毕的事件处理
 			mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+				@Override
 				public void onCompletion(MediaPlayer mp) {
 					// 循环播放
 					try {
@@ -237,6 +237,7 @@ public class FragmentWater extends Fragment {
 			});
 			// 播放音乐时发生错误的事件处理
 			mp.setOnErrorListener(new MediaPlayer.OnErrorListener() {
+				@Override
 				public boolean onError(MediaPlayer mp, int what, int extra) {
 					// 释放资源
 					try {
@@ -389,7 +390,7 @@ public class FragmentWater extends Fragment {
 				    e.printStackTrace();  
 				}  
 				
-				Button adPosiButton=ad.getButton(AlertDialog.BUTTON_POSITIVE);
+				Button adPosiButton=ad.getButton(DialogInterface.BUTTON_POSITIVE);
 				adPosiButton.setEnabled(false);
 				
 				Message msg=new Message();
@@ -426,13 +427,13 @@ public class FragmentWater extends Fragment {
 					}
 					@Override
 					public void afterTextChanged(Editable s) {
-						ad.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
+						ad.getButton(DialogInterface.BUTTON_POSITIVE).setEnabled(false);
 						if(s!=null&&!"".equals(s.toString())){
 							try {
 							int a=Integer.parseInt(s.toString());
 							String info_text=infoString.getText().toString();
 							if(a<=70&&a>=20&&!TextUtils.isEmpty(info_text)){
-								ad.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);
+								ad.getButton(DialogInterface.BUTTON_POSITIVE).setEnabled(true);
 							}
 							} catch (Exception e) {
 								// i dont care this error
@@ -449,13 +450,13 @@ public class FragmentWater extends Fragment {
 					}
 					@Override
 					public void afterTextChanged(Editable s) {
-						ad.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
+						ad.getButton(DialogInterface.BUTTON_POSITIVE).setEnabled(false);
 						if(s!=null&&!"".equals(s.toString())){
 							try {
 							String temp_text=tempString.getText().toString();
 							int a=Integer.parseInt(temp_text.toString());
 							if(a<=70&&a>=20&&!TextUtils.isEmpty(s)){
-								ad.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);
+								ad.getButton(DialogInterface.BUTTON_POSITIVE).setEnabled(true);
 							}
 							} catch (Exception e) {
 								// i dont care this error
@@ -589,7 +590,8 @@ public class FragmentWater extends Fragment {
 	public void askTemperatureFromBT(){
 		//任务
 		TimerTask task = new TimerTask() {
-		  public void run() {
+		  @Override
+		public void run() {
 			  //ask temp  not need to send msg  when bt return temp msg it will user setCurrentTemperatureFromBT
 			  ((MainActivity)getActivity()).sentAskTemperature();
 			  }
@@ -1018,7 +1020,7 @@ public class FragmentWater extends Fragment {
 					    e.printStackTrace();  
 					}  
 					
-					Button adPosiButton=ad.getButton(AlertDialog.BUTTON_POSITIVE);
+					Button adPosiButton=ad.getButton(DialogInterface.BUTTON_POSITIVE);
 					//adPosiButton.setEnabled(false);
 					
 					Message msg=new Message();
@@ -1055,13 +1057,13 @@ public class FragmentWater extends Fragment {
 						}
 						@Override
 						public void afterTextChanged(Editable s) {
-							ad.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
+							ad.getButton(DialogInterface.BUTTON_POSITIVE).setEnabled(false);
 							if(s!=null&&!"".equals(s.toString())){
 								try {
 								int a=Integer.parseInt(s.toString());
 								String info_text=infoString.getText().toString();
 								if(a<=70&&a>=20&&!TextUtils.isEmpty(info_text)){
-									ad.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);
+									ad.getButton(DialogInterface.BUTTON_POSITIVE).setEnabled(true);
 								}
 								} catch (Exception e) {
 									// i dont care this error
@@ -1078,13 +1080,13 @@ public class FragmentWater extends Fragment {
 						}
 						@Override
 						public void afterTextChanged(Editable s) {
-							ad.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
+							ad.getButton(DialogInterface.BUTTON_POSITIVE).setEnabled(false);
 							if(s!=null&&!"".equals(s.toString())){
 								try {
 								String temp_text=tempString.getText().toString();
 								int a=Integer.parseInt(temp_text.toString());
 								if(a<=70&&a>=20&&!TextUtils.isEmpty(s)){
-									ad.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);
+									ad.getButton(DialogInterface.BUTTON_POSITIVE).setEnabled(true);
 								}
 								} catch (Exception e) {
 									// i dont care this error

@@ -102,7 +102,7 @@ public class DeviceScanActivity extends Activity {
 						if(!isFindBtDevices){
 							alertDialog.show();
 							
-							alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setOnLongClickListener(new OnLongClickListener() {
+							alertDialog.getButton(DialogInterface.BUTTON_NEGATIVE).setOnLongClickListener(new OnLongClickListener() {
 								@Override
 								public boolean onLongClick(View v) {
 									  Intent intent=new Intent();  

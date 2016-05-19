@@ -192,7 +192,8 @@ public class DeviceControlActivity extends Activity {
                             ad1.setTitle("WriteCharacteristic");
                             ad1.setView(textEntryView);
                             ad1.setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int i) {
+                                @Override
+								public void onClick(DialogInterface dialog, int i) {
                                     byte[] value = new byte[20];
                                     value[0] = (byte) 0x00;
                                     if(editTextName.getText().length() > 0){
@@ -210,7 +211,8 @@ public class DeviceControlActivity extends Activity {
                                 }
                             });
                             ad1.setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int i) {
+                                @Override
+								public void onClick(DialogInterface dialog, int i) {
 
                                 }
                             });

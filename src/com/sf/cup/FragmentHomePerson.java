@@ -547,7 +547,7 @@ public class FragmentHomePerson extends Fragment {
 	
 	private TextView addPredefineButton(String text){
 		final TextView btn = new TextView(getActivity());
-		LinearLayout.LayoutParams layoutParams =new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+		LinearLayout.LayoutParams layoutParams =new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
         layoutParams.setMargins(0, 5, 0, 5);
         btn.setLayoutParams(layoutParams);
         btn.setGravity(Gravity.CENTER);

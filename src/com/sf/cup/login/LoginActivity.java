@@ -247,6 +247,7 @@ public class LoginActivity extends Activity {
             	final String avatarPath=p.getString(Utils.SHARE_PREFERENCE_CUP_AVATAR, "");
             	if(!TextUtils.isEmpty(avatar)&&TextUtils.isEmpty(avatarPath)){
             		new Thread(new Runnable() {
+						@Override
 						public void run() {
 							File f=Utils.downLoadFile(avatar,Environment.getExternalStorageDirectory() + "/8CUP/web/","avatar.jpg");
 							SharedPreferences.Editor e=Utils.getSharedPpreferenceEdit(LoginActivity.this);

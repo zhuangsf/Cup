@@ -88,11 +88,13 @@ public class CircleWaveView extends View implements Runnable {
 		started = false;
 	}
 
+	@Override
 	protected void onDetachedFromWindow() {
 		super.onDetachedFromWindow();
 		stop();
 	}
 
+	@Override
 	protected void onDraw(Canvas canvas) {
 		super.onDraw(canvas);
 		if (maxRadius <= 0.0F) {
@@ -116,6 +118,7 @@ public class CircleWaveView extends View implements Runnable {
 		canvas.drawCircle(centerX, centerY, 10, mSolidPaint);
 	}
 
+	@Override
 	public void onWindowFocusChanged(boolean hasWindowFocus) {
 		super.onWindowFocusChanged(hasWindowFocus);
 		if (hasWindowFocus) {
@@ -126,6 +129,7 @@ public class CircleWaveView extends View implements Runnable {
 		}
 	}
 
+	@Override
 	public void run() {
 		while (started) {
 			floatRadius = 4.0F + floatRadius;

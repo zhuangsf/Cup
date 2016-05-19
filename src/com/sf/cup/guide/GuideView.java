@@ -21,6 +21,7 @@ import android.view.ViewGroup.LayoutParams;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
+import pl.droidsonroids.gif.GifImageButton;
 
 public class GuideView extends Activity{
 	     private ViewPager viewPager;  
@@ -40,7 +41,7 @@ public class GuideView extends Activity{
 	        pageViews.add(inflater.inflate(R.layout.item02, null));  
 	        pageViews.add(inflater.inflate(R.layout.item03, null));  
 	        pageViews.add(inflater.inflate(R.layout.item04, null));  
-//	        pageViews.add(inflater.inflate(R.layout.item05, null));
+	        pageViews.add(inflater.inflate(R.layout.item05, null));
 //	        pageViews.add(inflater.inflate(R.layout.item06, null));
 	        imageViews = new ImageView[pageViews.size()];  
 	        main = (ViewGroup)inflater.inflate(R.layout.guideview, null);  
@@ -63,6 +64,8 @@ public class GuideView extends Activity{
 	        viewPager.setAdapter(new GuidePageAdapter());  
 	        viewPager.setOnPageChangeListener(new GuidePageChangeListener()); 
 	        
+	        
+	        GifImageButton a;
 	      /* ((TextView) main.findViewById(R.id.skip)).setOnClickListener(new View.OnClickListener() {
 	           	@Override
 	           	public void onClick(View arg0) {

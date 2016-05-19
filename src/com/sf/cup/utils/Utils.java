@@ -23,7 +23,6 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.conn.ConnectTimeoutException;
-import org.apache.http.entity.FileEntity;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.entity.mime.HttpMultipartMode;
 import org.apache.http.entity.mime.MultipartEntity;
@@ -86,6 +85,7 @@ public class Utils {
 	 * upload to server  when avatar modify
 	 * @deprecated
 	 */
+	@Deprecated
 	public static final String SHARE_PREFERENCE_CUP_AVATAR_IS_MODIFY="AVATAR_IS_MODIFY"; //true:after modify and wont upload 
 	public static final String SHARE_PREFERENCE_CUP_AVATAR_WEB_PATH="AVATAR_WEB_PATH";//for web    fix the server  
 	

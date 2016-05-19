@@ -1,6 +1,5 @@
 package com.sf.cup;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -31,23 +30,14 @@ import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.media.MediaPlayer;
-import android.media.RingtoneManager;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
-import android.os.SystemClock;
 import android.text.TextUtils;
-import android.util.Log;
-import android.view.MotionEvent;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.Button;
 import android.widget.ExpandableListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.TextView;
 import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.Toast;
 
@@ -589,6 +579,7 @@ public class MainActivity extends Activity {
 	private void initView() {
 		myTabRg = (RadioGroup) findViewById(R.id.tab_menu);
 		myTabRg.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+			@Override
 			public void onCheckedChanged(RadioGroup group, int checkedId) {
 				
 				createFragment();
@@ -715,6 +706,7 @@ public class MainActivity extends Activity {
 	
 	
 	
+	@Override
 	public void onBackPressed()
 	{
 	    int count=getFragmentManager().getBackStackEntryCount();

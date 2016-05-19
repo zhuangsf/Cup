@@ -120,7 +120,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:src="@drawable/water_status_point_focus" >
+                        android:src="@drawable/water_status_point_focus"
+                         android:visibility="gone" >
                     </ImageView>
 
                     <ImageView
@@ -155,7 +156,9 @@
                         android:layout_weight="1"
                         android:gravity="center"
                         android:text="自然温"
-                        android:textColor="@drawable/cup_pink" >
+                        android:textColor="@drawable/cup_pink"
+                        android:visibility="gone"
+                         >
                     </TextView>
 
                     <TextView

@@ -281,20 +281,27 @@ public class FragmentWater extends Fragment {
 		//isFirst must be bigger than 2 or there must be a bug 
 		Map<String, Object> m=new HashMap<String, Object>();
 		if(isFirst==2){
-			m.put(VIEW_INFO_TEXT, "早上第一杯水温");
+			m.put(VIEW_INFO_TEXT, "早上第一杯水");
 			m.put(VIEW_TEMPERATURE_TEXT, "45");
 			m.put(VIEW_RADIO_BTN, false);
 			temperatureList.add(m);
 			m=new HashMap<String, Object>();
-			m.put(VIEW_INFO_TEXT, "泡咖啡");
-			m.put(VIEW_TEMPERATURE_TEXT, "75");
+			m.put(VIEW_INFO_TEXT, "工作喝水");
+			m.put(VIEW_TEMPERATURE_TEXT, "55");
+			m.put(VIEW_RADIO_BTN, false);
+			temperatureList.add(m);
+			m=new HashMap<String, Object>();
+			m.put(VIEW_INFO_TEXT, "运动后喝水");
+			m.put(VIEW_TEMPERATURE_TEXT, "5");
 			m.put(VIEW_RADIO_BTN, false);
 			temperatureList.add(m);	
 			SharedPreferences.Editor e = Utils.getSharedPpreferenceEdit(getActivity());
-					e.putString(Utils.SHARE_PREFERENCE_CUP_TEMPERATURE_MODE_INFO[0], "早上第一杯水温");
+					e.putString(Utils.SHARE_PREFERENCE_CUP_TEMPERATURE_MODE_INFO[0], "早上第一杯水");
 					e.putString(Utils.SHARE_PREFERENCE_CUP_TEMPERATURE_MODE_VALUE[0], "45");
-					e.putString(Utils.SHARE_PREFERENCE_CUP_TEMPERATURE_MODE_INFO[1], "泡咖啡");
-					e.putString(Utils.SHARE_PREFERENCE_CUP_TEMPERATURE_MODE_VALUE[1], "75");
+					e.putString(Utils.SHARE_PREFERENCE_CUP_TEMPERATURE_MODE_INFO[1], "工作喝水");
+					e.putString(Utils.SHARE_PREFERENCE_CUP_TEMPERATURE_MODE_VALUE[1], "55");
+					e.putString(Utils.SHARE_PREFERENCE_CUP_TEMPERATURE_MODE_INFO[2], "运动后喝水");
+					e.putString(Utils.SHARE_PREFERENCE_CUP_TEMPERATURE_MODE_VALUE[2], "50");
 					e.commit();
 		}else{
 			for(int i=0;i<5;i++){

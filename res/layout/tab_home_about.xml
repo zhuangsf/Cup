@@ -101,7 +101,8 @@
                 android:background="@drawable/cup_light_gray"
                 android:gravity="center"
                 android:text="杭州市萧山区北干科创园\n电话：0571-87703609"
-                android:textSize="7pt" >
+                android:textSize="7pt"
+                android:visibility="gone" >
             </TextView>
         </LinearLayout>
     </LinearLayout>

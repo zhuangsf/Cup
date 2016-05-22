@@ -237,8 +237,10 @@ public class FragmentHomePerson extends Fragment {
 			startPhotoZoom(getTakePicSaveUri());
 			break;
 		case REQUESTCODE_CUTTING:// 取得裁剪后的图片
-			if (data != null) {
+			try {
 				setPicToView(data);
+			} catch (Exception e) {
+				e.printStackTrace();// 用户点击取消操作
 			}
 			break;
 		}

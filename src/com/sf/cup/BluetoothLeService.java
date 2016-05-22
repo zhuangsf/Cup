@@ -233,6 +233,10 @@ public class BluetoothLeService extends Service {
             Log.d(TAG, "Trying to use an existing mBluetoothGatt for connection.");
             if (mBluetoothGatt.connect()) {
                 mConnectionState = STATE_CONNECTING;
+                
+                String intentAction;
+                    intentAction = ACTION_GATT_CONNECTED;
+                    broadcastUpdate(intentAction);
                 return true;
             } else {
                 return false;

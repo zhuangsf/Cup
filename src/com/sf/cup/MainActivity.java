@@ -193,12 +193,16 @@ public class MainActivity extends Activity {
                 if(connectFailAlertDialog!=null&&connectFailAlertDialog.isShowing()){
                 	connectFailAlertDialog.dismiss();
                 }
-//                Toast.makeText(MainActivity.this, "蓝牙水杯已连接", Toast.LENGTH_SHORT).show();
+                if(progressDialog!=null&&progressDialog.isShowing()){
+   					progressDialog.dismiss();
+   					mHandler.removeMessages(MSG_STOP_WAIT_BT);//connect success remove the hint
+   		        }
+                Toast.makeText(MainActivity.this, "蓝牙水杯已连接", Toast.LENGTH_SHORT).show();
             } else if (BluetoothLeService.ACTION_GATT_DISCONNECTED.equals(action)) {
                 mConnected = false;
                 Utils.Log("xxxxxxxxxxxxxxxxxx BroadcastReceiver ACTION_GATT_DISCONNECTED mConnected:"+mConnected);
                 Toast.makeText(MainActivity.this, "蓝牙水杯已断开", Toast.LENGTH_SHORT).show();
-                if(progressDialog!=null){
+                if(progressDialog!=null&&progressDialog.isShowing()){
            					progressDialog.dismiss();
            		}
                 boolean result= MainActivity.this.reConnect();
@@ -216,7 +220,7 @@ public class MainActivity extends Activity {
                 mBluetoothLeService.setCharacteristicNotification(characteristic, true);
                 Utils.Log("xxxxxxxxxxxxxxxxxx BroadcastReceiver ACTION_GATT_SERVICES_DISCOVERED");
                 sentAskTemperature();//ask the temperature after bt discovered        may before notification?????
-                if(progressDialog!=null){
+                if(progressDialog!=null&&progressDialog.isShowing()){
   					progressDialog.dismiss();
   					Utils.Log(" mHandler.removeMessages="+mHandler.hasMessages(MSG_STOP_WAIT_BT));
   					mHandler.removeMessages(MSG_STOP_WAIT_BT);//connect success remove the hint
@@ -230,7 +234,7 @@ public class MainActivity extends Activity {
 	                if("02".equals(responeStringArray[1])){
 	                	int temp=Integer.parseInt(responeStringArray[3]+responeStringArray[2], 16);
 	                	fWater.setCurrentTemperatureFromBT(temp/10+(temp%10>=5?1:0));
-	                    if(progressDialog!=null){
+	                    if(progressDialog!=null&&progressDialog.isShowing()){
 	    					progressDialog.dismiss();
 	    				}
 	                }else if("88".equals(responeStringArray[1])){

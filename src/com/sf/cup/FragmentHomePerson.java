@@ -554,7 +554,7 @@ public class FragmentHomePerson extends Fragment {
         btn.setLayoutParams(layoutParams);
         btn.setGravity(Gravity.CENTER);
         btn.setMinWidth(100);
-        btn.setTextSize(TypedValue.COMPLEX_UNIT_PX,25);
+        //btn.setTextSize(TypedValue.COMPLEX_UNIT_PX,25);
 		btn.setText(text);
 		btn.setTextColor(0xFFFFFFFF);
 		btn.setBackground(getResources().getDrawable(R.drawable.predefine_shape));

@@ -69,7 +69,7 @@ public class FragmentWater extends Fragment {
 	View maskView;
 	LinearLayout temperature_setting;
 	boolean temperature_mode_enable=false;
-	int temperature_setting_value=00;
+	int temperature_setting_value=50; //00; what a stupid customer
 	int temperature_current_value=20;
 	int temperature_mode_index=-1;
 	

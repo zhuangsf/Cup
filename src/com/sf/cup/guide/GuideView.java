@@ -1,6 +1,9 @@
 package com.sf.cup.guide;
 
 import java.util.ArrayList;
+import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import com.sf.cup.MainActivity;
 import com.sf.cup.R;
@@ -9,6 +12,7 @@ import com.sf.cup.utils.Utils;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.v4.view.PagerAdapter;
@@ -30,6 +34,9 @@ public class GuideView extends Activity{
 	     private ImageView[] imageViews; 
 	     private ViewGroup main;
 	     private ViewGroup group;
+	     
+	     View maskView;//
+	     
 	    /** Called when the activity is first created. */
 	    @Override
 	    public void onCreate(Bundle savedInstanceState) {
@@ -76,7 +83,66 @@ public class GuideView extends Activity{
 						finish(); 
 	           	}
 	           });*/
+	        
+	        
+	        
+	      //create a mask to disable mode change
+			maskView=new View(this);
+			maskView.setLayoutParams(new ViewGroup.LayoutParams(
+			            ViewGroup.LayoutParams.FILL_PARENT,
+			            ViewGroup.LayoutParams.FILL_PARENT));
+			maskView.setBackground(getResources().getDrawable(R.drawable.guide_logo));
+			maskView.setClickable(true);// set true  to disable other view click
+			maskView.setOnClickListener(new View.OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					maskView.setVisibility(View.GONE);
+					main.removeView(maskView);
+				}
+			});
+			
+			main.addView(maskView);
+//			 dismissMaskView();
+			 new dismissMaskViewTask().execute();
+			
 	    }
+	    
+	    private Timer timer = new Timer(true);
+		public void dismissMaskView(){
+			//任务
+			TimerTask task = new TimerTask() {
+			  @Override
+			public void run() {
+				  // must do in ui thread    
+				  main.removeView(maskView);
+				  }
+			};
+			 
+			//启动定时器
+			timer.schedule(task, 2000);
+		}
+		
+		 private class dismissMaskViewTask extends AsyncTask<Void, Void, String[]> {
+
+				@Override
+				protected String[] doInBackground(Void... params) {
+					// Simulates a background job.
+					try {
+						Thread.sleep(new Random().nextInt(1000)+1500);
+					} catch (InterruptedException e) {
+					}
+					return null;
+				}
+
+				@Override
+				protected void onPostExecute(String[] result) {
+					// Do some stuff here
+					main.removeView(maskView);
+					super.onPostExecute(result);
+				}
+			}
+	    
+	    
 	    class GuidePageAdapter extends PagerAdapter {  
 	        @Override  
 	        public int getCount() {  

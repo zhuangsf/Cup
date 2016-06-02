@@ -34,7 +34,7 @@ public class GuideView extends Activity{
 	     private ImageView[] imageViews; 
 	     private ViewGroup main;
 	     private ViewGroup group;
-	     
+	     private Button buttonGo;
 	     View maskView;//
 	     
 	    /** Called when the activity is first created. */
@@ -48,12 +48,13 @@ public class GuideView extends Activity{
 	        pageViews.add(inflater.inflate(R.layout.item02, null));  
 	        pageViews.add(inflater.inflate(R.layout.item03, null));  
 	        pageViews.add(inflater.inflate(R.layout.item04, null));  
-	        pageViews.add(inflater.inflate(R.layout.item05, null));
+//	        pageViews.add(inflater.inflate(R.layout.item05, null));
 //	        pageViews.add(inflater.inflate(R.layout.item06, null));
 	        imageViews = new ImageView[pageViews.size()];  
 	        main = (ViewGroup)inflater.inflate(R.layout.guideview, null);  
 	        group = (ViewGroup)main.findViewById(R.id.viewGroup);  
 	        viewPager = (ViewPager)main.findViewById(R.id.guidePages);  
+	        buttonGo = (Button)main.findViewById(R.id.buttonGo);
 	        for (int i = 0; i < pageViews.size(); i++) {  
 	            imageView = new ImageView(GuideView.this);  
 	            imageView.setLayoutParams(new LayoutParams(20,20));  
@@ -182,7 +183,7 @@ public class GuideView extends Activity{
 						finish();
 					}
 	            });
-	            ((Button)pageViews.get(arg1).findViewById(R.id.buttonStart)).setOnClickListener(new View.OnClickListener() {
+	            buttonGo.setOnClickListener(new View.OnClickListener() {
 					
 					@Override
 					public void onClick(View arg0) {
@@ -237,6 +238,12 @@ public class GuideView extends Activity{
 	                if (arg0 != i) {  
 	                    imageViews[i].setBackgroundResource(R.drawable.page_indicator);  
 	                }  
+	            }
+	            Utils.Log("imageViews.length = "+imageViews.length+" ,arg0="+arg0);
+	            if(arg0==(imageViews.length-1)){
+	            	buttonGo.setVisibility(View.VISIBLE);
+	            }else{
+	            	buttonGo.setVisibility(View.INVISIBLE);
 	            }
 	        }  
 	    }  

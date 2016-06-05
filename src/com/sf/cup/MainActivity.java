@@ -719,7 +719,7 @@ public class MainActivity extends Activity {
 	    if (l - lastTime > 2000L)
 	    {
 	      lastTime = l;
-	      Toast.makeText(this, "Press the back key again quit.", 0).show();
+	      Toast.makeText(this, "再按一次返回，退出应用.", 0).show();
 	      return;
 	    }
 		}

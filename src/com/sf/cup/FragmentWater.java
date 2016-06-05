@@ -759,10 +759,28 @@ public class FragmentWater extends Fragment {
 	public void setHeight(BaseAdapter comAdapter, ListView l) {
 		int listViewHeight = 0;
 		int adaptCount = comAdapter.getCount();
+		int dpi=Utils.getDisplayDensity(getActivity());
+		Utils.Log("xxxxxxxxxxxxx dddddddddddddpi="+dpi);
 		for (int i = 0; i < adaptCount; i++) {
 			View temp = comAdapter.getView(i, null, l);
 			temp.measure(0, 0);
-			listViewHeight += temp.getMeasuredHeight()+15;// the divide height
+			
+			/*
+			 * ldpi       120dpi
+				mdpi     160dpi
+				hdpi       240dpi
+				xhdpi     320dpi
+			 */
+			
+			if(320==dpi){
+				listViewHeight += temp.getMeasuredHeight()+30;// the divide height
+			}else if(240==dpi){
+				listViewHeight += temp.getMeasuredHeight()+15;// the divide height
+			}else if(160==dpi){
+				listViewHeight += temp.getMeasuredHeight()+13;// the divide height
+			}else{
+				listViewHeight += temp.getMeasuredHeight()+15;// the divide height
+			}
 		}
 		LayoutParams layoutParams = l.getLayoutParams();
 		layoutParams.width = LayoutParams.FILL_PARENT;

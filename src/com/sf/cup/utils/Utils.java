@@ -46,6 +46,7 @@ import android.os.Message;
 import android.os.PowerManager;
 import android.text.TextUtils;
 import android.util.Base64;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import dalvik.system.DexClassLoader;
 
@@ -711,4 +712,12 @@ public class Utils {
 		e = getSharedPpreference(c).edit();
 		return e;
 	}
+    
+    
+    
+    public static int getDisplayDensity(Context c) {  
+        DisplayMetrics metric = new DisplayMetrics();  
+        metric=c.getApplicationContext().getResources().getDisplayMetrics();  
+        return metric.densityDpi;  
+    }
 }

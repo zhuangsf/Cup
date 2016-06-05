@@ -197,7 +197,7 @@ public class MainActivity extends Activity {
    					progressDialog.dismiss();
    					mHandler.removeMessages(MSG_STOP_WAIT_BT);//connect success remove the hint
    		        }
-                Toast.makeText(MainActivity.this, "蓝牙水杯已连接", Toast.LENGTH_SHORT).show();
+               // Toast.makeText(MainActivity.this, "蓝牙水杯已连接", Toast.LENGTH_SHORT).show();
             } else if (BluetoothLeService.ACTION_GATT_DISCONNECTED.equals(action)) {
                 mConnected = false;
                 Utils.Log("xxxxxxxxxxxxxxxxxx BroadcastReceiver ACTION_GATT_DISCONNECTED mConnected:"+mConnected);

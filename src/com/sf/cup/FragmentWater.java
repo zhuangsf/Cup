@@ -778,6 +778,8 @@ public class FragmentWater extends Fragment {
 				listViewHeight += temp.getMeasuredHeight()+15;// the divide height
 			}else if(160==dpi){
 				listViewHeight += temp.getMeasuredHeight()+13;// the divide height
+			}else if(320<dpi){
+				listViewHeight += temp.getMeasuredHeight()+45;// the divide height
 			}else{
 				listViewHeight += temp.getMeasuredHeight()+15;// the divide height
 			}

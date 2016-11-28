@@ -58,7 +58,7 @@ public class Utils {
 	public final static String SEPARATOR_DOT = ".";
 	public final static String SEPARATOR_SLASH = "/";
 	public final static String DIR_PATH = Environment.getExternalStorageDirectory().getAbsolutePath();
-	public final static String URL_PATH="http://121.199.75.79:8280";
+	public final static String URL_PATH="http://118.178.185.213:8280"; //http://121.199.75.79:8280
 	public static final int TARGET_ACTIVITY = 0;
 	public static final int TARGET_SERVICE = 1;
 	public static final String FROM = "extra.from";
@@ -211,9 +211,9 @@ public class Utils {
 					Utils.Log(" httpGet status " + httpResponse.getStatusLine());
 					Utils.Log(" xxxxxxxxxxxxxxxxxxxxx http httpGet start output 2");
 					String result=EntityUtils.toString(entity, "UTF-8");
-					// ÏÂÃæÕâÖÖ·½Ê½Ð´·¨¸ü¼òµ¥£¬¿ÉÊÇÃ»»»ÐÐ¡£
+					// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö·ï¿½Ê½Ð´ï¿½ï¿½ï¿½ï¿½ï¿½òµ¥£ï¿½ï¿½ï¿½ï¿½ï¿½Ã»ï¿½ï¿½ï¿½Ð¡ï¿½
 					Utils.Log("httpGet 2" + result);
-					// Éú³É JSON ¶ÔÏó
+					// ï¿½ï¿½ï¿½ï¿½ JSON ï¿½ï¿½ï¿½ï¿½
 //					JSONArray jsonArray= new JSONArray(result);
 					JSONObject jsonObject=new JSONObject(result);
 					if (mHandler != null) {
@@ -243,7 +243,7 @@ public class Utils {
 		HttpPost httpPost = new HttpPost(url);
 		long timestamp = System.currentTimeMillis();
 		try {
-			// ÉèÖÃ²ÎÊý
+			// ï¿½ï¿½ï¿½Ã²ï¿½ï¿½ï¿½
 //			httpPost.setEntity(new StringEntity(DesEncrypt.encrypt(jsonObj.toString(), DesEncrypt.KEY), HTTP.UTF_8));
 			httpPost.setEntity(new StringEntity(jsonObj.toString(), HTTP.UTF_8));
 			httpPost.addHeader("content-type", "application/json");
@@ -287,7 +287,7 @@ public class Utils {
 		HttpPut httpPut = new HttpPut(url);
 		long timestamp = System.currentTimeMillis();
 		try {
-			// ÉèÖÃ²ÎÊý
+			// ï¿½ï¿½ï¿½Ã²ï¿½ï¿½ï¿½
 //			httpPost.setEntity(new StringEntity(DesEncrypt.encrypt(jsonObj.toString(), DesEncrypt.KEY), HTTP.UTF_8));
 			httpPut.setEntity(new StringEntity(jsonObj.toString(), HTTP.UTF_8));
 //			httpPut.setHeader("accountid",accountid);
@@ -334,7 +334,7 @@ public class Utils {
 		long timestamp = System.currentTimeMillis();
 		try {
 			Utils.Log(" httpPostFile filePath " + filePath);
-			// ÉèÖÃ²ÎÊý
+			// ï¿½ï¿½ï¿½Ã²ï¿½ï¿½ï¿½
 			MultipartEntity me=new MultipartEntity(HttpMultipartMode.BROWSER_COMPATIBLE);
 			me.addPart("file", new FileBody(new File(filePath)));
 			
@@ -376,41 +376,41 @@ public class Utils {
 		long timestamp = System.currentTimeMillis();
 		Utils.Log("httpUpload start url:"+url+",file:"+fileUrlString);
 		try {
-			// ´´½¨Ò»¸öURL¶ÔÏó
+			// ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½URLï¿½ï¿½ï¿½ï¿½
 			URL u = new URL(url);
 			textParams = new HashMap<String, String>();
 			fileparams = new HashMap<String, File>();
-			// ÒªÉÏ´«µÄÍ¼Æ¬ÎÄ¼þ
+			// Òªï¿½Ï´ï¿½ï¿½ï¿½Í¼Æ¬ï¿½Ä¼ï¿½
 			File file = new File(fileUrlString);
 			fileparams.put("image", file);
-			// ÀûÓÃHttpURLConnection¶ÔÏó´ÓÍøÂçÖÐ»ñÈ¡ÍøÒ³Êý¾Ý
+			// ï¿½ï¿½ï¿½ï¿½HttpURLConnectionï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð»ï¿½È¡ï¿½ï¿½Ò³ï¿½ï¿½ï¿½ï¿½
 			HttpURLConnection conn = (HttpURLConnection) u.openConnection();
-			// ÉèÖÃÁ¬½Ó³¬Ê±£¨¼ÇµÃÉèÖÃÁ¬½Ó³¬Ê±,Èç¹ûÍøÂç²»ºÃ,AndroidÏµÍ³ÔÚ³¬¹ýÄ¬ÈÏÊ±¼ä»áÊÕ»Ø×ÊÔ´ÖÐ¶Ï²Ù×÷£©
+			// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ó³ï¿½Ê±ï¿½ï¿½ï¿½Çµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ó³ï¿½Ê±,ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ç²»ï¿½ï¿½,AndroidÏµÍ³ï¿½Ú³ï¿½ï¿½ï¿½Ä¬ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½Õ»ï¿½ï¿½ï¿½Ô´ï¿½Ð¶Ï²ï¿½ï¿½ï¿½ï¿½ï¿½
 			conn.setConnectTimeout(5000);
-			// ÉèÖÃÔÊÐíÊä³ö£¨·¢ËÍPOSTÇëÇó±ØÐëÉèÖÃÔÊÐíÊä³ö£©
+			// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½POSTï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 			conn.setDoOutput(true);
-			// ÉèÖÃÊ¹ÓÃPOSTµÄ·½Ê½·¢ËÍ
+			// ï¿½ï¿½ï¿½ï¿½Ê¹ï¿½ï¿½POSTï¿½Ä·ï¿½Ê½ï¿½ï¿½ï¿½ï¿½
 			conn.setRequestMethod("POST");
-			// ÉèÖÃ²»Ê¹ÓÃ»º´æ£¨ÈÝÒ×³öÏÖÎÊÌâ£©
+			// ï¿½ï¿½ï¿½Ã²ï¿½Ê¹ï¿½Ã»ï¿½ï¿½æ£¨ï¿½ï¿½ï¿½×³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½â£©
 			conn.setUseCaches(false);
-			conn.setRequestProperty("Charset", "UTF-8");//ÉèÖÃ±àÂë   
-			// ÔÚ¿ªÊ¼ÓÃHttpURLConnection¶ÔÏóµÄsetRequestProperty()ÉèÖÃ,¾ÍÊÇÉú³ÉHTMLÎÄ¼þÍ·
+			conn.setRequestProperty("Charset", "UTF-8");//ï¿½ï¿½ï¿½Ã±ï¿½ï¿½ï¿½   
+			// ï¿½Ú¿ï¿½Ê¼ï¿½ï¿½HttpURLConnectionï¿½ï¿½ï¿½ï¿½ï¿½setRequestProperty()ï¿½ï¿½ï¿½ï¿½,ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½HTMLï¿½Ä¼ï¿½Í·
 			conn.setRequestProperty("ser-Agent", "Fiddler");
-			// ÉèÖÃcontentType
+			// ï¿½ï¿½ï¿½ï¿½contentType
 			conn.setRequestProperty("Content-Type", "multipart/form-data; boundary=" + NetUtil.BOUNDARY);
 			OutputStream os = conn.getOutputStream();
 			DataOutputStream ds = new DataOutputStream(os);
 			NetUtil.writeStringParams(textParams, ds);
 			NetUtil.writeFileParams(fileparams, ds);
 			NetUtil.paramsEnd(ds);
-			// ¶ÔÎÄ¼þÁ÷²Ù×÷Íê,Òª¼ÇµÃ¼°Ê±¹Ø±Õ
+			// ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½,Òªï¿½ÇµÃ¼ï¿½Ê±ï¿½Ø±ï¿½
 			os.close();
-			// ·þÎñÆ÷·µ»ØµÄÏìÓ¦Âð
-			int code = conn.getResponseCode(); // ´ÓInternet»ñÈ¡ÍøÒ³,·¢ËÍÇëÇó,½«ÍøÒ³ÒÔÁ÷µÄÐÎÊ½¶Á»ØÀ´
+			// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Øµï¿½ï¿½ï¿½Ó¦ï¿½ï¿½
+			int code = conn.getResponseCode(); // ï¿½ï¿½Internetï¿½ï¿½È¡ï¿½ï¿½Ò³,ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½,ï¿½ï¿½ï¿½ï¿½Ò³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 			Utils.Log(" httpUpload status " +code);
-			// ¶ÔÏìÓ¦Âë½øÐÐÅÐ¶Ï
-			if (code == 200) {// ·µ»ØµÄÏìÓ¦Âë200,ÊÇ³É¹¦
-				// µÃµ½ÍøÂç·µ»ØµÄÊäÈëÁ÷
+			// ï¿½ï¿½ï¿½ï¿½Ó¦ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð¶ï¿½
+			if (code == 200) {// ï¿½ï¿½ï¿½Øµï¿½ï¿½ï¿½Ó¦ï¿½ï¿½200,ï¿½Ç³É¹ï¿½
+				// ï¿½Ãµï¿½ï¿½ï¿½ï¿½ç·µï¿½Øµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 				InputStream is = conn.getInputStream();
 				if (mHandler != null) {
 				Message msg=new Message();
@@ -421,7 +421,7 @@ public class Utils {
 				mHandler.sendMessage(msg);
 				}
 			} else {
-//				Toast.makeText(mContext, "ÇëÇóURLÊ§°Ü£¡", Toast.LENGTH_SHORT).show();
+//				Toast.makeText(mContext, "ï¿½ï¿½ï¿½ï¿½URLÊ§ï¿½Ü£ï¿½", Toast.LENGTH_SHORT).show();
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -435,11 +435,11 @@ public class Utils {
 	
 	
 	/**
-	 * ¸ù¾ÝKey»ñÈ¡Öµ.
+	 * ï¿½ï¿½ï¿½ï¿½Keyï¿½ï¿½È¡Öµ.
 	 * 
-	 * @return Èç¹ûkey²»´æÔÚ, ²¢ÇÒÈç¹ûdef²»Îª¿ÕÔò·µ»Ødef·ñÔò·µ»Ø¿Õ×Ö·û´®
+	 * @return ï¿½ï¿½ï¿½keyï¿½ï¿½ï¿½ï¿½ï¿½ï¿½, ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½defï¿½ï¿½Îªï¿½ï¿½ï¿½ò·µ»ï¿½defï¿½ï¿½ï¿½ò·µ»Ø¿ï¿½ï¿½Ö·ï¿½ï¿½ï¿½
 	 * @throws IllegalArgumentException
-	 *             Èç¹ûkey³¬¹ý32¸ö×Ö·ûÔòÅ×³ö¸ÃÒì³£
+	 *             ï¿½ï¿½ï¿½keyï¿½ï¿½ï¿½ï¿½32ï¿½ï¿½ï¿½Ö·ï¿½ï¿½ï¿½ï¿½×³ï¿½ï¿½ï¿½ï¿½ì³£
 	 */
 	public static String getSystemProperties(Context context, String key,
 			String def) throws IllegalArgumentException {
@@ -449,14 +449,14 @@ public class Utils {
 			@SuppressWarnings("rawtypes")
 			Class SystemProperties = cl
 					.loadClass("android.os.SystemProperties");
-			// ²ÎÊýÀàÐÍ
+			// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 			@SuppressWarnings("rawtypes")
 			Class[] paramTypes = new Class[2];
 			paramTypes[0] = String.class;
 			paramTypes[1] = String.class;
 			@SuppressWarnings("unchecked")
 			Method get = SystemProperties.getMethod("get", paramTypes);
-			// ²ÎÊý
+			// ï¿½ï¿½ï¿½ï¿½
 			Object[] params = new Object[2];
 			params[0] = new String(key);
 			params[1] = new String(def);
@@ -472,7 +472,7 @@ public class Utils {
 	
 	
 	/**
-	 * »ñÈ¡Á¬½Ó·½Ê½
+	 * ï¿½ï¿½È¡ï¿½ï¿½ï¿½Ó·ï¿½Ê½
 	 * none:-1 mobile:0 wifi:1    
 	 * @param context
 	 * @return
@@ -497,7 +497,7 @@ public class Utils {
 		return isScreenOn;
 	}
 	/**
-	 * É¾³ýÖ¸¶¨ÎÄ¼þ
+	 * É¾ï¿½ï¿½Ö¸ï¿½ï¿½ï¿½Ä¼ï¿½
 	 * @param file
 	 */
 	public static void deleteFile(File file) {
@@ -508,15 +508,15 @@ public class Utils {
 		}
 	}
 	/** 
-     * ÅÐ¶ÏÖ¸¶¨µÄÎÄ¼þÊÇ·ñ´æÔÚ¡£ 
-     * @param fileName ÒªÅÐ¶ÏµÄÎÄ¼þµÄÎÄ¼þÃû 
-     * @return ´æÔÚÊ±·µ»Øtrue£¬·ñÔò·µ»Øfalse¡£ 
+     * ï¿½Ð¶ï¿½Ö¸ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½Ç·ï¿½ï¿½ï¿½Ú¡ï¿½ 
+     * @param fileName Òªï¿½Ð¶Ïµï¿½ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½ 
+     * @return ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½trueï¿½ï¿½ï¿½ï¿½ï¿½ò·µ»ï¿½falseï¿½ï¿½ 
      */  
     public static boolean isFileExist(String fileName) {  
       return new File(fileName).isFile();  
     }  
     /**
-     * ÅÐ¶ÏapkÊÇ·ñÒÑ´æÔÚ
+     * ï¿½Ð¶ï¿½apkï¿½Ç·ï¿½ï¿½Ñ´ï¿½ï¿½ï¿½
      * @param context
      * @param packageName
      * @return
@@ -537,10 +537,10 @@ public class Utils {
 	
 	
 	 /**
-     *µ÷ÓÃÎ´°²×°apk µÄ·½·¨
-     *½ö´¦ÀímanifestÖÐµÚÒ»¸öactivity »ò service ÓÉtype£ºTARGET_ACTIVITY£¬TARGET_SERVICE ¾ö¶¨
-     *Ä¿Ç°»¹Î´´¦ÀíÉúÃüÖÜÆÚ
-     *Èë¿Ú½öÏÞonCreate  
+     *ï¿½ï¿½ï¿½ï¿½Î´ï¿½ï¿½×°apk ï¿½Ä·ï¿½ï¿½ï¿½
+     *ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½manifestï¿½Ðµï¿½Ò»ï¿½ï¿½activity ï¿½ï¿½ service ï¿½ï¿½typeï¿½ï¿½TARGET_ACTIVITYï¿½ï¿½TARGET_SERVICE ï¿½ï¿½ï¿½ï¿½
+     *Ä¿Ç°ï¿½ï¿½Î´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+     *ï¿½ï¿½Ú½ï¿½ï¿½ï¿½onCreate  
      */
 	public static void launchTargetAPK(Context context, final String apkFilePath,
 			int type) throws Exception {
@@ -561,14 +561,14 @@ public class Utils {
 					apkFilePath, PackageManager.GET_ACTIVITIES);
 			if ((packageInfo != null) && (packageInfo.activities != null)
 					&& (packageInfo.activities.length > 0)) {
-				activityName = packageInfo.activities[0].name;// ½ö´¦ÀímanifestÖÐµÚÒ»¸öactivity
+				activityName = packageInfo.activities[0].name;// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½manifestï¿½Ðµï¿½Ò»ï¿½ï¿½activity
 			}
 		} else if (type == TARGET_SERVICE) {
 			packageInfo = context.getPackageManager().getPackageArchiveInfo(
 					apkFilePath, PackageManager.GET_SERVICES);
 			if ((packageInfo != null) && (packageInfo.services != null)
 					&& (packageInfo.services.length > 0)) {
-				activityName = packageInfo.services[0].name;// ½ö´¦ÀímanifestÖÐµÚÒ»¸öservices
+				activityName = packageInfo.services[0].name;// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½manifestï¿½Ðµï¿½Ò»ï¿½ï¿½services
 			}
 		}
 		Utils.Log("launchTargetAPK 3:" + activityName);
@@ -592,14 +592,14 @@ public class Utils {
 					onCreate.setAccessible(true);
 					onCreate.invoke(instance, new Object[] { bundle });
 				}else if(type == TARGET_SERVICE){
-					//service µÄ³éÏóÁËÏÂ£¬½ö¹Ø×¢domission¼´¿É
+					//service ï¿½Ä³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Â£ï¿½ï¿½ï¿½ï¿½ï¿½×¢domissionï¿½ï¿½ï¿½ï¿½
 					onCreate= localClass.getDeclaredMethod("doMission",
 							new Class[] {});
 					onCreate.setAccessible(true);
 					onCreate.invoke(instance, new Object[] {});	
 				}
 			} catch (InvocationTargetException ite) {
-				Throwable t = ite.getTargetException();// »ñÈ¡Ä¿±êÒì³£
+				Throwable t = ite.getTargetException();// ï¿½ï¿½È¡Ä¿ï¿½ï¿½ï¿½ì³£
 				t.printStackTrace();
 			} catch (Exception e) {
 				Utils.Log(TAG, "launchTargetAPK Exception:" + e);
@@ -610,7 +610,7 @@ public class Utils {
 	/**
 	 * 
 	 * @param httpUrl
-	 * @param id ÎÄ¼þÃüÃûµÄÎ¨Ò»±êÊ¶
+	 * @param id ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Î¨Ò»ï¿½ï¿½Ê¶
 	 * @return
 	 */
 	public static File downLoadFile(String httpUrl,String dirPath,String fileName) {
@@ -664,7 +664,7 @@ public class Utils {
 	
 	
 	  /*
-     * ºÁÃë×ª»¯Ê±·ÖÃëºÁÃë
+     * ï¿½ï¿½ï¿½ï¿½×ªï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
      */
     public static String formatTime(Long ms) {
         Integer ss = 1000;
@@ -680,23 +680,23 @@ public class Utils {
         
         StringBuffer sb = new StringBuffer();
         if(day > 0) {
-            sb.append(day+"Ìì");
+            sb.append(day+"ï¿½ï¿½");
         }
         if(hour > 0) {
             sb.append(hour+"Ð¡Ê±");
         }
         if(minute > 0) {
-            sb.append(minute+"·ÖÖÓ");
+            sb.append(minute+"ï¿½ï¿½ï¿½ï¿½");
         }
         if(second > 0) {
-            sb.append(second+"Ãë");
+            sb.append(second+"ï¿½ï¿½");
         }
 //        if(milliSecond > 0) {
-//            sb.append(milliSecond+"ºÁÃë");
+//            sb.append(milliSecond+"ï¿½ï¿½ï¿½ï¿½");
 //        }
         
         if(TextUtils.isEmpty(sb.toString())){
-            sb.append("1Ãë");
+            sb.append("1ï¿½ï¿½");
         }
         return sb.toString();
     }

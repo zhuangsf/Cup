@@ -41,6 +41,8 @@ import android.widget.RadioGroup;
 import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.Toast;
 
+import com.umeng.analytics.MobclickAgent;
+import com.umeng.analytics.MobclickAgent.EScenarioType;
 public class MainActivity extends Activity {
 	private final static String TAG = MainActivity.class.getPackage() + "."
 			+ MainActivity.class.getSimpleName();
@@ -345,6 +347,11 @@ public class MainActivity extends Activity {
     
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		//add for umeng
+	    MobclickAgent.setScenarioType(this, EScenarioType.E_UM_NORMAL);
+	    MobclickAgent.openActivityDurationTrack(false);
+	    MobclickAgent.setDebugMode(true);
+		
 		// 1,is first open app start guide
 		SharedPreferences p = Utils.getSharedPpreference(this);
 		SharedPreferences.Editor e = Utils.getSharedPpreferenceEdit(this);
@@ -422,7 +429,8 @@ public class MainActivity extends Activity {
 			}
 		}*/
 		
-		
+		//add for umeng
+		MobclickAgent.onResume(this);
 	}
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -494,6 +502,9 @@ public class MainActivity extends Activity {
     protected void onPause() {
         super.onPause();
         unregisterReceiver(mGattUpdateReceiver);
+        
+        //add for umeng
+        MobclickAgent.onPause(this);
     }
 
     @Override

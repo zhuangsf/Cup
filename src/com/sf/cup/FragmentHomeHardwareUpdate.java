@@ -12,7 +12,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 
-public class FragmentHomeHardwareUpdate extends Fragment {
+public class FragmentHomeHardwareUpdate extends FragmentPack {
  
 	Button goBackButton;
 	Button btn_hardware_update;
@@ -40,9 +40,9 @@ public class FragmentHomeHardwareUpdate extends Fragment {
 			@Override
 			public void onClick(View v) {
 				new AlertDialog.Builder(getActivity())
-						.setMessage("ÄúÏÖÔÚÊ¹ÓÃµÄÎª×îĞÂ°æ±¾ÏµÍ³")
-				    	.setTitle("ÎÂÜ°ÌáÊ¾")
-						.setPositiveButton("È·¶¨", null)
+						.setMessage("æ‚¨ç°åœ¨ä½¿ç”¨çš„ä¸ºæœ€æ–°ç‰ˆæœ¬ç³»ç»Ÿ")
+				    	.setTitle("æ¸©é¦¨æç¤º")
+						.setPositiveButton("ç¡®å®š", null)
 						.create()
 						.show();
 			}
@@ -85,4 +85,11 @@ public class FragmentHomeHardwareUpdate extends Fragment {
    	    }
 
    	}
+   	
+   	
+   	
+   	@Override
+	protected String getPageName() {
+		return FragmentHomeHardwareUpdate.class.getName();
+	}
 }

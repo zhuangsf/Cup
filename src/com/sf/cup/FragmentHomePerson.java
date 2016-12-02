@@ -55,7 +55,7 @@ import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class FragmentHomePerson extends Fragment {
+public class FragmentHomePerson extends FragmentPack {
 	private final static String TAG = FragmentHomePerson.class.getPackage().getName() + "."
 			+ FragmentHomePerson.class.getSimpleName();
 
@@ -721,4 +721,12 @@ public class FragmentHomePerson extends Fragment {
 		}
 
 	}
+	
+	
+	
+	@Override
+	protected String getPageName() {
+		return FragmentHomePerson.class.getName();
+	}
+   	
 }

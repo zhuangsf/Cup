@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-public class FragmentHomePairInfo extends Fragment {
+public class FragmentHomePairInfo extends FragmentPack {
  
 	Button goBackButton;
 	TextView pair_info;
@@ -24,8 +24,8 @@ public class FragmentHomePairInfo extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
     	View v=inflater.inflate(R.layout.tab_home_pair_info, null);
     	pair_info= (TextView)v.findViewById(R.id.pair_info);
-    	if(true){//获取蓝牙配对信息
-    		pair_info.setText("水杯1号");
+    	if(true){//鑾峰彇钃濈墮閰嶅淇℃伅
+    		pair_info.setText("姘存澂");
     	}
     	
         return v; 
@@ -81,4 +81,11 @@ public class FragmentHomePairInfo extends Fragment {
    	    }
 
    	}
+   	
+   	
+   	@Override
+	protected String getPageName() {
+		return FragmentHomePairInfo.class.getName();
+	}
+   	
 }

@@ -17,7 +17,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 
-public class FragmentHomeReset extends Fragment {
+public class FragmentHomeReset extends FragmentPack {
  
 	Button reset_cancel;
 	Button reset_ok;
@@ -45,16 +45,16 @@ public class FragmentHomeReset extends Fragment {
 			@Override
 			public void onClick(View v) {
 				new AlertDialog.Builder(getActivity())
-				.setMessage("È·¶¨Òª»Ö¸´³ö³§ÉèÖÃ£¿")
-		    	.setTitle("ÎÂÜ°ÌáÊ¾")
-				.setPositiveButton("È·¶¨", new DialogInterface.OnClickListener() {
+				.setMessage("ç¡®å®šè¦æ¢å¤å‡ºå‚è®¾ç½®ï¼Ÿ")
+		    	.setTitle("æ¸©é¦¨æç¤º")
+				.setPositiveButton("ç¡®å®š", new DialogInterface.OnClickListener() {
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
-						//ÏÔÊ¾µÈ´ı
+						//æ˜¾ç¤ºç­‰å¾…
 						clearAll();
 					}
 				})
-				.setNegativeButton("È¡Ïû", null)
+				.setNegativeButton("å–æ¶ˆ", null)
 				.create()
 				.show();
 			}
@@ -72,9 +72,9 @@ public class FragmentHomeReset extends Fragment {
 		
 		
 		new AlertDialog.Builder(getActivity())
-		.setMessage("»Ö¸´³ö³§ºó£¬ÇëÖØĞÂµÇÂ½")
-    	.setTitle("ÎÂÜ°ÌáÊ¾")
-		.setPositiveButton("È·¶¨", new DialogInterface.OnClickListener() {
+		.setMessage("æ¢å¤å‡ºå‚åï¼Œè¯·é‡æ–°ç™»é™†")
+    	.setTitle("æ¸©é¦¨æç¤º")
+		.setPositiveButton("ç¡®å®š", new DialogInterface.OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				getActivity().finish();
@@ -139,4 +139,10 @@ public class FragmentHomeReset extends Fragment {
    	    }
 
    	}
+   	
+   	@Override
+	protected String getPageName() {
+		return FragmentHomeReset.class.getName();
+	}
+   	
 }

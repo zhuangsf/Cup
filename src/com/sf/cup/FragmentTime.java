@@ -34,7 +34,7 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-public class FragmentTime extends Fragment {
+public class FragmentTime extends FragmentPack {
 	private final static String TAG = FragmentTime.class.getPackage().getName() + "."
 			+ FragmentTime.class.getSimpleName();
 	
@@ -132,9 +132,9 @@ public class FragmentTime extends Fragment {
 			public void onClick(View v) {
 				alarmEnable=!alarmEnable;
 				if(alarmEnable){
-					Toast.makeText(getActivity(), "ÆôÓÃÄÖÖÓ¹¦ÄÜ", Toast.LENGTH_SHORT).show();
+					Toast.makeText(getActivity(), "å¯ç”¨é—¹é’ŸåŠŸèƒ½", Toast.LENGTH_SHORT).show();
 				}else{
-					Toast.makeText(getActivity(), "½ûÓÃÄÖÖÓ¹¦ÄÜ", Toast.LENGTH_SHORT).show();
+					Toast.makeText(getActivity(), "ç¦ç”¨é—¹é’ŸåŠŸèƒ½", Toast.LENGTH_SHORT).show();
 				}
 				
 				//1,update ui
@@ -165,7 +165,7 @@ public class FragmentTime extends Fragment {
 	
 	//get the setting from preferrence
 	private void initAlarm(){
-		 //SharedPreferences ³õÊ¼»¯½çÃæ
+		 //SharedPreferences åˆå§‹åŒ–ç•Œé¢
 			SharedPreferences p;
 			p = getActivity().getSharedPreferences(Utils.SHARE_PREFERENCE_CUP,Context.MODE_PRIVATE);
 			
@@ -249,7 +249,7 @@ public class FragmentTime extends Fragment {
 						c.add(Calendar.DAY_OF_MONTH, 1);
 					}
 					long tmpMills = c.getTimeInMillis() - System.currentTimeMillis();
-					Toast.makeText(getActivity(), "ÄÖÖÓ"+(index+1)+" ÉèÖÃ:" + Utils.formatTime(tmpMills) + "ºó", Toast.LENGTH_LONG).show();
+					Toast.makeText(getActivity(), "é—¹é’Ÿ"+(index+1)+" è®¾ç½®:" + Utils.formatTime(tmpMills) + "å", Toast.LENGTH_LONG).show();
 					AlarmManager am = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
 					am.setRepeating(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(),AlarmManager.INTERVAL_DAY,getPendingIntent(index));
 				} else {
@@ -257,7 +257,7 @@ public class FragmentTime extends Fragment {
 					am.cancel(getPendingIntent(index));
 				}
 				
-				 //SharedPreferences±£´æÊı¾İ
+				 //SharedPreferencesä¿å­˜æ•°æ®
 				SharedPreferences p;
 				SharedPreferences.Editor e;
 				p = getActivity().getSharedPreferences(Utils.SHARE_PREFERENCE_CUP,Context.MODE_PRIVATE);
@@ -274,7 +274,7 @@ public class FragmentTime extends Fragment {
 		alarmList.get(index).setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				//Ñ¡ÖĞµÄÊ±ºòÉèÖÃËûµÄ³õÊ¼Öµ
+				//é€‰ä¸­çš„æ—¶å€™è®¾ç½®ä»–çš„åˆå§‹å€¼
 				String timeString=alarmList.get(index).getText().toString();
 				String[] timeArray=timeString.split(":");
 				c.set(Calendar.HOUR_OF_DAY, Integer.parseInt(timeArray[0]));
@@ -298,7 +298,7 @@ public class FragmentTime extends Fragment {
 							swtichList.get(index).setChecked(true);
 						} else {
 							long tmpMills = c.getTimeInMillis() - System.currentTimeMillis();
-							Toast.makeText(getActivity(), "ÄÖÖÓ"+(index+1)+" ÉèÖÃ:" + Utils.formatTime(tmpMills) + "ºó",Toast.LENGTH_LONG).show();
+							Toast.makeText(getActivity(), "é—¹é’Ÿ"+(index+1)+" è®¾ç½®:" + Utils.formatTime(tmpMills) + "å",Toast.LENGTH_LONG).show();
 							AlarmManager am = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
 							am.setRepeating(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(),AlarmManager.INTERVAL_DAY, getPendingIntent(index));
 						}
@@ -309,13 +309,13 @@ public class FragmentTime extends Fragment {
 					isTimePickerOk=true;
 				}else{
 					Utils.Log("android version older than KK");
-					tpd.setButton(DialogInterface.BUTTON_POSITIVE, "È·ÈÏ", new DialogInterface.OnClickListener() {
+					tpd.setButton(DialogInterface.BUTTON_POSITIVE, "ç¡®è®¤", new DialogInterface.OnClickListener() {
 						@Override
 						public void onClick(DialogInterface dialog, int which) {
 							isTimePickerOk=true;
 						}
 					});
-					tpd.setButton(DialogInterface.BUTTON_NEGATIVE, "È¡Ïû", new DialogInterface.OnClickListener() {
+					tpd.setButton(DialogInterface.BUTTON_NEGATIVE, "å–æ¶ˆ", new DialogInterface.OnClickListener() {
 						@Override
 						public void onClick(DialogInterface dialog, int which) {
 							isTimePickerOk=false;
@@ -339,14 +339,14 @@ public class FragmentTime extends Fragment {
 		c.set(Calendar.MILLISECOND, 0);
 		Utils.Log("xxxxxxxxx edit alarm :" + hourOfDay + ":" + minute + ":" + c.getTimeInMillis() + ":"
 				+ Calendar.getInstance().getTimeInMillis());
-		// ±ÜÃâÉèÖÃÊ±¼ä±Èµ±Ç°Ê±¼äĞ¡Ê± ÂíÉÏÏìÓ¦µÄÇé¿ö·¢Éú
+		// é¿å…è®¾ç½®æ—¶é—´æ¯”å½“å‰æ—¶é—´å°æ—¶ é©¬ä¸Šå“åº”çš„æƒ…å†µå‘ç”Ÿ
 		if (c.getTimeInMillis() < Calendar.getInstance().getTimeInMillis()) {
 			// c.set(Calendar.DAY_OF_MONTH, c.get(Calendar.DAY_OF_MONTH) + 1);
 			c.add(Calendar.DAY_OF_MONTH, 1);
 			Utils.Log("xxxxxxxxx edit alarm 2:" + (c.get(Calendar.MONTH) + 1) + ":" + c.get(Calendar.DAY_OF_MONTH));
 		}
 		
-		 //SharedPreferences±£´æÊı¾İ
+		 //SharedPreferencesä¿å­˜æ•°æ®
 		SharedPreferences p;
 		SharedPreferences.Editor e;
 		p = getActivity().getSharedPreferences(Utils.SHARE_PREFERENCE_CUP,Context.MODE_PRIVATE);
@@ -419,5 +419,12 @@ public class FragmentTime extends Fragment {
 			throw new RuntimeException(e);
 		}
 
+	}
+	
+	
+	
+	@Override
+	protected String getPageName() {
+		return FragmentTime.class.getName();
 	}
 }

@@ -34,7 +34,7 @@ import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
-public class FragmentHome extends Fragment {
+public class FragmentHome extends FragmentPack {
 	private final static String TAG = FragmentHome.class.getPackage().getName() + "."
 			+ FragmentHome.class.getSimpleName();
 	
@@ -266,9 +266,9 @@ public class FragmentHome extends Fragment {
 				Utils.Log(" httpGet status " + httpResponse.getStatusLine());
 				Utils.Log(" xxxxxxxxxxxxxxxxxxxxx http httpGet start output 2");
 				String result=EntityUtils.toString(entity, "UTF-8");
-				// ÏÂÃæÕâÖÖ·½Ê½Ğ´·¨¸ü¼òµ¥£¬¿ÉÊÇÃ»»»ĞĞ¡£
+				// ä¸‹é¢è¿™ç§æ–¹å¼å†™æ³•æ›´ç®€å•ï¼Œå¯æ˜¯æ²¡æ¢è¡Œã€‚
 				Utils.Log("httpGet 2" + result);
-				// Éú³É JSON ¶ÔÏó
+				// ç”Ÿæˆ JSON å¯¹è±¡
 //				JSONArray jsonArray= new JSONArray(result);
 				JSONObject jsonObject=new JSONObject(result);
 				Message msg=new Message();
@@ -312,4 +312,11 @@ public class FragmentHome extends Fragment {
    	    }
 
    	}
+   	
+   	
+   	
+   	@Override
+	protected String getPageName() {
+		return FragmentHome.class.getName();
+	}
 }

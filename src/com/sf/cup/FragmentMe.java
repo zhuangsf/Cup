@@ -8,7 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-public class FragmentMe extends Fragment {
+public class FragmentMe extends FragmentPack {
  
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -53,4 +53,10 @@ public class FragmentMe extends Fragment {
    	    }
 
    	}
+   	
+   	@Override
+	protected String getPageName() {
+		return FragmentMe.class.getName();
+	}
+   	
 }

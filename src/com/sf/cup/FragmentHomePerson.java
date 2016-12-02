@@ -69,10 +69,10 @@ public class FragmentHomePerson extends Fragment {
 
 	List<Map<String, Object>> personList1 = new ArrayList<Map<String, Object>>(); // list
 																					// view
-																					// ¾ÍÊÇÒ»Ö±ÍæÅªÕâ¸ö
+																					// ï¿½ï¿½ï¿½ï¿½Ò»Ö±ï¿½ï¿½Åªï¿½ï¿½ï¿½
 	List<Map<String, Object>> personList2 = new ArrayList<Map<String, Object>>(); // list
 																					// view
-																					// ¾ÍÊÇÒ»Ö±ÍæÅªÕâ¸ö
+																					// ï¿½ï¿½ï¿½ï¿½Ò»Ö±ï¿½ï¿½Åªï¿½ï¿½ï¿½
 
 	EditText person_info;
 
@@ -80,14 +80,14 @@ public class FragmentHomePerson extends Fragment {
 
 	LinearLayout avatar_layout;
 	ImageView avatar_image;
-	private SelectPicPopupWindow menuWindow; // ×Ô¶¨ÒåµÄÍ·Ïñ±à¼­µ¯³ö¿ò
-	private static final String IMAGE_FILE_NAME = "avatarImage.jpg";// Í·ÏñÎÄ¼þÃû³Æ
-	private String urlpath; // Í¼Æ¬±¾µØÂ·¾¶
-	private String resultStr = ""; // ·þÎñ¶Ë·µ»Ø½á¹û¼¯
-	private static ProgressDialog pd;// µÈ´ý½ø¶ÈÈ¦
-	private static final int REQUESTCODE_PICK = 0; // Ïà²áÑ¡Í¼±ê¼Ç
-	private static final int REQUESTCODE_TAKE = 1; // Ïà»úÅÄÕÕ±ê¼Ç
-	private static final int REQUESTCODE_CUTTING = 2; // Í¼Æ¬²ÃÇÐ±ê¼Ç
+	private SelectPicPopupWindow menuWindow; // ï¿½Ô¶ï¿½ï¿½ï¿½ï¿½Í·ï¿½ï¿½à¼­ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	private static final String IMAGE_FILE_NAME = "avatarImage.jpg";// Í·ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½
+	private String urlpath; // Í¼Æ¬ï¿½ï¿½ï¿½ï¿½Â·ï¿½ï¿½
+	private String resultStr = ""; // ï¿½ï¿½ï¿½ï¿½Ë·ï¿½ï¿½Ø½ï¿½ï¿½
+	private static ProgressDialog pd;// ï¿½È´ï¿½ï¿½ï¿½È¦
+	private static final int REQUESTCODE_PICK = 0; // ï¿½ï¿½ï¿½Ñ¡Í¼ï¿½ï¿½ï¿½
+	private static final int REQUESTCODE_TAKE = 1; // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Õ±ï¿½ï¿½
+	private static final int REQUESTCODE_CUTTING = 2; // Í¼Æ¬ï¿½ï¿½ï¿½Ð±ï¿½ï¿½
 
 	Handler mHandler = new Handler() {
 		@Override
@@ -197,23 +197,23 @@ public class FragmentHomePerson extends Fragment {
 		return Uri.fromFile(new File(Environment.getExternalStorageDirectory()+"/8CUP", IMAGE_FILE_NAME));
 	}
 
-	// Îªµ¯³ö´°¿ÚÊµÏÖ¼àÌýÀà
+	// Îªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Êµï¿½Ö¼ï¿½ï¿½ï¿½ï¿½ï¿½
 	private OnClickListener itemsOnClick = new OnClickListener() {
 		@Override
 		public void onClick(View v) {
 			menuWindow.dismiss();
 			switch (v.getId()) {
-			// ÅÄÕÕ
+			// ï¿½ï¿½ï¿½ï¿½
 			case R.id.takePhotoBtn:
 				Intent takeIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-				// ÏÂÃæÕâ¾äÖ¸¶¨µ÷ÓÃÏà»úÅÄÕÕºóµÄÕÕÆ¬´æ´¢µÄÂ·¾¶
+				// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Õºï¿½ï¿½ï¿½ï¿½Æ¬ï¿½æ´¢ï¿½ï¿½Â·ï¿½ï¿½
 				takeIntent.putExtra(MediaStore.EXTRA_OUTPUT,getTakePicSaveUri());
 				startActivityForResult(takeIntent, REQUESTCODE_TAKE);
 				break;
-			// Ïà²áÑ¡ÔñÍ¼Æ¬
+			// ï¿½ï¿½ï¿½Ñ¡ï¿½ï¿½Í¼Æ¬
 			case R.id.pickPhotoBtn:
 				Intent pickIntent = new Intent(Intent.ACTION_PICK, null);
-				// Èç¹ûÅóÓÑÃÇÒªÏÞÖÆÉÏ´«µ½·þÎñÆ÷µÄÍ¼Æ¬ÀàÐÍÊ±¿ÉÒÔÖ±½ÓÐ´Èç£º"image/jpeg ¡¢ image/pngµÈµÄÀàÐÍ"
+				// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Òªï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í¼Æ¬ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½Ö±ï¿½ï¿½Ð´ï¿½ç£º"image/jpeg ï¿½ï¿½ image/pngï¿½Èµï¿½ï¿½ï¿½ï¿½ï¿½"
 				pickIntent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
 				startActivityForResult(pickIntent, REQUESTCODE_PICK);
 				break;
@@ -226,21 +226,21 @@ public class FragmentHomePerson extends Fragment {
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		switch (requestCode) {
-		case REQUESTCODE_PICK:// Ö±½Ó´ÓÏà²á»ñÈ¡
+		case REQUESTCODE_PICK:// Ö±ï¿½Ó´ï¿½ï¿½ï¿½ï¿½ï¿½È¡
 			try {
 				startPhotoZoom(data.getData());
 			} catch (NullPointerException e) {
-				e.printStackTrace();// ÓÃ»§µã»÷È¡Ïû²Ù×÷
+				e.printStackTrace();// ï¿½Ã»ï¿½ï¿½ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½
 			}
 			break;
-		case REQUESTCODE_TAKE:// µ÷ÓÃÏà»úÅÄÕÕ
+		case REQUESTCODE_TAKE:// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 			startPhotoZoom(getTakePicSaveUri());
 			break;
-		case REQUESTCODE_CUTTING:// È¡µÃ²Ã¼ôºóµÄÍ¼Æ¬
+		case REQUESTCODE_CUTTING:// È¡ï¿½Ã²Ã¼ï¿½ï¿½ï¿½ï¿½Í¼Æ¬
 			try {
 				setPicToView(data);
 			} catch (Exception e) {
-				e.printStackTrace();// ÓÃ»§µã»÷È¡Ïû²Ù×÷
+				e.printStackTrace();// ï¿½Ã»ï¿½ï¿½ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½
 			}
 			break;
 		}
@@ -248,20 +248,20 @@ public class FragmentHomePerson extends Fragment {
 	}
 
 	/**
-	 * ²Ã¼ôÍ¼Æ¬·½·¨ÊµÏÖ
+	 * ï¿½Ã¼ï¿½Í¼Æ¬ï¿½ï¿½ï¿½ï¿½Êµï¿½ï¿½
 	 * 
 	 * @param uri
 	 */
 	public void startPhotoZoom(Uri uri) {
 		Intent intent = new Intent("com.android.camera.action.CROP");
 		intent.setDataAndType(uri, "image/*");
-		// crop=trueÊÇÉèÖÃÔÚ¿ªÆôµÄIntentÖÐÉèÖÃÏÔÊ¾µÄVIEW¿É²Ã¼ô
+		// crop=trueï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ú¿ï¿½ï¿½ï¿½ï¿½ï¿½Intentï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¾ï¿½ï¿½VIEWï¿½É²Ã¼ï¿½
 		intent.putExtra("crop", "true");
-		intent.putExtra("scale", true);// È¥ºÚ±ß
-		// aspectX aspectY ÊÇ¿í¸ßµÄ±ÈÀý
+		intent.putExtra("scale", true);// È¥ï¿½Ú±ï¿½
+		// aspectX aspectY ï¿½Ç¿ï¿½ßµÄ±ï¿½ï¿½ï¿½
 		intent.putExtra("aspectX", 1);
 		intent.putExtra("aspectY", 1);
-		// outputX outputY ÊÇ²Ã¼ôÍ¼Æ¬¿í¸ß
+		// outputX outputY ï¿½Ç²Ã¼ï¿½Í¼Æ¬ï¿½ï¿½ï¿½
 		intent.putExtra("outputX", 300);
 		intent.putExtra("outputY", 300);
 		// the return data  true   may waste logs of mem
@@ -273,14 +273,14 @@ public class FragmentHomePerson extends Fragment {
 	}
 
 	/**
-	 * ±£´æ²Ã¼ôÖ®ºóµÄÍ¼Æ¬Êý¾Ý
+	 * ï¿½ï¿½ï¿½ï¿½Ã¼ï¿½Ö®ï¿½ï¿½ï¿½Í¼Æ¬ï¿½ï¿½ï¿½
 	 * 
 	 * @param picdata
 	 */
 	private void setPicToView(Intent picdata) {
 		Bundle extras = picdata.getExtras();
 		if (extras != null) {
-			// È¡µÃSDCardÍ¼Æ¬Â·¾¶×öÏÔÊ¾
+			// È¡ï¿½ï¿½SDCardÍ¼Æ¬Â·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¾
 			//Bitmap photo = extras.getParcelable("data");
 			Bitmap photo =getBitmapFromUri(getCropPicSaveUri(),getActivity());
 			Drawable drawable = new BitmapDrawable(null, photo);
@@ -312,8 +312,8 @@ public class FragmentHomePerson extends Fragment {
 				Utils.Log(TAG,"xxxxxxxxxxxxxxxxxx httpPut error:" + ee);
 				ee.printStackTrace();
 			}
-			// ÐÂÏß³ÌºóÌ¨ÉÏ´«·þÎñ¶Ë
-			// pd = ProgressDialog.show(mContext, null, "ÕýÔÚÉÏ´«Í¼Æ¬£¬ÇëÉÔºò...");
+			// ï¿½ï¿½ï¿½ß³Ìºï¿½Ì¨ï¿½Ï´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+			// pd = ProgressDialog.show(mContext, null, "ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½Í¼Æ¬ï¿½ï¿½ï¿½ï¿½ï¿½Ôºï¿½...");
 			// new Thread(uploadImageRunnable).start();
 		}
 	}
@@ -323,7 +323,7 @@ public class FragmentHomePerson extends Fragment {
 	 {
 	  try
 	  {
-	   // ¶ÁÈ¡uriËùÔÚµÄÍ¼Æ¬
+	   // ï¿½ï¿½È¡uriï¿½ï¿½ï¿½Úµï¿½Í¼Æ¬
 	   Bitmap bitmap = BitmapFactory.decodeStream(mContext.getContentResolver().openInputStream(uri));
 	   bitmap = MediaStore.Images.Media.getBitmap(mContext.getContentResolver(), uri);
 	   return bitmap;
@@ -363,14 +363,14 @@ public class FragmentHomePerson extends Fragment {
 			switch (mPosition) {
 			case 1:
 				String sexString = (String) personList1.get(mPosition).get("info");
-				int initSexCheck = "ÄÐ".equals(sexString) ? 0 : 1;
+				int initSexCheck = "ï¿½ï¿½".equals(sexString) ? 0 : 1;
 				//TODO    display null at first time         !!!!!!!!!!!!!!!!!!!!!!   fix: init female oncreate
 				ad = new AlertDialog.Builder(getActivity()).setTitle((String) personList1.get(mPosition).get("title"))
-						.setSingleChoiceItems(new String[] { "ÄÐ", "Å®" }, initSexCheck,
+						.setSingleChoiceItems(new String[] { "ï¿½ï¿½", "Å®" }, initSexCheck,
 								new DialogInterface.OnClickListener() {
 									@Override
 									public void onClick(DialogInterface dialog, int which) {
-										String sex = which == 0 ? "ÄÐ" : "Å®";
+										String sex = which == 0 ? "ï¿½ï¿½" : "Å®";
 										personList1.get(mPosition).put("info", sex);
 										SharedPreferences.Editor e = Utils.getSharedPpreferenceEdit(getActivity());
 										e.putString(Utils.SHARE_PREFERENCE_CUP_PERSON_1[mPosition], sex);
@@ -378,11 +378,11 @@ public class FragmentHomePerson extends Fragment {
 										doUpdate1();
 									}
 								})
-						.setNegativeButton("È·¶¨", null).show();
+						.setNegativeButton("È·ï¿½ï¿½", null).show();
 				break;
 			case 2:
 				// could not change the phone number
-				Toast.makeText(getActivity(), "ÊÖ»úºÅÂë°ó¶¨£¬ÎÞ·¨ÐÞ¸Ä", Toast.LENGTH_SHORT).show();
+				Toast.makeText(getActivity(), "ï¿½Ö»ï¿½ï¿½ï¿½ï¿½ó¶¨£ï¿½ï¿½Þ·ï¿½ï¿½Þ¸ï¿½", Toast.LENGTH_SHORT).show();
 				break;
 			case 0:
 				LayoutInflater inflater = getActivity().getLayoutInflater();
@@ -394,7 +394,7 @@ public class FragmentHomePerson extends Fragment {
 				person_info.setText((String) personList1.get(mPosition).get("info"));
 				person_title.setText(list1Title[mPosition]);
 				ad = new AlertDialog.Builder(getActivity())
-						.setPositiveButton("È·¶¨", new DialogInterface.OnClickListener() {
+						.setPositiveButton("È·ï¿½ï¿½", new DialogInterface.OnClickListener() {
 							@Override
 							public void onClick(DialogInterface dialog, int which) {
 								personList1.get(mPosition).put("info", person_info.getText().toString());
@@ -404,8 +404,8 @@ public class FragmentHomePerson extends Fragment {
 								e.commit();
 								doUpdate1();
 							}
-						}).setNegativeButton("È¡Ïû", null).create();
-				ad.setTitle("¸öÈËÐÅÏ¢ÉèÖÃ");
+						}).setNegativeButton("È¡ï¿½ï¿½", null).create();
+				ad.setTitle("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï¢ï¿½ï¿½ï¿½ï¿½");
 				ad.setView(layout);
 				ad.show();
 				Message msg = new Message();
@@ -458,7 +458,7 @@ public class FragmentHomePerson extends Fragment {
 				person_info.setFilters(new InputFilter[] { new InputFilter.LengthFilter(3) });
 				person_info.setInputType(InputType.TYPE_CLASS_NUMBER);
 				ad = new AlertDialog.Builder(getActivity())
-						.setPositiveButton("È·¶¨", new DialogInterface.OnClickListener() {
+						.setPositiveButton("È·ï¿½ï¿½", new DialogInterface.OnClickListener() {
 							@Override
 							public void onClick(DialogInterface dialog, int which) {
 								personList2.get(mPosition).put("info", person_info.getText().toString());
@@ -468,8 +468,8 @@ public class FragmentHomePerson extends Fragment {
 								e.commit();
 								doUpdate2();
 							}
-						}).setNegativeButton("È¡Ïû", null).create();
-				ad.setTitle("¸öÈËÐÅÏ¢ÉèÖÃ");
+						}).setNegativeButton("È¡ï¿½ï¿½", null).create();
+				ad.setTitle("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï¢ï¿½ï¿½ï¿½ï¿½");
 				ad.setView(layout);
 				ad.show();
 				msg = new Message();
@@ -480,24 +480,24 @@ public class FragmentHomePerson extends Fragment {
 			case 0:
 			case 1:
 				if (mPosition == 0) {
-					person_info.setHint("¹«Ë¾");
+					person_info.setHint("ï¿½ï¿½Ë¾");
 					LinearLayout pd = (LinearLayout) layout.findViewById(R.id.pre_define);
-					pd.addView(addPredefineButton("°ì¹«ÊÒ"));
-					pd.addView(addPredefineButton("¼ÒÀï"));
-					pd.addView(addPredefineButton("»§Íâ"));
-					pd.addView(addPredefineButton("³µÔØ"));
+					pd.addView(addPredefineButton("ï¿½ì¹«ï¿½ï¿½"));
+					pd.addView(addPredefineButton("ï¿½ï¿½ï¿½ï¿½"));
+					pd.addView(addPredefineButton("ï¿½ï¿½ï¿½ï¿½"));
+					pd.addView(addPredefineButton("ï¿½ï¿½ï¿½ï¿½"));
 
 				}else if(mPosition==1)
 				{
-					person_info.setHint("½¡¿µ");
+					person_info.setHint("ï¿½ï¿½ï¿½ï¿½");
 					LinearLayout pd = (LinearLayout) layout.findViewById(R.id.pre_define);
-					pd.addView(addPredefineButton("Ò×³öº¹"));
-					pd.addView(addPredefineButton("ÉÙ³öº¹"));
-					pd.addView(addPredefineButton("Õý³£"));
+					pd.addView(addPredefineButton("ï¿½×³ï¿½ï¿½ï¿½"));
+					pd.addView(addPredefineButton("ï¿½Ù³ï¿½ï¿½ï¿½"));
+					pd.addView(addPredefineButton("ï¿½ï¿½"));
 				}
 				person_info.setFilters(new InputFilter[] { new InputFilter.LengthFilter(5) });
 				ad = new AlertDialog.Builder(getActivity())
-						.setPositiveButton("È·¶¨", new DialogInterface.OnClickListener() {
+						.setPositiveButton("È·ï¿½ï¿½", new DialogInterface.OnClickListener() {
 							@Override
 							public void onClick(DialogInterface dialog, int which) {
 								personList2.get(mPosition).put("info", person_info.getText().toString());
@@ -507,9 +507,9 @@ public class FragmentHomePerson extends Fragment {
 								e.commit();
 								doUpdate2();
 							}
-						}).setNegativeButton("È¡Ïû", null).create();
+						}).setNegativeButton("È¡ï¿½ï¿½", null).create();
 
-				ad.setTitle("¸öÈËÐÅÏ¢ÉèÖÃ");
+				ad.setTitle("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï¢ï¿½ï¿½ï¿½ï¿½");
 				ad.setView(layout);
 				ad.show();
 				msg = new Message();
@@ -526,8 +526,8 @@ public class FragmentHomePerson extends Fragment {
 				DatePickerDialog dialog = new DatePickerDialog(getActivity(), new DatePickerDialog.OnDateSetListener() {
 					@Override
 					public void onDateSet(DatePicker dp, int year, int month, int dayOfMonth) {
-						// et.setText("ÄúÑ¡ÔñÁË£º" + year + "Äê" + (month+1) + "ÔÂ" +
-						// dayOfMonth + "ÈÕ");
+						// et.setText("ï¿½ï¿½Ñ¡ï¿½ï¿½ï¿½Ë£ï¿½" + year + "ï¿½ï¿½" + (month+1) + "ï¿½ï¿½" +
+						// dayOfMonth + "ï¿½ï¿½");
 						String dateFormat = year + "-" + (month+1) + "-" + dayOfMonth;
 						personList2.get(mPosition).put("info", dateFormat);
 						SharedPreferences.Editor e = Utils.getSharedPpreferenceEdit(getActivity());
@@ -535,9 +535,9 @@ public class FragmentHomePerson extends Fragment {
 						e.commit();
 						doUpdate2();
 					}
-				}, Integer.parseInt(dateSpilt[0]), // ´«ÈëÄê·Ý
-						Integer.parseInt(dateSpilt[1])-1, // ´«ÈëÔÂ·Ý
-						Integer.parseInt(dateSpilt[2]) // ´«ÈëÌìÊý
+				}, Integer.parseInt(dateSpilt[0]), // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+						Integer.parseInt(dateSpilt[1])-1, // ï¿½ï¿½ï¿½ï¿½ï¿½Â·ï¿½
+						Integer.parseInt(dateSpilt[2]) // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 				);
 				dialog.show();
 				break;
